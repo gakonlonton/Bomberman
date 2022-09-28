@@ -21,6 +21,10 @@ public class GraphicManager {
         }
     }
 
+    public void bomberRenderer(Map map) {
+        map.getEntities().forEach(g -> g.render(gc));
+    }
+
     public void clearScreen(Canvas canvas) {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
     }

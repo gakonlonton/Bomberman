@@ -13,14 +13,10 @@ import uet.oop.bomberman.graphics.GraphicManager;
 import uet.oop.bomberman.graphics.Map;
 import uet.oop.bomberman.graphics.Sprite;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class BombermanGame extends Application {
     private GraphicManager graphics;
     private Canvas canvas;
     public static Map map;
-    private List<Entity> entities = new ArrayList<>();
     private KeyboardEvent keyboardEvent;
 
     public static void main(String[] args) {
@@ -55,17 +51,16 @@ public class BombermanGame extends Application {
         timer.start();
 
         map = new Map(1, keyboardEvent);
-
-        Entity bomberman = new Bomber(1, 1, Sprite.player_right.getFxImage(), keyboardEvent);
-        entities.add(bomberman);
     }
 
     public void update() {
-        map.update();
+        map.entitiesUpdate();
+
     }
 
     public void render() {
         graphics.clearScreen(canvas);
         graphics.mapRenderer(map);
+        graphics.bomberRenderer(map);
     }
 }

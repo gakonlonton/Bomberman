@@ -1,6 +1,7 @@
 package uet.oop.bomberman.graphics;
 
 import uet.oop.bomberman.controller.KeyboardEvent;
+import uet.oop.bomberman.entities.Bomber;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.Grass;
 import uet.oop.bomberman.entities.Wall;
@@ -17,6 +18,7 @@ public class Map {
     protected List<List<Entity>> map;
     protected int mapHeight;
     protected int mapWidth;
+    public List<Entity> entities = new ArrayList<>();
 
     public Map(int level, KeyboardEvent keyboardEvent) {
         map = new ArrayList<>();
@@ -29,6 +31,11 @@ public class Map {
             mapHeight = sc.nextInt();
             mapWidth = sc.nextInt();
             sc.nextLine();
+            /// Display Bomber
+            Entity bomber = new Bomber(1, 1, Sprite.player_right.getFxImage(), keyboardEvent);
+            entities.add(bomber);
+
+            /// Display Map
             for (int i = 0; i < mapHeight; i++) {
                 String tempLine = sc.nextLine();
                 List<Entity> tempList = new ArrayList<>();
@@ -54,8 +61,11 @@ public class Map {
     public List<List<Entity>> getMap() {
         return map;
     }
+    public List<Entity> getEntities() {
+        return entities;
+    }
 
-    public void update() {
-
+    public void entitiesUpdate() {
+        entities.forEach(Entity::update);
     }
 }
