@@ -53,7 +53,4 @@ Thông tin về các loại *Enemy* được liệt kê như dưới đây:
 - Enemy bị tiêu diệt khi thuộc phạm vi Bomb nổ
 - Một đối tượng thuộc phạm vi Bomb nổ có nghĩa là đối tượng đó va chạm với một trong các tia lửa được tạo ra tại thời điểm một đối tượng Bomb nổ.
 - Khi Bomb nổ, một Flame trung tâm![](res/sprites/bomb_exploded.png) tại vị trí Bomb nổ và bốn Flame tại bốn vị trí ô đơn vị xung quanh vị trí của Bomb xuất hiện theo bốn hướng trên![](res/sprites/explosion_vertical.png)/dưới![](res/sprites/explosion_vertical.png)/trái![](res/sprites/explosion_horizontal.png)/phải![](res/sprites/explosion_horizontal.png). Độ dài bốn Flame xung quanh mặc định là 1 đơn vị, được tăng lên khi Bomber sử dụng các FlameItem.
-- Khi 1 quả Bomb nổ, những quả Bomb được đặt bên cạnh sẽ nổ ngay lập tức chứ không có thời gian chờ
-- Khi các Flame xuất hiện, nếu có một đối tượng thuộc loại Brick/Wall nằm trên vị trí một trong các Flame thì độ dài Flame đó sẽ được giảm đi để sao cho Flame chỉ xuất hiện đến vị trí đối tượng Brick/Wall theo hướng xuất hiện. Lúc đó chỉ có đối tượng Brick/Wall bị ảnh hưởng bởi Flame, các đối tượng tiếp theo không bị ảnh hưởng. Còn nếu vật cản Flame là một đối tượng Bomb khác thì đối tượng Bomb đó cũng sẽ nổ ngay lập tức.
-- 2 Items Flame và Bomb sẽ được tăng không giới hạn khi ăn, còn với Speed Item sau khi tăng đến tốc độc tối đa sẽ không được tăng tốc độ nữa.
-- Các Items được kích hoạt trong một màn chơi sẽ được reset khi sang màn sau.
+
