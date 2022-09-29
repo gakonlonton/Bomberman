@@ -7,8 +7,6 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.stage.Stage;
 import uet.oop.bomberman.controller.KeyboardEvent;
-import uet.oop.bomberman.entities.Bomber;
-import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.graphics.GraphicManager;
 import uet.oop.bomberman.graphics.Map;
 import uet.oop.bomberman.graphics.Sprite;
@@ -55,12 +53,11 @@ public class BombermanGame extends Application {
 
     public void update() {
         map.entitiesUpdate();
-
     }
 
     public void render() {
         graphics.clearScreen(canvas);
-        graphics.mapRenderer(map);
-        graphics.bomberRenderer(map);
+        graphics.renderMap(map);
+        graphics.renderBomber(map);
     }
 }

@@ -1,5 +1,6 @@
 package uet.oop.bomberman.graphics;
 
+import uet.oop.bomberman.controller.CollisionManager;
 import uet.oop.bomberman.controller.KeyboardEvent;
 import uet.oop.bomberman.entities.Bomber;
 import uet.oop.bomberman.entities.Entity;
@@ -27,12 +28,11 @@ public class Map {
         File file = new File(mapDir.normalize().toString() + "/res/levels/Level" + level + ".txt");
         try {
             Scanner sc = new Scanner(file);
-            int levels = sc.nextInt();
             mapHeight = sc.nextInt();
             mapWidth = sc.nextInt();
             sc.nextLine();
             /// Display Bomber
-            Entity bomber = new Bomber(1, 1, Sprite.player_right.getFxImage(), keyboardEvent);
+            Entity bomber = new Bomber(1, 1, Sprite.player_right.getFxImage(), keyboardEvent, new CollisionManager(this));
             entities.add(bomber);
 
             /// Display Map
@@ -63,6 +63,11 @@ public class Map {
     }
     public List<Entity> getEntities() {
         return entities;
+    }
+    public Entity getPosition(int x, int y) {
+        int roundedX = Math.round(x / Sprite.SCALED_SIZE);
+        int roundedY = Math.round(y / Sprite.SCALED_SIZE);
+        return map.get(roundedY).get(roundedX);
     }
 
     public void entitiesUpdate() {
