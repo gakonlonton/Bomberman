@@ -2,10 +2,7 @@ package uet.oop.bomberman.graphics;
 
 import uet.oop.bomberman.controller.CollisionManager;
 import uet.oop.bomberman.controller.KeyboardEvent;
-import uet.oop.bomberman.entities.Bomber;
-import uet.oop.bomberman.entities.Entity;
-import uet.oop.bomberman.entities.Grass;
-import uet.oop.bomberman.entities.Wall;
+import uet.oop.bomberman.entities.*;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -43,6 +40,9 @@ public class Map {
                     switch (tempLine.charAt(j)) {
                         case '#':
                             tempList.add(new Wall(j, i, Sprite.wall.getFxImage()));
+                            break;
+                        case '*':
+                            tempList.add(new Brick(j, i, Sprite.brick.getFxImage()));
                             break;
                         default:
                             tempList.add(new Grass(j, i, Sprite.grass.getFxImage()));

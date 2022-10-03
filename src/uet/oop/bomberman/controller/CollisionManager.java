@@ -8,8 +8,8 @@ import uet.oop.bomberman.graphics.Sprite;
 
 public class CollisionManager {
     private Map map;
-    public static final int FIX_WIDTH = 5;
-    public static final int FIX_HEIGHT = 4;
+    public static final int FIX_WIDTH = 6;
+    public static final int FIX_HEIGHT = 5;
 
     public CollisionManager(Map map) {
         this.map = map;
