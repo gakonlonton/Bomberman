@@ -1,10 +1,8 @@
 package uet.oop.bomberman.entities;
 
-import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.paint.Color;
+import javafx.scene.input.KeyCode;
 import uet.oop.bomberman.graphics.Sprite;
 
 public abstract class Entity {
@@ -39,4 +37,6 @@ public abstract class Entity {
         gc.drawImage(img, x, y);
     }
     public abstract void update();
+
+    public void checkKeyEvent(KeyCode keys, boolean isPress) {}
 }

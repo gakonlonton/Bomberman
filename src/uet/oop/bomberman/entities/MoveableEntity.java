@@ -6,8 +6,8 @@ import uet.oop.bomberman.controller.Direction.DIRECTION;
 public abstract class MoveableEntity extends Entity {
     public DIRECTION direction = DIRECTION.RIGHT;
     protected boolean isRunning = false;
-    /// public DIRECTION backward = DIRECTION.RIGHT;
-
+    public int speed = 2;
+    public int spriteIndex = 0;
     public MoveableEntity(int xUnit, int yUnit, Image img) {
         super(xUnit, yUnit, img);
     }
@@ -26,19 +26,20 @@ public abstract class MoveableEntity extends Entity {
             isRunning = true;
             direction = dir;
             if (dir == DIRECTION.DOWN) {
-                y += 1;
+                y += speed;
             }
             if (dir == DIRECTION.UP) {
-                y -= 1;
+                y -= speed;
             }
             if (dir == DIRECTION.LEFT) {
-                x -= 1;
+                x -= speed;
             }
             if (dir == DIRECTION.RIGHT) {
-                x += 1;
+                x += speed;
             }
         }
         else {
+            spriteIndex = 0;
             isRunning = false;
         }
     }

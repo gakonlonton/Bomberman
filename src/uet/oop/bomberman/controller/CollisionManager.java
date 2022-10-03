@@ -1,6 +1,5 @@
 package uet.oop.bomberman.controller;
 
-import javafx.util.Pair;
 import uet.oop.bomberman.controller.Direction.DIRECTION;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.Obstacle;
@@ -9,8 +8,8 @@ import uet.oop.bomberman.graphics.Sprite;
 
 public class CollisionManager {
     private Map map;
-    public static final int FIX_WIDTH = 3;
-    public static final int FIX_HEIGHT = 3;
+    public static final int FIX_WIDTH = 5;
+    public static final int FIX_HEIGHT = 4;
 
     public CollisionManager(Map map) {
         this.map = map;
