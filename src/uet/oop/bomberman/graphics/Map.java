@@ -64,6 +64,14 @@ public class Map {
     public List<Entity> getEntities() {
         return entities;
     }
+    public Bomber getBomberman() {
+        for(Entity e: entities) {
+            if (e instanceof Bomber) {
+                return (Bomber) e;
+            }
+        }
+        return null;
+    }
     public Entity getPosition(int x, int y) {
         int roundedX = Math.round(x / Sprite.SCALED_SIZE);
         int roundedY = Math.round(y / Sprite.SCALED_SIZE);

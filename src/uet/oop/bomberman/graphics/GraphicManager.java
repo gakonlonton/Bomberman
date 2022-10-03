@@ -21,7 +21,7 @@ public class GraphicManager {
         }
     }
 
-    public void renderBomber(Map map) {
+    public void renderEntites(Map map) {
         map.getEntities().forEach(g -> g.render(gc));
     }
 

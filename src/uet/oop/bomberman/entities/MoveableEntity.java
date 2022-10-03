@@ -7,7 +7,6 @@ public abstract class MoveableEntity extends Entity {
     public DIRECTION direction = DIRECTION.RIGHT;
     protected boolean isRunning = false;
     public int speed = 2;
-    public int spriteIndex = 0;
     public MoveableEntity(int xUnit, int yUnit, Image img) {
         super(xUnit, yUnit, img);
     }
