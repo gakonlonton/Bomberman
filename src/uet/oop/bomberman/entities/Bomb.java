@@ -1,54 +1,112 @@
 package uet.oop.bomberman.entities;
 
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import uet.oop.bomberman.controller.Timer;
 import uet.oop.bomberman.graphics.Sprite;
 
-public class Bomb extends Entity implements Obstacle {
-    private boolean exploded;
-    private long timer;
-    private int flame;
-    public Bomb(int x, int y, Image img, int flame) {
-        super(x, y, img);
-        this.flame = flame;
-        timer = Timer.now();
-        spriteIndex = 0;
-        exploded = false;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+
+public class Bomb extends Entity {
+    public enum status {
+        REMAIN, EXPLODED, DISAPPEAR
     }
-    @Override
-    public void update() {
-        if (exploded == false) {
-            spriteIndex++;
-            switch (spriteIndex) {
+
+    protected status bombStatus;
+    protected List<Flame> flameExplode = new ArrayList<>();
+    private int delayTime = 3;
+    private int spriteIndex = 0;
+
+    Timer timer = new Timer();
+    TimerTask task = new TimerTask() {
+        int cnt = 0;
+        @Override
+        public void run() {
+            cnt++;
+            if ((delayTime - cnt) <= 0) {
+                bombStatus = status.EXPLODED;
+                timer.cancel();
+                spriteIndex = 0;
+            }
+        }
+    };
+
+    private void pickSprite(Image img) {
+        this.img = img;
+    }
+
+    public Bomb(int x, int y, Image img) {
+        super(x, y, img);
+        bombStatus = status.REMAIN;
+        timer.schedule(task, 0, 1000);
+        for (int i = 0; i < 5; i++) {
+            switch (i) {
                 case 0:
-                    pickSprite(Sprite.bomb.getFxImage());
+                    flameExplode.add(new Flame(x, y + 1, Sprite.explosion_vertical_down_last.getFxImage()));
                     break;
                 case 1:
-                    pickSprite(Sprite.bomb_1.getFxImage());
+                    flameExplode.add(new Flame(x, y - 1, Sprite.explosion_vertical_top_last.getFxImage()));
                     break;
                 case 2:
-                    pickSprite(Sprite.bomb_2.getFxImage());
+                    flameExplode.add(new Flame(x - 1, y, Sprite.explosion_horizontal_left_last.getFxImage()));
+                    break;
+                case 3:
+                    flameExplode.add(new Flame(x + 1, y, Sprite.explosion_horizontal_right_last.getFxImage()));
+                    break;
+                case 4:
+                    flameExplode.add(new Flame(x, y, Sprite.bomb_exploded.getFxImage()));
                     break;
                 default:
-                    spriteIndex = 0;
                     break;
             }
-            exploded = (Timer.now() - timer > Timer.TIME_FOR_BOMB_EXPLODE);
         }
     }
 
-    public int getFlame() {
-        return flame;
+    public status getBombStatus() {
+        return bombStatus;
     }
 
-    public void pickSprite(Image img) {
-        this.img = img;
-    }
-    public void setExploded(boolean exploded) {
-        this.exploded = exploded;
+    @Override
+    public void update() {
+        if (bombStatus == status.REMAIN) {
+            spriteIndex = (spriteIndex + 1) % 1000;
+            pickSprite(Sprite.movingSprite(Sprite.bomb, Sprite.bomb_1, Sprite.bomb_2, spriteIndex, 30).getFxImage());
+        }
+        if (bombStatus == status.EXPLODED) {
+            spriteIndex = (spriteIndex + 1) % 1000;
+            flameExplode.get(0).pickSprite(Sprite.movingSprite(Sprite.explosion_vertical_down_last,
+                                                                Sprite.explosion_vertical_down_last1,
+                                                                Sprite.explosion_vertical_down_last2,
+                                                                spriteIndex, 30).getFxImage());
+            flameExplode.get(1).pickSprite(Sprite.movingSprite(Sprite.explosion_vertical_top_last,
+                                                                Sprite.explosion_vertical_top_last1,
+                                                                Sprite.explosion_vertical_top_last2,
+                                                                spriteIndex, 30).getFxImage());
+            flameExplode.get(2).pickSprite(Sprite.movingSprite(Sprite.explosion_horizontal_left_last,
+                                                                Sprite.explosion_horizontal_left_last1,
+                                                                Sprite.explosion_horizontal_left_last2,
+                                                                spriteIndex, 30).getFxImage());
+            flameExplode.get(3).pickSprite(Sprite.movingSprite(Sprite.explosion_horizontal_right_last,
+                                                                Sprite.explosion_horizontal_right_last1,
+                                                                Sprite.explosion_horizontal_right_last2,
+                                                                spriteIndex, 30).getFxImage());
+            flameExplode.get(4).pickSprite(Sprite.movingSprite(Sprite.bomb_exploded,
+                                                                Sprite.bomb_exploded1,
+                                                                Sprite.bomb_exploded2,
+                                                                spriteIndex, 30).getFxImage());
+            bombStatus = (spriteIndex == 15) ? status.DISAPPEAR : bombStatus;
+        }
     }
 
-    public boolean isExploded() {
-        return exploded;
+    @Override
+    public void render(GraphicsContext gc) {
+        if (bombStatus == status.REMAIN) {
+            super.render(gc);
+        }
+        if (bombStatus == status.EXPLODED) {
+            flameExplode.forEach(g-> g.render(gc));
+        }
     }
 }

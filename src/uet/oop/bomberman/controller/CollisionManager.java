@@ -64,14 +64,6 @@ public class CollisionManager {
         return false;
     }
 
-    public List<Bomb> getBombList() {
-        List<Bomb> bombs = new ArrayList<>();
-        for(Bomb bomb: map.getBomberman().getBombManager().getBombs()) {
-            bombs.add(bomb);
-        }
-        return bombs;
-    }
-
     public Entity getEntityAt(int x, int y) {
         return map.getMap().get(y).get(x);
     }

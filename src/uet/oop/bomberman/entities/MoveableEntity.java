@@ -38,7 +38,6 @@ public abstract class MoveableEntity extends Entity {
             }
         }
         else {
-            spriteIndex = 0;
             isRunning = false;
         }
     }

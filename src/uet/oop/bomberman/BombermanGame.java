@@ -7,17 +7,16 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.stage.Stage;
 import uet.oop.bomberman.controller.KeyboardEvent;
-import uet.oop.bomberman.controller.Timer;
 import uet.oop.bomberman.graphics.GraphicManager;
 import uet.oop.bomberman.graphics.Map;
 import uet.oop.bomberman.graphics.Sprite;
+
 
 public class BombermanGame extends Application {
     private GraphicManager graphics;
     private Canvas canvas;
     public static Map map;
     private KeyboardEvent keyboardEvent;
-    private Timer timer;
 
     public static void main(String[] args) {
         Application.launch(BombermanGame.class);
@@ -36,18 +35,21 @@ public class BombermanGame extends Application {
         // Tao scene
         Scene scene = new Scene(root);
         keyboardEvent = new KeyboardEvent(scene);
-        timer = new Timer(this);
 
         // Them scene vao stage
         stage.setScene(scene);
         stage.show();
 
-        map = new Map(1, keyboardEvent);
-    }
+        AnimationTimer timer = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                render();
+                update();
+            }
+        };
+        timer.start();
 
-    public void gameLoop() {
-        update();
-        render();
+        map = new Map(1, keyboardEvent);
     }
 
     public void update() {

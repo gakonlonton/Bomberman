@@ -8,7 +8,6 @@ import uet.oop.bomberman.graphics.Sprite;
 public abstract class Entity {
     protected int x;
     protected int y;
-    public int spriteIndex = 0;
     protected Image img;
 
     //Khởi tạo đối tượng, chuyển từ tọa độ đơn vị sang tọa độ trong canvas
