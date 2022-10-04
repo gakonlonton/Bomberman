@@ -37,6 +37,7 @@ public class Bomber extends MoveableEntity {
     }
 
     private void updatePosition() {
+        isRunning = false;
         if (keyboardEvent.isPressed(KeyCode.W)) {
             spriteIndex++;
             if (collisionManager.touchObstacle(x, y - speed, DIRECTION.UP)) {
@@ -44,39 +45,38 @@ public class Bomber extends MoveableEntity {
                 spriteIndex = 0;
             }
             else super.update(DIRECTION.UP, true);
-            pickSprite(Sprite.movingSprite(Sprite.player_up, Sprite.player_up_1, Sprite.player_up_2, spriteIndex, 15).getFxImage());
+            pickSprite(Sprite.movingSprite(Sprite.player_up, Sprite.player_up_1, Sprite.player_up_2, spriteIndex, 20).getFxImage());
         }
-        else if (keyboardEvent.isPressed(KeyCode.S)) {
+        if (keyboardEvent.isPressed(KeyCode.S)) {
             spriteIndex++;
             if (collisionManager.touchObstacle(x, y + speed, DIRECTION.DOWN)) {
                 super.update(DIRECTION.DOWN, false);
                 spriteIndex = 0;
             }
             else super.update(DIRECTION.DOWN, true);
-            pickSprite(Sprite.movingSprite(Sprite.player_down, Sprite.player_down_1, Sprite.player_down_2, spriteIndex, 15).getFxImage());
+            pickSprite(Sprite.movingSprite(Sprite.player_down, Sprite.player_down_1, Sprite.player_down_2, spriteIndex, 20).getFxImage());
         }
-        else if (keyboardEvent.isPressed(KeyCode.A)) {
+        if (keyboardEvent.isPressed(KeyCode.A)) {
             spriteIndex++;
             if (collisionManager.touchObstacle(x - speed, y, DIRECTION.LEFT)) {
                 super.update(DIRECTION.LEFT, false);
                 spriteIndex = 0;
             }
             else super.update(DIRECTION.LEFT, true);
-            pickSprite(Sprite.movingSprite(Sprite.player_left, Sprite.player_left_1, Sprite.player_left_2, spriteIndex, 15).getFxImage());
+            pickSprite(Sprite.movingSprite(Sprite.player_left, Sprite.player_left_1, Sprite.player_left_2, spriteIndex, 20).getFxImage());
         }
-        else if (keyboardEvent.isPressed(KeyCode.D)) {
+        if (keyboardEvent.isPressed(KeyCode.D)) {
             spriteIndex++;
             if (collisionManager.touchObstacle(x + speed, y, DIRECTION.RIGHT)) {
                 super.update(DIRECTION.RIGHT, false);
                 spriteIndex = 0;
             }
             else super.update(DIRECTION.RIGHT, true);
-            pickSprite(Sprite.movingSprite(Sprite.player_right, Sprite.player_right_1, Sprite.player_right_2, spriteIndex, 15).getFxImage());
+            pickSprite(Sprite.movingSprite(Sprite.player_right, Sprite.player_right_1, Sprite.player_right_2, spriteIndex, 20).getFxImage());
         }
-        else if (keyboardEvent.isPressed(KeyCode.SPACE)) {
+        if (keyboardEvent.isPressed(KeyCode.SPACE)) {
             placedBomb = true;
         }
-        else spriteIndex = 0;
     }
 
     public void updateBomb() {

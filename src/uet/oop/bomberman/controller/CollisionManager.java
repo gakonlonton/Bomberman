@@ -12,8 +12,8 @@ import java.util.List;
 
 public class CollisionManager {
     private Map map;
-    public static final int FIX_WIDTH = 2;
-    public static final int FIX_HEIGHT = 5;
+    public static final int FIX_WIDTH = 5;
+    public static final int FIX_HEIGHT = 4;
 
     public CollisionManager(Map map) {
         this.map = map;
@@ -28,19 +28,19 @@ public class CollisionManager {
         switch (direction) {
             case UP:
                 object1 = map.getPosition(x + FIX_WIDTH, y + FIX_HEIGHT);
-                object2 = map.getPosition(x + 20 - FIX_WIDTH, y + FIX_HEIGHT);
+                object2 = map.getPosition(x + 24 - FIX_WIDTH, y + FIX_HEIGHT);
                 break;
             case DOWN:
                 object1 = map.getPosition(x + FIX_WIDTH, y + Sprite.SCALED_SIZE - FIX_HEIGHT);
-                object2 = map.getPosition(x + 20 - FIX_WIDTH, y + Sprite.SCALED_SIZE - FIX_HEIGHT);
+                object2 = map.getPosition(x + 24 - FIX_WIDTH, y + Sprite.SCALED_SIZE - FIX_HEIGHT);
                 break;
             case LEFT:
                 object1 = map.getPosition(x + FIX_WIDTH, y + FIX_HEIGHT);
                 object2 = map.getPosition(x + FIX_WIDTH, y + Sprite.SCALED_SIZE - FIX_HEIGHT);
                 break;
             case RIGHT:
-                object1 = map.getPosition(x + 20, y + FIX_HEIGHT);
-                object2 = map.getPosition(x + 20, y + Sprite.SCALED_SIZE - FIX_HEIGHT);
+                object1 = map.getPosition(x + 24, y + FIX_HEIGHT);
+                object2 = map.getPosition(x + 24, y + Sprite.SCALED_SIZE - FIX_HEIGHT);
                 break;
             default:
                 object1 = map.getPosition(x, y);
