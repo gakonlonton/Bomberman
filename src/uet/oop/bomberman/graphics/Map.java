@@ -44,6 +44,11 @@ public class Map {
                         case '*':
                             tempList.add(new Brick(j, i, Sprite.brick.getFxImage()));
                             break;
+                        case '1':
+                            Enemy temp = new EnemyBalloon(j, i, Sprite.balloom_left1.getFxImage(), new CollisionManager(this));
+                            entities.add(temp);
+                            tempList.add(new Grass(j, i, Sprite.grass.getFxImage()));
+                            break;
                         default:
                             tempList.add(new Grass(j, i, Sprite.grass.getFxImage()));
                             break;

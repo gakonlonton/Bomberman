@@ -3,11 +3,11 @@ package uet.oop.bomberman.entities;
 import javafx.scene.image.Image;
 import uet.oop.bomberman.controller.Direction.DIRECTION;
 
-public abstract class MoveableEntity extends Entity {
+public abstract class EntityAnimation extends Entity {
     public DIRECTION direction = DIRECTION.RIGHT;
     protected boolean isRunning = false;
     public int speed = 2;
-    public MoveableEntity(int xUnit, int yUnit, Image img) {
+    public EntityAnimation(int xUnit, int yUnit, Image img) {
         super(xUnit, yUnit, img);
     }
 

@@ -23,44 +23,27 @@ public class CollisionManager {
         return map;
     }
 
-    public boolean touchObstacle(int x, int y, DIRECTION direction) {
-        Entity object1, object2;
-        switch (direction) {
-            case UP:
-                object1 = map.getPosition(x + FIX_WIDTH, y + FIX_HEIGHT);
-                object2 = map.getPosition(x + 24 - FIX_WIDTH, y + FIX_HEIGHT);
-                break;
-            case DOWN:
-                object1 = map.getPosition(x + FIX_WIDTH, y + Sprite.SCALED_SIZE - FIX_HEIGHT);
-                object2 = map.getPosition(x + 24 - FIX_WIDTH, y + Sprite.SCALED_SIZE - FIX_HEIGHT);
-                break;
-            case LEFT:
-                object1 = map.getPosition(x + FIX_WIDTH, y + FIX_HEIGHT);
-                object2 = map.getPosition(x + FIX_WIDTH, y + Sprite.SCALED_SIZE - FIX_HEIGHT);
-                break;
-            case RIGHT:
-                object1 = map.getPosition(x + 24, y + FIX_HEIGHT);
-                object2 = map.getPosition(x + 24, y + Sprite.SCALED_SIZE - FIX_HEIGHT);
-                break;
-            default:
-                object1 = map.getPosition(x, y);
-                object2 = map.getPosition(x, y);
-                break;
-        }
-        if (object1 instanceof Obstacle || object2 instanceof Obstacle) {
-            return true;
-        }
-        else return false;
+    public boolean touchObstacle(int x, int y) {
+        Entity topLeft, downLeft, topRight, downRight;
+        topLeft = map.getPosition(x, y);
+        topRight = map.getPosition(x + 20, y);
+        downLeft = map.getPosition(x, y + 29);
+        downRight = map.getPosition(x + 20, y + 29);
+        return topLeft instanceof Obstacle || topRight instanceof Obstacle
+                || downLeft instanceof Obstacle || downRight instanceof Obstacle;
     }
 
-    public boolean collide(Entity entity1, Entity entity2) {
-        if (entity1.getX() == entity2.getX() + FIX_WIDTH && entity1.getY() == entity2.getY() + FIX_HEIGHT
-            || entity1.getX() == entity2.getX() + Sprite.SCALED_SIZE - 2 * FIX_WIDTH && entity1.getY() == entity2.getY() + FIX_HEIGHT
-            || entity1.getX() == entity2.getX() + FIX_WIDTH && entity1.getY() == entity2.getY() + Sprite.SCALED_SIZE - 2 * FIX_HEIGHT
-            || entity1.getX() == entity2.getX() + Sprite.SCALED_SIZE - 2 * FIX_WIDTH && entity1.getY() == entity2.getY() + Sprite.SCALED_SIZE - 2 * FIX_HEIGHT
-            || entity1.getX() == entity2.getX() + Sprite.DEFAULT_SIZE && entity1.getY() == entity2.getY() + Sprite.DEFAULT_SIZE) {
-            return true;
-        }
+    public boolean enemyTouchObstacle(int x, int y) {
+        Entity topLeft, downLeft, topRight, downRight;
+        topLeft = map.getPosition(x, y);
+        topRight = map.getPosition(x + 30, y);
+        downLeft = map.getPosition(x, y + 30);
+        downRight = map.getPosition(x + 30, y + 30);
+        return topLeft instanceof Obstacle || topRight instanceof Obstacle
+                || downLeft instanceof Obstacle || downRight instanceof Obstacle;
+    }
+
+    public boolean touchBomb(int x, int y) {
         return false;
     }
 

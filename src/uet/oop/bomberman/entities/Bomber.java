@@ -11,7 +11,7 @@ import uet.oop.bomberman.graphics.Sprite;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Bomber extends MoveableEntity {
+public class Bomber extends EntityAnimation {
     private CollisionManager collisionManager;
 
     private KeyboardEvent keyboardEvent;
@@ -38,9 +38,11 @@ public class Bomber extends MoveableEntity {
 
     private void updatePosition() {
         isRunning = false;
+        boolean pressed = false;
         if (keyboardEvent.isPressed(KeyCode.W)) {
+            pressed = true;
             spriteIndex++;
-            if (collisionManager.touchObstacle(x, y - speed, DIRECTION.UP)) {
+            if (collisionManager.touchObstacle(x, y - speed)) {
                 super.update(DIRECTION.UP, false);
                 spriteIndex = 0;
             }
@@ -48,8 +50,9 @@ public class Bomber extends MoveableEntity {
             pickSprite(Sprite.movingSprite(Sprite.player_up, Sprite.player_up_1, Sprite.player_up_2, spriteIndex, 20).getFxImage());
         }
         if (keyboardEvent.isPressed(KeyCode.S)) {
+            pressed = true;
             spriteIndex++;
-            if (collisionManager.touchObstacle(x, y + speed, DIRECTION.DOWN)) {
+            if (collisionManager.touchObstacle(x, y + speed)) {
                 super.update(DIRECTION.DOWN, false);
                 spriteIndex = 0;
             }
@@ -57,8 +60,9 @@ public class Bomber extends MoveableEntity {
             pickSprite(Sprite.movingSprite(Sprite.player_down, Sprite.player_down_1, Sprite.player_down_2, spriteIndex, 20).getFxImage());
         }
         if (keyboardEvent.isPressed(KeyCode.A)) {
+            pressed = true;
             spriteIndex++;
-            if (collisionManager.touchObstacle(x - speed, y, DIRECTION.LEFT)) {
+            if (collisionManager.touchObstacle(x - speed, y)) {
                 super.update(DIRECTION.LEFT, false);
                 spriteIndex = 0;
             }
@@ -66,8 +70,9 @@ public class Bomber extends MoveableEntity {
             pickSprite(Sprite.movingSprite(Sprite.player_left, Sprite.player_left_1, Sprite.player_left_2, spriteIndex, 20).getFxImage());
         }
         if (keyboardEvent.isPressed(KeyCode.D)) {
+            pressed = true;
             spriteIndex++;
-            if (collisionManager.touchObstacle(x + speed, y, DIRECTION.RIGHT)) {
+            if (collisionManager.touchObstacle(x + speed, y)) {
                 super.update(DIRECTION.RIGHT, false);
                 spriteIndex = 0;
             }
@@ -76,6 +81,10 @@ public class Bomber extends MoveableEntity {
         }
         if (keyboardEvent.isPressed(KeyCode.SPACE)) {
             placedBomb = true;
+            pressed = true;
+        }
+        if (!pressed) {
+            spriteIndex = 0;
         }
     }
 
