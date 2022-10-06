@@ -83,6 +83,10 @@ public class Map {
         return map.get(roundedY).get(roundedX);
     }
 
+    public void replace(int x, int y, Entity entity) {
+        map.get(y).set(x, entity);
+    }
+
     public void entitiesUpdate() {
         entities.forEach(Entity::update);
     }

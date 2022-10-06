@@ -2,6 +2,8 @@ package uet.oop.bomberman.entities;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import uet.oop.bomberman.controller.CollisionManager;
+import uet.oop.bomberman.graphics.Map;
 import uet.oop.bomberman.graphics.Sprite;
 
 import java.util.ArrayList;
@@ -18,6 +20,8 @@ public class Bomb extends Entity implements Obstacle {
     protected List<Flame> flameExplode = new ArrayList<>();
     private int delayTime = 3;
     private int spriteIndex = 0;
+    private CollisionManager collisionManager;
+    private Map map;
 
     Timer timer = new Timer();
     TimerTask task = new TimerTask() {
@@ -37,8 +41,10 @@ public class Bomb extends Entity implements Obstacle {
         this.img = img;
     }
 
-    public Bomb(int x, int y, Image img) {
+    public Bomb(int x, int y, Image img, CollisionManager collisionManager) {
         super(x, y, img);
+        this.collisionManager = collisionManager;
+        this.map = collisionManager.getMap();
         bombStatus = status.REMAIN;
         timer.schedule(task, 0, 1000);
         for (int i = 0; i < 5; i++) {
@@ -97,6 +103,39 @@ public class Bomb extends Entity implements Obstacle {
                                                                 Sprite.bomb_exploded2,
                                                                 spriteIndex, 30).getFxImage());
             bombStatus = (spriteIndex == 15) ? status.DISAPPEAR : bombStatus;
+            if (spriteIndex == 15) {
+                bombStatus = status.DISAPPEAR;
+                bombExplode();
+            }
+        }
+    }
+
+    private List<Entity> explode = new ArrayList<>();
+
+    public void bombExplode() {
+        x = x / Sprite.SCALED_SIZE;
+        y = y / Sprite.SCALED_SIZE;
+        for (int i = 1; i <= 1; i++) {
+            System.out.println(x + " " + y);
+            // Destroy up side
+            if (map.getMap().get(y - 1).get(x) instanceof Brick) {
+                map.replace(x, y - 1, new Grass(x, y - 1, Sprite.grass.getFxImage()));
+            }
+
+            // Destroy down side
+            if (map.getMap().get(y + 1).get(x) instanceof Brick) {
+                map.replace(x, y + 1, new Grass(x, y + 1, Sprite.grass.getFxImage()));
+            }
+
+            // Destroy left side
+            if (map.getMap().get(y).get(x - 1) instanceof Brick) {
+                map.replace(x - 1, y, new Grass(x - 1, y, Sprite.grass.getFxImage()));
+            }
+
+            // Destroy right side
+            if (map.getMap().get(y).get(x + 1) instanceof Brick) {
+                map.replace(x + 1, y, new Grass(x + 1, y, Sprite.grass.getFxImage()));
+            }
         }
     }
 

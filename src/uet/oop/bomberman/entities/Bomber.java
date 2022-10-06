@@ -92,7 +92,7 @@ public class Bomber extends EntityAnimation {
         if (placedBomb) {
             int _x = (x + Sprite.SCALED_SIZE / 2) / Sprite.SCALED_SIZE;
             int _y = (y + Sprite.SCALED_SIZE / 2) / Sprite.SCALED_SIZE;
-            Bomb bomb = new Bomb(_x, _y, Sprite.bomb.getFxImage());
+            Bomb bomb = new Bomb(_x, _y, Sprite.bomb.getFxImage(), collisionManager);
             bombManager.add(bomb);
             placedBomb = false;
         }
