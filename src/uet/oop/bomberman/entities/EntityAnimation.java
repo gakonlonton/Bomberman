@@ -6,7 +6,7 @@ import uet.oop.bomberman.controller.Direction.DIRECTION;
 public abstract class EntityAnimation extends Entity {
     public DIRECTION direction = DIRECTION.RIGHT;
     protected boolean isRunning = false;
-    public int speed = 2;
+    public int speed = 3;
     public EntityAnimation(int xUnit, int yUnit, Image img) {
         super(xUnit, yUnit, img);
     }
@@ -16,25 +16,25 @@ public abstract class EntityAnimation extends Entity {
 
     }
 
-    public void update(DIRECTION dir, boolean success) {
-        updateDirection(dir, success);
+    public void update(DIRECTION dir, boolean success, int realSpeed) {
+        updateDirection(dir, success, realSpeed);
     }
 
-    public void updateDirection(DIRECTION dir, boolean success) {
+    public void updateDirection(DIRECTION dir, boolean success, int realSpeed) {
         if (success) {
             isRunning = true;
             direction = dir;
             if (dir == DIRECTION.DOWN) {
-                y += speed;
+                y += realSpeed;
             }
             if (dir == DIRECTION.UP) {
-                y -= speed;
+                y -= realSpeed;
             }
             if (dir == DIRECTION.LEFT) {
-                x -= speed;
+                x -= realSpeed;
             }
             if (dir == DIRECTION.RIGHT) {
-                x += speed;
+                x += realSpeed;
             }
         }
         else {

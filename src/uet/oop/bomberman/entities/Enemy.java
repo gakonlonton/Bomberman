@@ -17,7 +17,7 @@ public class Enemy extends EntityDestroyable {
             return false;
         }
         else {
-            super.update(DIRECTION.LEFT, true);
+            super.update(DIRECTION.LEFT, true, speed);
             return true;
         }
     }
@@ -27,7 +27,7 @@ public class Enemy extends EntityDestroyable {
             return false;
         }
         else {
-            super.update(DIRECTION.RIGHT, true);
+            super.update(DIRECTION.RIGHT, true, speed);
             return true;
         }
     }
@@ -37,7 +37,7 @@ public class Enemy extends EntityDestroyable {
             return false;
         }
         else {
-            super.update(DIRECTION.UP, true);
+            super.update(DIRECTION.UP, true, speed);
             return true;
         }
     }
@@ -47,7 +47,7 @@ public class Enemy extends EntityDestroyable {
             return false;
         }
         else {
-            super.update(DIRECTION.DOWN, true);
+            super.update(DIRECTION.DOWN, true, speed);
             return true;
         }
     }

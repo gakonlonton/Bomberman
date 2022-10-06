@@ -43,40 +43,40 @@ public class Bomber extends EntityAnimation {
             pressed = true;
             spriteIndex++;
             if (collisionManager.touchObstacle(x, y - speed)) {
-                super.update(DIRECTION.UP, false);
+                super.update(DIRECTION.UP, false, speed);
                 spriteIndex = 0;
             }
-            else super.update(DIRECTION.UP, true);
+            else super.update(DIRECTION.UP, true, speed);
             pickSprite(Sprite.movingSprite(Sprite.player_up, Sprite.player_up_1, Sprite.player_up_2, spriteIndex, 20).getFxImage());
         }
         if (keyboardEvent.isPressed(KeyCode.S)) {
             pressed = true;
             spriteIndex++;
             if (collisionManager.touchObstacle(x, y + speed)) {
-                super.update(DIRECTION.DOWN, false);
+                super.update(DIRECTION.DOWN, false, speed);
                 spriteIndex = 0;
             }
-            else super.update(DIRECTION.DOWN, true);
+            else super.update(DIRECTION.DOWN, true, speed);
             pickSprite(Sprite.movingSprite(Sprite.player_down, Sprite.player_down_1, Sprite.player_down_2, spriteIndex, 20).getFxImage());
         }
         if (keyboardEvent.isPressed(KeyCode.A)) {
             pressed = true;
             spriteIndex++;
             if (collisionManager.touchObstacle(x - speed, y)) {
-                super.update(DIRECTION.LEFT, false);
+                super.update(DIRECTION.LEFT, false, speed);
                 spriteIndex = 0;
             }
-            else super.update(DIRECTION.LEFT, true);
+            else super.update(DIRECTION.LEFT, true, speed);
             pickSprite(Sprite.movingSprite(Sprite.player_left, Sprite.player_left_1, Sprite.player_left_2, spriteIndex, 20).getFxImage());
         }
         if (keyboardEvent.isPressed(KeyCode.D)) {
             pressed = true;
             spriteIndex++;
             if (collisionManager.touchObstacle(x + speed, y)) {
-                super.update(DIRECTION.RIGHT, false);
+                super.update(DIRECTION.RIGHT, false, speed);
                 spriteIndex = 0;
             }
-            else super.update(DIRECTION.RIGHT, true);
+            else super.update(DIRECTION.RIGHT, true, speed);
             pickSprite(Sprite.movingSprite(Sprite.player_right, Sprite.player_right_1, Sprite.player_right_2, spriteIndex, 20).getFxImage());
         }
         if (keyboardEvent.isPressed(KeyCode.SPACE)) {

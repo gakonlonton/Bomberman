@@ -9,38 +9,38 @@ public class EnemyBalloon extends Enemy {
 
     public EnemyBalloon(int x, int y, Image img, CollisionManager collisionManager) {
         super(x, y, img, collisionManager);
-        this.speed = 2;
+        this.speed = 1;
     }
 
     public void update() {
         if (death) return;
 
         if (direction == DIRECTION.LEFT) {
-            if (collisionManager.enemyTouchObstacle(x - speed, y)) {
+            if (collisionManager.enemyTouchObstacle(x - this.speed, y)) {
                 goRandom();
             }
-            else super.update(DIRECTION.LEFT, true);
+            else super.update(DIRECTION.LEFT, true, this.speed);
         }
 
         if (direction == DIRECTION.RIGHT) {
-            if (collisionManager.enemyTouchObstacle(x + speed, y)) {
+            if (collisionManager.enemyTouchObstacle(x + this.speed, y)) {
                 goRandom();
             }
-            else super.update(DIRECTION.RIGHT, true);
+            else super.update(DIRECTION.RIGHT, true, this.speed);
         }
 
         if (direction == DIRECTION.UP) {
-            if (collisionManager.enemyTouchObstacle(x, y - speed)) {
+            if (collisionManager.enemyTouchObstacle(x, y - this.speed)) {
                 goRandom();
             }
-            else super.update(DIRECTION.UP, true);
+            else super.update(DIRECTION.UP, true, this.speed);
         }
 
         if (direction == DIRECTION.DOWN) {
-            if (collisionManager.enemyTouchObstacle(x, y + speed)) {
+            if (collisionManager.enemyTouchObstacle(x, y + this.speed)) {
                 goRandom();
             }
-            else super.update(DIRECTION.DOWN, true);
+            else super.update(DIRECTION.DOWN, true, this.speed);
         }
     }
 
