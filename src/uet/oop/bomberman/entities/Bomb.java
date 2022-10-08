@@ -16,8 +16,10 @@ public class Bomb extends Entity implements Obstacle {
         REMAIN, EXPLODED, DISAPPEAR
     }
 
-    protected status bombStatus;
+    public status bombStatus;
     protected List<Flame> flameExplode = new ArrayList<>();
+    public int flameLength = 1;
+
     private int delayTime = 3;
     private int spriteIndex = 0;
     private CollisionManager collisionManager;
@@ -50,19 +52,19 @@ public class Bomb extends Entity implements Obstacle {
         for (int i = 0; i < 5; i++) {
             switch (i) {
                 case 0:
-                    flameExplode.add(new Flame(x, y + 1, Sprite.explosion_vertical_down_last.getFxImage()));
+                    flameExplode.add(new Flame(x, y + 1, Flame.flameType.DOWN, map));
                     break;
                 case 1:
-                    flameExplode.add(new Flame(x, y - 1, Sprite.explosion_vertical_top_last.getFxImage()));
+                    flameExplode.add(new Flame(x, y - 1, Flame.flameType.UP, map));
                     break;
                 case 2:
-                    flameExplode.add(new Flame(x - 1, y, Sprite.explosion_horizontal_left_last.getFxImage()));
+                    flameExplode.add(new Flame(x - 1, y, Flame.flameType.LEFT, map));
                     break;
                 case 3:
-                    flameExplode.add(new Flame(x + 1, y, Sprite.explosion_horizontal_right_last.getFxImage()));
+                    flameExplode.add(new Flame(x + 1, y, Flame.flameType.RIGHT, map));
                     break;
                 case 4:
-                    flameExplode.add(new Flame(x, y, Sprite.bomb_exploded.getFxImage()));
+                    flameExplode.add(new Flame(x, y, Flame.flameType.CENTER, map));
                     break;
                 default:
                     break;
@@ -82,26 +84,8 @@ public class Bomb extends Entity implements Obstacle {
         }
         if (bombStatus == status.EXPLODED) {
             spriteIndex = (spriteIndex + 1) % 1000;
-            flameExplode.get(0).pickSprite(Sprite.movingSprite(Sprite.explosion_vertical_down_last,
-                                                                Sprite.explosion_vertical_down_last1,
-                                                                Sprite.explosion_vertical_down_last2,
-                                                                spriteIndex, 30).getFxImage());
-            flameExplode.get(1).pickSprite(Sprite.movingSprite(Sprite.explosion_vertical_top_last,
-                                                                Sprite.explosion_vertical_top_last1,
-                                                                Sprite.explosion_vertical_top_last2,
-                                                                spriteIndex, 30).getFxImage());
-            flameExplode.get(2).pickSprite(Sprite.movingSprite(Sprite.explosion_horizontal_left_last,
-                                                                Sprite.explosion_horizontal_left_last1,
-                                                                Sprite.explosion_horizontal_left_last2,
-                                                                spriteIndex, 30).getFxImage());
-            flameExplode.get(3).pickSprite(Sprite.movingSprite(Sprite.explosion_horizontal_right_last,
-                                                                Sprite.explosion_horizontal_right_last1,
-                                                                Sprite.explosion_horizontal_right_last2,
-                                                                spriteIndex, 30).getFxImage());
-            flameExplode.get(4).pickSprite(Sprite.movingSprite(Sprite.bomb_exploded,
-                                                                Sprite.bomb_exploded1,
-                                                                Sprite.bomb_exploded2,
-                                                                spriteIndex, 30).getFxImage());
+            bombStatus = flameExplode.get(0).getStatus();
+            flameExplode.forEach(Entity::update);
             bombStatus = (spriteIndex == 15) ? status.DISAPPEAR : bombStatus;
             if (spriteIndex == 15) {
                 bombStatus = status.DISAPPEAR;
@@ -110,13 +94,10 @@ public class Bomb extends Entity implements Obstacle {
         }
     }
 
-    private List<Entity> explode = new ArrayList<>();
-
     public void bombExplode() {
         x = x / Sprite.SCALED_SIZE;
         y = y / Sprite.SCALED_SIZE;
-        for (int i = 1; i <= 1; i++) {
-            System.out.println(x + " " + y);
+        for (int i = 1; i <= flameLength; i++) {
             // Destroy up side
             if (map.getMap().get(y - 1).get(x) instanceof Brick) {
                 map.replace(x, y - 1, new Grass(x, y - 1, Sprite.grass.getFxImage()));
