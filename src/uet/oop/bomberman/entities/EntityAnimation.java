@@ -6,7 +6,7 @@ import uet.oop.bomberman.controller.Direction.DIRECTION;
 public abstract class EntityAnimation extends Entity {
     public DIRECTION direction = DIRECTION.RIGHT;
     protected boolean isRunning = false;
-    public int speed = 3;
+    public int speed = 2;
     public EntityAnimation(int xUnit, int yUnit, Image img) {
         super(xUnit, yUnit, img);
     }

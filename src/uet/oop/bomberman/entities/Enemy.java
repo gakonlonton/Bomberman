@@ -13,7 +13,7 @@ public class Enemy extends EntityDestroyable {
     }
 
     public boolean goLeft() {
-        if (collisionManager.enemyTouchObstacle(x - speed, y)) {
+        if (collisionManager.touchObstacle(x - speed, y, 1)) {
             return false;
         }
         else {
@@ -23,7 +23,7 @@ public class Enemy extends EntityDestroyable {
     }
 
     public boolean goRight() {
-        if (collisionManager.enemyTouchObstacle(x + speed, y)) {
+        if (collisionManager.touchObstacle(x + speed, y, 1)) {
             return false;
         }
         else {
@@ -33,7 +33,7 @@ public class Enemy extends EntityDestroyable {
     }
 
     public boolean goUp() {
-        if (collisionManager.enemyTouchObstacle(x, y - speed)) {
+        if (collisionManager.touchObstacle(x, y - speed, 1)) {
             return false;
         }
         else {
@@ -43,7 +43,7 @@ public class Enemy extends EntityDestroyable {
     }
 
     public boolean goDown() {
-        if (collisionManager.enemyTouchObstacle(x, y + speed)) {
+        if (collisionManager.touchObstacle(x, y + speed, 1)) {
             return false;
         }
         else {

@@ -94,6 +94,18 @@ public class Bomb extends Entity implements Obstacle {
         }
     }
 
+    public boolean inRange(int _x, int _y) {
+        int xTile = _x / Sprite.SCALED_SIZE;
+        int yTile = _y / Sprite.SCALED_SIZE;
+        int xBomb = x / Sprite.SCALED_SIZE;
+        int yBomb = y / Sprite.SCALED_SIZE;
+        return (xTile == xBomb && yTile == yBomb)
+                || (xTile == xBomb && yTile + flameLength == yBomb)
+                || (xTile == xBomb && yTile - flameLength == yBomb)
+                || (xTile == xBomb + flameLength && yTile == yBomb)
+                || (xTile == xBomb - flameLength && yTile == yBomb);
+    }
+
     public void bombExplode() {
         x = x / Sprite.SCALED_SIZE;
         y = y / Sprite.SCALED_SIZE;

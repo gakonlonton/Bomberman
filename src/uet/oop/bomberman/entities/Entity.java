@@ -38,5 +38,5 @@ public abstract class Entity {
     }
     public abstract void update();
 
-    public void checkKeyEvent(KeyCode keys, boolean isPress) {}
+    public void isPressed(KeyCode keys, boolean isPress) {}
 }
