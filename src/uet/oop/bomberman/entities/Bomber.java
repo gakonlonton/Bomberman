@@ -80,7 +80,9 @@ public class Bomber extends EntityAnimation {
         }
         if (status == bomberStatus.DEAD) {
             spriteIndex++;
-            pickSprite(Sprite.movingSprite(Sprite.player_dead1, Sprite.player_dead2, Sprite.player_dead3, spriteIndex, 20).getFxImage());
+            pickSprite(Sprite.movingSprite(Sprite.player_dead1,
+                                        Sprite.player_dead2,
+                                        Sprite.player_dead3, spriteIndex, 20).getFxImage());
             if (spriteIndex >= 20) {
                 GameMaster.gameStatus = GameMaster.ingameSatus.LOBBY;
                 return;
@@ -99,7 +101,9 @@ public class Bomber extends EntityAnimation {
                 spriteIndex = 0;
             }
             else super.update(DIRECTION.UP, true, speed);
-            pickSprite(Sprite.movingSprite(Sprite.player_up, Sprite.player_up_1, Sprite.player_up_2, spriteIndex, 20).getFxImage());
+            pickSprite(Sprite.movingSprite(Sprite.player_up,
+                                        Sprite.player_up_1,
+                                        Sprite.player_up_2, spriteIndex, 20).getFxImage());
         }
         if (goDown) {
             pressed = true;
@@ -109,7 +113,9 @@ public class Bomber extends EntityAnimation {
                 spriteIndex = 0;
             }
             else super.update(DIRECTION.DOWN, true, speed);
-            pickSprite(Sprite.movingSprite(Sprite.player_down, Sprite.player_down_1, Sprite.player_down_2, spriteIndex, 20).getFxImage());
+            pickSprite(Sprite.movingSprite(Sprite.player_down,
+                                        Sprite.player_down_1,
+                                        Sprite.player_down_2, spriteIndex, 20).getFxImage());
         }
         if (goLeft) {
             pressed = true;
@@ -119,7 +125,9 @@ public class Bomber extends EntityAnimation {
                 spriteIndex = 0;
             }
             else super.update(DIRECTION.LEFT, true, speed);
-            pickSprite(Sprite.movingSprite(Sprite.player_left, Sprite.player_left_1, Sprite.player_left_2, spriteIndex, 20).getFxImage());
+            pickSprite(Sprite.movingSprite(Sprite.player_left,
+                                        Sprite.player_left_1,
+                                        Sprite.player_left_2, spriteIndex, 20).getFxImage());
         }
         if (goRight) {
             pressed = true;
@@ -129,7 +137,9 @@ public class Bomber extends EntityAnimation {
                 spriteIndex = 0;
             }
             else super.update(DIRECTION.RIGHT, true, speed);
-            pickSprite(Sprite.movingSprite(Sprite.player_right, Sprite.player_right_1, Sprite.player_right_2, spriteIndex, 20).getFxImage());
+            pickSprite(Sprite.movingSprite(Sprite.player_right,
+                                        Sprite.player_right_1,
+                                        Sprite.player_right_2, spriteIndex, 20).getFxImage());
         }
         if (placedBomb) {
             pressed = true;

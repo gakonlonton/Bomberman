@@ -83,14 +83,8 @@ public class Bomb extends Entity implements Obstacle {
             pickSprite(Sprite.movingSprite(Sprite.bomb, Sprite.bomb_1, Sprite.bomb_2, spriteIndex, 30).getFxImage());
         }
         if (bombStatus == status.EXPLODED) {
-            spriteIndex = (spriteIndex + 1) % 1000;
             bombStatus = flameExplode.get(0).getStatus();
             flameExplode.forEach(Entity::update);
-            bombStatus = (spriteIndex == 15) ? status.DISAPPEAR : bombStatus;
-            if (spriteIndex == 15) {
-                bombStatus = status.DISAPPEAR;
-                bombExplode();
-            }
         }
     }
 
@@ -104,32 +98,6 @@ public class Bomb extends Entity implements Obstacle {
                 || (xTile == xBomb && yTile - flameLength == yBomb)
                 || (xTile == xBomb + flameLength && yTile == yBomb)
                 || (xTile == xBomb - flameLength && yTile == yBomb);
-    }
-
-    public void bombExplode() {
-        x = x / Sprite.SCALED_SIZE;
-        y = y / Sprite.SCALED_SIZE;
-        for (int i = 1; i <= flameLength; i++) {
-            // Destroy up side
-            if (map.getMap().get(y - 1).get(x) instanceof Brick) {
-                map.replace(x, y - 1, new Grass(x, y - 1, Sprite.grass.getFxImage()));
-            }
-
-            // Destroy down side
-            if (map.getMap().get(y + 1).get(x) instanceof Brick) {
-                map.replace(x, y + 1, new Grass(x, y + 1, Sprite.grass.getFxImage()));
-            }
-
-            // Destroy left side
-            if (map.getMap().get(y).get(x - 1) instanceof Brick) {
-                map.replace(x - 1, y, new Grass(x - 1, y, Sprite.grass.getFxImage()));
-            }
-
-            // Destroy right side
-            if (map.getMap().get(y).get(x + 1) instanceof Brick) {
-                map.replace(x + 1, y, new Grass(x + 1, y, Sprite.grass.getFxImage()));
-            }
-        }
     }
 
     @Override

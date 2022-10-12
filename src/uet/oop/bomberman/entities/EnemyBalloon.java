@@ -28,7 +28,9 @@ public class EnemyBalloon extends Enemy {
                 spriteIndex = 0;
             }
             else super.update(DIRECTION.LEFT, true, this.speed);
-            pickSprite(Sprite.movingSprite(Sprite.balloom_left1, Sprite.balloom_left2, Sprite.balloom_left3, spriteIndex, 20).getFxImage());
+            pickSprite(Sprite.movingSprite(Sprite.balloom_left1,
+                                        Sprite.balloom_left2,
+                                        Sprite.balloom_left3, spriteIndex, 20).getFxImage());
         }
 
         if (direction == DIRECTION.RIGHT) {
@@ -37,7 +39,9 @@ public class EnemyBalloon extends Enemy {
                 goRandom();
             }
             else super.update(DIRECTION.RIGHT, true, this.speed);
-            pickSprite(Sprite.movingSprite(Sprite.balloom_right1, Sprite.balloom_right2, Sprite.balloom_right3, spriteIndex, 20).getFxImage());
+            pickSprite(Sprite.movingSprite(Sprite.balloom_right1,
+                                        Sprite.balloom_right2,
+                                        Sprite.balloom_right3, spriteIndex, 20).getFxImage());
         }
 
         if (direction == DIRECTION.UP) {
@@ -46,7 +50,9 @@ public class EnemyBalloon extends Enemy {
                 goRandom();
             }
             else super.update(DIRECTION.UP, true, this.speed);
-            pickSprite(Sprite.movingSprite(Sprite.balloom_right1, Sprite.balloom_right2, Sprite.balloom_right3, spriteIndex, 20).getFxImage());
+            pickSprite(Sprite.movingSprite(Sprite.balloom_right1,
+                                        Sprite.balloom_right2,
+                                        Sprite.balloom_right3, spriteIndex, 20).getFxImage());
         }
 
         if (direction == DIRECTION.DOWN) {
@@ -55,7 +61,9 @@ public class EnemyBalloon extends Enemy {
                 goRandom();
             }
             else super.update(DIRECTION.DOWN, true, this.speed);
-            pickSprite(Sprite.movingSprite(Sprite.balloom_left1, Sprite.balloom_left2, Sprite.balloom_left3, spriteIndex, 20).getFxImage());
+            pickSprite(Sprite.movingSprite(Sprite.balloom_left1,
+                                        Sprite.balloom_left2,
+                                        Sprite.balloom_left3, spriteIndex, 20).getFxImage());
         }
     }
 
