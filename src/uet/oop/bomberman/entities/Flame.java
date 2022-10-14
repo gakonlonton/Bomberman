@@ -7,7 +7,7 @@ import uet.oop.bomberman.graphics.Sprite;
 
 public class Flame extends Entity {
     enum flameType {
-        UP, DOWN, LEFT, RIGHT, CENTER
+        UP, DOWN, LEFT, RIGHT, CENTER, VERTICAL, HORIZON
     }
     private int spriteIndex = 0;
     private flameType type;
@@ -32,6 +32,12 @@ public class Flame extends Entity {
                 break;
             case RIGHT:
                 img = Sprite.explosion_horizontal_right_last.getFxImage();
+                break;
+            case HORIZON:
+                img = Sprite.explosion_horizontal.getFxImage();
+                break;
+            case VERTICAL:
+                img = Sprite.explosion_vertical.getFxImage();
                 break;
             case CENTER:
                 img = Sprite.bomb_exploded2.getFxImage();
@@ -80,6 +86,18 @@ public class Flame extends Entity {
                 pickSprite(Sprite.movingSprite(Sprite.bomb_exploded,
                         Sprite.bomb_exploded1,
                         Sprite.bomb_exploded2,
+                        spriteIndex, 20).getFxImage());
+                break;
+            case VERTICAL:
+                pickSprite(Sprite.movingSprite(Sprite.explosion_vertical,
+                        Sprite.explosion_vertical1,
+                        Sprite.explosion_vertical2,
+                        spriteIndex, 20).getFxImage());
+                break;
+            case HORIZON:
+                pickSprite(Sprite.movingSprite(Sprite.explosion_horizontal,
+                        Sprite.explosion_horizontal1,
+                        Sprite.explosion_horizontal2,
                         spriteIndex, 20).getFxImage());
                 break;
             default:

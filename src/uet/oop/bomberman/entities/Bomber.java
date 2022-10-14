@@ -28,6 +28,17 @@ public class Bomber extends EntityAnimation {
     public List<Bomb> bombManager = new ArrayList<>();
     private int spriteIndex = 0;
 
+    /*
+        Stats that can change when pick up Item
+     */
+    public static int speed = 3;
+    public static int flameLength = 3;
+    public static int bombCount = 1;
+
+    /*
+        Constructor
+     */
+
     public Bomber(int x, int y, Image img, CollisionManager collisionManager) {
         super(x, y, img);
         this.collisionManager = collisionManager;
@@ -75,6 +86,7 @@ public class Bomber extends EntityAnimation {
             updatePosition();
             updateBomb();
             updateBombManager();
+            updateItemState();
             updateBomberStatus();
             updateExplosion();
         }
@@ -167,11 +179,22 @@ public class Bomber extends EntityAnimation {
 
     public void updateBomb() {
         if (placedBomb) {
-            int _x = (x + Sprite.SCALED_SIZE / 2) / Sprite.SCALED_SIZE;
-            int _y = (y + Sprite.SCALED_SIZE / 2) / Sprite.SCALED_SIZE;
-            Bomb bomb = new Bomb(_x, _y, Sprite.bomb.getFxImage(), collisionManager);
-            bombManager.add(bomb);
-            placedBomb = false;
+            if (bombManager.size() < bombCount) {
+                int _x = (x + Sprite.SCALED_SIZE / 2) / Sprite.SCALED_SIZE;
+                int _y = (y + Sprite.SCALED_SIZE / 2) / Sprite.SCALED_SIZE;
+                Bomb bomb = new Bomb(_x, _y, Sprite.bomb.getFxImage(), collisionManager);
+                boolean already = false;
+                for (Entity i : bombManager) {
+                    if (i.x == bomb.x && i.y == bomb.y) {
+                        already = true;
+                        break;
+                    }
+                }
+                if (!already) {
+                    bombManager.add(bomb);
+                }
+                placedBomb = false;
+            }
         }
     }
 
@@ -195,6 +218,22 @@ public class Bomber extends EntityAnimation {
         }
     }
 
+    public boolean setItems(int xTile, int yTile) {
+        switch (map.getItems(xTile, yTile)) {
+            case ItemSpeed.code:
+                map.replace(xTile, yTile, new ItemSpeed(xTile, yTile, Sprite.powerup_speed.getFxImage()));
+                return true;
+            case ItemFlame.code:
+                map.replace(xTile, yTile, new ItemFlame(xTile, yTile, Sprite.powerup_flames.getFxImage()));
+                return true;
+            case ItemBomb.code:
+                map.replace(xTile, yTile, new ItemBomb(xTile, yTile, Sprite.powerup_bombs.getFxImage()));
+                return true;
+            default:
+                return false;
+        }
+    }
+
     public void updateExplosion() {
         for (int i = 0; i < bombManager.size(); i++) {
             Bomb bomb = bombManager.get(i);
@@ -202,37 +241,78 @@ public class Bomber extends EntityAnimation {
                 int xTile = bomb.x / Sprite.SCALED_SIZE;
                 int yTile = bomb.y / Sprite.SCALED_SIZE;
                 Entity tmp;
-                for (int dir = 0; dir < 4; dir++) {
-                    switch (dir) {
-                        case 0:
-                            tmp = map.getMap().get(yTile - 1).get(xTile);
-                            if (tmp instanceof Brick) {
-                                map.replace(xTile, yTile - 1, new Grass(xTile, yTile - 1, Sprite.grass.getFxImage()));
-                            }
-                            break;
-                        case 1:
-                            tmp = map.getMap().get(yTile + 1).get(xTile);
-                            if (tmp instanceof Brick) {
-                                map.replace(xTile, yTile + 1, new Grass(xTile, yTile + 1, Sprite.grass.getFxImage()));
-                            }
-                            break;
-                        case 2:
-                            tmp = map.getMap().get(yTile).get(xTile - 1);
-                            if (tmp instanceof Brick) {
-                                map.replace(xTile - 1, yTile, new Grass(xTile - 1, yTile, Sprite.grass.getFxImage()));
-                            }
-                            break;
-                        case 3:
-                            tmp = map.getMap().get(yTile).get(xTile + 1);
-                            if (tmp instanceof Brick) {
-                                map.replace(xTile + 1, yTile, new Grass(xTile + 1, yTile, Sprite.grass.getFxImage()));
-                            }
-                            break;
-                        default:
-                            break;
+                boolean upCheck = true, downCheck = true, leftCheck = true, rightCheck = true;
+                System.out.println("o dadadayd " + xTile + " " + yTile);
+                for (int len = 1; len <= flameLength; len++) {
+                    System.out.println(len);
+                    for (int dir = 0; dir < 4; dir++) {
+                        switch (dir) {
+                            case 0:
+                                if (upCheck) {
+                                    tmp = map.getMap().get(Math.max(yTile - len, 0)).get(xTile);
+                                    if (tmp instanceof Obstacle) upCheck = false;
+                                    if (tmp instanceof Brick) {
+                                        if (!setItems(xTile, Math.max(yTile - len, 0))) {
+                                            map.replace(xTile, Math.max(yTile - len, 0), new Grass(xTile, Math.max(yTile - len, 0), Sprite.grass.getFxImage()));
+                                        }
+                                    }
+                                }
+                                break;
+                            case 1:
+                                if (downCheck) {
+                                    System.out.println("true day tai " + xTile + " " + yTile + len);
+                                    tmp = map.getMap().get(Math.min(yTile + len, 18)).get(xTile);
+                                    if (tmp instanceof Obstacle) {
+                                        downCheck = false;
+                                        System.out.println("nhma roi lai false tai " + xTile + " " + yTile + len);
+                                    }
+                                    if (tmp instanceof Brick) {
+                                        System.out.println(xTile + " " + yTile + len);
+                                        if (!setItems(xTile, Math.min(yTile + len, 18))) {
+                                            map.replace(xTile, Math.min(yTile + len, 18), new Grass(xTile, Math.min(yTile + len, 18), Sprite.grass.getFxImage()));
+                                        }
+                                    }
+                                }
+                                break;
+                            case 2:
+                                if (leftCheck) {
+                                    tmp = map.getMap().get(yTile).get(Math.max(xTile - len, 0));
+                                    if (tmp instanceof Obstacle) leftCheck = false;
+                                    if (tmp instanceof Brick) {
+                                        if (!setItems(Math.max(xTile - len, 0), yTile)) {
+                                            map.replace(Math.max(xTile - len, 0), yTile, new Grass(Math.max(xTile - len, 0), yTile, Sprite.grass.getFxImage()));
+                                        }
+                                    }
+                                }
+                                break;
+                            case 3:
+                                if (rightCheck) {
+                                    tmp = map.getMap().get(yTile).get(Math.min(xTile + len, 32));
+                                    if (tmp instanceof Obstacle) rightCheck = false;
+                                    if (tmp instanceof Brick) {
+                                        if (!setItems(Math.min(xTile + len, 32), yTile)) {
+                                            map.replace(Math.min(xTile + len, 32), yTile, new Grass(Math.min(xTile + len, 32), yTile, Sprite.grass.getFxImage()));
+                                        }
+                                    }
+                                }
+                                break;
+                            default:
+                                break;
+                        }
                     }
                 }
             }
+        }
+    }
+
+    public void updateItemState() {
+        Entity item = map.getPosition(x + 16, y + 16);
+        if (item instanceof Item) {
+            Item tmp = (Item) item;
+            tmp.powerUp(this);
+            int xTile = (x + 16) / Sprite.SCALED_SIZE;
+            int yTile = (y + 16) / Sprite.SCALED_SIZE;
+            map.replace(xTile, yTile, new Grass(xTile, yTile, Sprite.grass.getFxImage()));
         }
     }
     @Override

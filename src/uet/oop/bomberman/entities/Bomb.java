@@ -6,10 +6,9 @@ import uet.oop.bomberman.controller.CollisionManager;
 import uet.oop.bomberman.graphics.Map;
 import uet.oop.bomberman.graphics.Sprite;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
+
+import static uet.oop.bomberman.entities.Bomber.*;
 
 public class Bomb extends Entity implements Obstacle {
     public enum status {
@@ -17,9 +16,11 @@ public class Bomb extends Entity implements Obstacle {
     }
 
     public status bombStatus;
-    protected List<Flame> flameExplode = new ArrayList<>();
-    public int flameLength = 1;
-
+    protected List<Flame> UpFlame = new ArrayList<>();
+    protected List<Flame> DownFlame = new ArrayList<>();
+    protected List<Flame> LeftFlame = new ArrayList<>();
+    protected List<Flame> RightFlame = new ArrayList<>();
+    protected Flame CenterFlame;
     private int delayTime = 3;
     private int spriteIndex = 0;
     private CollisionManager collisionManager;
@@ -49,22 +50,83 @@ public class Bomb extends Entity implements Obstacle {
         this.map = collisionManager.getMap();
         bombStatus = status.REMAIN;
         timer.schedule(task, 0, 1000);
-        for (int i = 0; i < 5; i++) {
+        CenterFlame = new Flame(x, y, Flame.flameType.CENTER, map);
+        int _x = x * Sprite.SCALED_SIZE;
+        int _y = y * Sprite.SCALED_SIZE;
+        boolean leftCheck = true, rightCheck = true, upCheck = true, downCheck = true;
+        for (int len = 1; len < flameLength; len++) {
+            for (int i = 0; i < 4; i++) {
+                switch (i) {
+                    case 0:
+                        if (map.getPosition(_x, Math.min(_y + len * Sprite.SCALED_SIZE, 18 * Sprite.SCALED_SIZE)) instanceof Obstacle) {
+                            downCheck = false;
+                        }
+                        if (downCheck) {
+                            DownFlame.add(new Flame(x, Math.min(y + len, 18), Flame.flameType.VERTICAL, map));
+                        }
+                        break;
+                    case 1:
+                        if (map.getPosition(_x, Math.max(_y - len * Sprite.SCALED_SIZE, 0 * Sprite.SCALED_SIZE)) instanceof Obstacle) {
+                            upCheck = false;
+                        }
+                        if (upCheck) {
+                            UpFlame.add(new Flame(x, Math.max(y - len, 0), Flame.flameType.VERTICAL, map));
+                        }
+                        break;
+                    case 2:
+                        if (map.getPosition(Math.max(_x - len * Sprite.SCALED_SIZE, 0 * Sprite.SCALED_SIZE), _y) instanceof Obstacle) {
+                            leftCheck = false;
+                        }
+                        if (leftCheck) {
+                            LeftFlame.add(new Flame(Math.max(x - len, 0), y, Flame.flameType.HORIZON, map));
+                        }
+                        break;
+                    case 3:
+                        if (map.getPosition(Math.min(_x + len * Sprite.SCALED_SIZE, 32 * Sprite.SCALED_SIZE), _y) instanceof Obstacle) {
+                            rightCheck = false;
+                        }
+                        if (rightCheck) {
+                            RightFlame.add(new Flame(Math.min(x + len, 32), y, Flame.flameType.HORIZON, map));
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+        for (int i = 0; i < 4; i++) {
             switch (i) {
                 case 0:
-                    flameExplode.add(new Flame(x, y + 1, Flame.flameType.DOWN, map));
+                    if (map.getPosition(_x, Math.min(_y + flameLength * Sprite.SCALED_SIZE, 18 * Sprite.SCALED_SIZE)) instanceof Obstacle) {
+                        downCheck = false;
+                    }
+                    if (downCheck) {
+                        DownFlame.add(new Flame(x, Math.min(y + flameLength, 18), Flame.flameType.DOWN, map));
+                    }
                     break;
                 case 1:
-                    flameExplode.add(new Flame(x, y - 1, Flame.flameType.UP, map));
+                    if (map.getPosition(_x, Math.max(_y - flameLength * Sprite.SCALED_SIZE, 0 * Sprite.SCALED_SIZE)) instanceof Obstacle) {
+                        upCheck = false;
+                    }
+                    if (upCheck) {
+                        UpFlame.add(new Flame(x, Math.max(y - flameLength, 0), Flame.flameType.UP, map));
+                    }
                     break;
                 case 2:
-                    flameExplode.add(new Flame(x - 1, y, Flame.flameType.LEFT, map));
+                    if (map.getPosition(Math.max(_x - flameLength * Sprite.SCALED_SIZE, 0 * Sprite.SCALED_SIZE), _y) instanceof Obstacle) {
+                        leftCheck = false;
+                    }
+                    if (leftCheck) {
+                        LeftFlame.add(new Flame(Math.max(x - flameLength, 0), y, Flame.flameType.LEFT, map));
+                    }
                     break;
                 case 3:
-                    flameExplode.add(new Flame(x + 1, y, Flame.flameType.RIGHT, map));
-                    break;
-                case 4:
-                    flameExplode.add(new Flame(x, y, Flame.flameType.CENTER, map));
+                    if (map.getPosition(Math.min(_x + flameLength * Sprite.SCALED_SIZE, 32 * Sprite.SCALED_SIZE), _y) instanceof Obstacle) {
+                        rightCheck = false;
+                    }
+                    if (rightCheck) {
+                        RightFlame.add(new Flame(Math.min(x + flameLength, 32), y, Flame.flameType.RIGHT, map));
+                    }
                     break;
                 default:
                     break;
@@ -83,8 +145,12 @@ public class Bomb extends Entity implements Obstacle {
             pickSprite(Sprite.movingSprite(Sprite.bomb, Sprite.bomb_1, Sprite.bomb_2, spriteIndex, 30).getFxImage());
         }
         if (bombStatus == status.EXPLODED) {
-            bombStatus = flameExplode.get(0).getStatus();
-            flameExplode.forEach(Entity::update);
+            bombStatus = CenterFlame.getStatus();
+            UpFlame.forEach(Entity::update);
+            DownFlame.forEach(Entity::update);
+            LeftFlame.forEach(Entity::update);
+            RightFlame.forEach(Entity::update);
+            CenterFlame.update();
         }
     }
 
@@ -100,13 +166,20 @@ public class Bomb extends Entity implements Obstacle {
                 || (xTile == xBomb - flameLength && yTile == yBomb);
     }
 
+    public void setBombStatus(status S) {
+        this.bombStatus = S;
+    }
+
     @Override
     public void render(GraphicsContext gc) {
         if (bombStatus == status.REMAIN) {
             super.render(gc);
         }
         if (bombStatus == status.EXPLODED) {
-            flameExplode.forEach(g-> g.render(gc));
+            for (List<Flame> flames : Arrays.asList(UpFlame, DownFlame, LeftFlame, RightFlame)) {
+                flames.forEach(g -> g.render(gc));
+            }
+            CenterFlame.render(gc);
         }
     }
 }

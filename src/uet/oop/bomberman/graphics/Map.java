@@ -19,6 +19,7 @@ import static uet.oop.bomberman.BombermanGame.WINDOW_WIDTH;
 
 public class Map {
     private int level;
+    protected int[][] itemList;
     protected List<List<Entity>> map = new ArrayList<>();
 
     public Map(int level) {
@@ -41,6 +42,7 @@ public class Map {
             System.out.println("Map file not found!");
         }
         sc.nextLine();
+        itemList = new int[WINDOW_HEIGHT][WINDOW_WIDTH];
         for (int i = 0; i < WINDOW_HEIGHT; i++) {
             String tempLine = sc.nextLine();
             map.add(new ArrayList<>());
@@ -61,6 +63,22 @@ public class Map {
                         map.get(i).add(new Grass(j, i, Sprite.grass.getFxImage()));
                         Enemy balloon = new EnemyBalloon(j, i, Sprite.balloom_left1.getFxImage(), new CollisionManager(this));
                         GameMaster.entities.get(level).add(balloon);
+                        break;
+                    case 'x':
+                        map.get(i).add(new Brick(j, i, Sprite.brick.getFxImage()));
+                        itemList[i][j] = ItemPortal.code;
+                        break;
+                    case 'b':
+                        map.get(i).add(new Brick(j, i, Sprite.brick.getFxImage()));
+                        itemList[i][j] = ItemBomb.code;
+                        break;
+                    case 'f':
+                        map.get(i).add(new Brick(j, i, Sprite.brick.getFxImage()));
+                        itemList[i][j] = ItemFlame.code;
+                        break;
+                    case 's':
+                        map.get(i).add(new Brick(j, i, Sprite.brick.getFxImage()));
+                        itemList[i][j] = ItemSpeed.code;
                         break;
                     default:
                         map.get(i).add(new Grass(j, i, Sprite.grass.getFxImage()));
@@ -87,6 +105,10 @@ public class Map {
         int roundedX = Math.round(x / Sprite.SCALED_SIZE);
         int roundedY = Math.round(y / Sprite.SCALED_SIZE);
         return map.get(roundedY).get(roundedX);
+    }
+
+    public int getItems(int x, int y) {
+        return itemList[y][x];
     }
 
     public void replace(int x, int y, Entity entity) {
