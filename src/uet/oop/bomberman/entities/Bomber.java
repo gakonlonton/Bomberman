@@ -222,6 +222,7 @@ public class Bomber extends EntityAnimation {
         switch (map.getItems(xTile, yTile)) {
             case ItemSpeed.code:
                 map.replace(xTile, yTile, new ItemSpeed(xTile, yTile, Sprite.powerup_speed.getFxImage()));
+
                 return true;
             case ItemFlame.code:
                 map.replace(xTile, yTile, new ItemFlame(xTile, yTile, Sprite.powerup_flames.getFxImage()));
@@ -240,18 +241,12 @@ public class Bomber extends EntityAnimation {
             if (bomb.getBombStatus() == Bomb.status.EXPLODED) {
                 int xTile = bomb.x / Sprite.SCALED_SIZE;
                 int yTile = bomb.y / Sprite.SCALED_SIZE;
-                Entity tmp;
-                boolean upCheck = true, downCheck = true, leftCheck = true, rightCheck = true;
-                System.out.println("o dadadayd " + xTile + " " + yTile);
                 for (int len = 1; len <= flameLength; len++) {
-                    System.out.println(len);
                     for (int dir = 0; dir < 4; dir++) {
                         switch (dir) {
                             case 0:
-                                if (upCheck) {
-                                    tmp = map.getMap().get(Math.max(yTile - len, 0)).get(xTile);
-                                    if (tmp instanceof Obstacle) upCheck = false;
-                                    if (tmp instanceof Brick) {
+                                if (bomb.hasFlameAt(len, DIRECTION.UP) || len == 1) {
+                                    if (map.getMap().get(Math.max(yTile - len, 0)).get(xTile) instanceof Brick) {
                                         if (!setItems(xTile, Math.max(yTile - len, 0))) {
                                             map.replace(xTile, Math.max(yTile - len, 0), new Grass(xTile, Math.max(yTile - len, 0), Sprite.grass.getFxImage()));
                                         }
@@ -259,15 +254,8 @@ public class Bomber extends EntityAnimation {
                                 }
                                 break;
                             case 1:
-                                if (downCheck) {
-                                    System.out.println("true day tai " + xTile + " " + yTile + len);
-                                    tmp = map.getMap().get(Math.min(yTile + len, 18)).get(xTile);
-                                    if (tmp instanceof Obstacle) {
-                                        downCheck = false;
-                                        System.out.println("nhma roi lai false tai " + xTile + " " + yTile + len);
-                                    }
-                                    if (tmp instanceof Brick) {
-                                        System.out.println(xTile + " " + yTile + len);
+                                if (bomb.hasFlameAt(len, DIRECTION.DOWN) || len == 1) {
+                                    if (map.getMap().get(Math.min(yTile + len, 18)).get(xTile) instanceof Brick) {
                                         if (!setItems(xTile, Math.min(yTile + len, 18))) {
                                             map.replace(xTile, Math.min(yTile + len, 18), new Grass(xTile, Math.min(yTile + len, 18), Sprite.grass.getFxImage()));
                                         }
@@ -275,10 +263,8 @@ public class Bomber extends EntityAnimation {
                                 }
                                 break;
                             case 2:
-                                if (leftCheck) {
-                                    tmp = map.getMap().get(yTile).get(Math.max(xTile - len, 0));
-                                    if (tmp instanceof Obstacle) leftCheck = false;
-                                    if (tmp instanceof Brick) {
+                                if (bomb.hasFlameAt(len, DIRECTION.LEFT) || len == 1) {
+                                    if (map.getMap().get(yTile).get(Math.max(xTile - len, 0)) instanceof Brick) {
                                         if (!setItems(Math.max(xTile - len, 0), yTile)) {
                                             map.replace(Math.max(xTile - len, 0), yTile, new Grass(Math.max(xTile - len, 0), yTile, Sprite.grass.getFxImage()));
                                         }
@@ -286,10 +272,8 @@ public class Bomber extends EntityAnimation {
                                 }
                                 break;
                             case 3:
-                                if (rightCheck) {
-                                    tmp = map.getMap().get(yTile).get(Math.min(xTile + len, 32));
-                                    if (tmp instanceof Obstacle) rightCheck = false;
-                                    if (tmp instanceof Brick) {
+                                if (bomb.hasFlameAt(len, DIRECTION.RIGHT) || len == 1) {
+                                    if (map.getMap().get(yTile).get(Math.min(xTile + len, 32)) instanceof Brick) {
                                         if (!setItems(Math.min(xTile + len, 32), yTile)) {
                                             map.replace(Math.min(xTile + len, 32), yTile, new Grass(Math.min(xTile + len, 32), yTile, Sprite.grass.getFxImage()));
                                         }
@@ -313,6 +297,7 @@ public class Bomber extends EntityAnimation {
             int xTile = (x + 16) / Sprite.SCALED_SIZE;
             int yTile = (y + 16) / Sprite.SCALED_SIZE;
             map.replace(xTile, yTile, new Grass(xTile, yTile, Sprite.grass.getFxImage()));
+
         }
     }
     @Override

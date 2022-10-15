@@ -37,6 +37,7 @@ public class EnemyBalloon extends Enemy {
             spriteIndex++;
             if (collisionManager.touchObstacle(x + this.speed, y, 1)) {
                 goRandom();
+                spriteIndex = 0;
             }
             else super.update(DIRECTION.RIGHT, true, this.speed);
             pickSprite(Sprite.movingSprite(Sprite.balloom_right1,
@@ -48,6 +49,7 @@ public class EnemyBalloon extends Enemy {
             spriteIndex++;
             if (collisionManager.touchObstacle(x, y - this.speed, 1)) {
                 goRandom();
+                spriteIndex = 0;
             }
             else super.update(DIRECTION.UP, true, this.speed);
             pickSprite(Sprite.movingSprite(Sprite.balloom_right1,
@@ -59,6 +61,7 @@ public class EnemyBalloon extends Enemy {
             spriteIndex++;
             if (collisionManager.touchObstacle(x, y + this.speed, 1)) {
                 goRandom();
+                spriteIndex = 0;
             }
             else super.update(DIRECTION.DOWN, true, this.speed);
             pickSprite(Sprite.movingSprite(Sprite.balloom_left1,

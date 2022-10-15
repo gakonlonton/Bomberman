@@ -3,11 +3,13 @@ package uet.oop.bomberman.entities;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import uet.oop.bomberman.controller.CollisionManager;
+import uet.oop.bomberman.controller.Direction.DIRECTION;
 import uet.oop.bomberman.graphics.Map;
 import uet.oop.bomberman.graphics.Sprite;
 
 import java.util.*;
 
+import static uet.oop.bomberman.BombermanGame.*;
 import static uet.oop.bomberman.entities.Bomber.*;
 
 public class Bomb extends Entity implements Obstacle {
@@ -58,11 +60,11 @@ public class Bomb extends Entity implements Obstacle {
             for (int i = 0; i < 4; i++) {
                 switch (i) {
                     case 0:
-                        if (map.getPosition(_x, Math.min(_y + len * Sprite.SCALED_SIZE, 18 * Sprite.SCALED_SIZE)) instanceof Obstacle) {
+                        if (map.getPosition(_x, Math.min(_y + len * Sprite.SCALED_SIZE, WINDOW_HEIGHT * Sprite.SCALED_SIZE - 1)) instanceof Obstacle) {
                             downCheck = false;
                         }
                         if (downCheck) {
-                            DownFlame.add(new Flame(x, Math.min(y + len, 18), Flame.flameType.VERTICAL, map));
+                            DownFlame.add(new Flame(x, Math.min(y + len, WINDOW_HEIGHT), Flame.flameType.VERTICAL, map));
                         }
                         break;
                     case 1:
@@ -82,11 +84,11 @@ public class Bomb extends Entity implements Obstacle {
                         }
                         break;
                     case 3:
-                        if (map.getPosition(Math.min(_x + len * Sprite.SCALED_SIZE, 32 * Sprite.SCALED_SIZE), _y) instanceof Obstacle) {
+                        if (map.getPosition(Math.min(_x + len * Sprite.SCALED_SIZE, WINDOW_WIDTH * Sprite.SCALED_SIZE - 1), _y) instanceof Obstacle) {
                             rightCheck = false;
                         }
                         if (rightCheck) {
-                            RightFlame.add(new Flame(Math.min(x + len, 32), y, Flame.flameType.HORIZON, map));
+                            RightFlame.add(new Flame(Math.min(x + len, WINDOW_WIDTH), y, Flame.flameType.HORIZON, map));
                         }
                         break;
                     default:
@@ -97,7 +99,7 @@ public class Bomb extends Entity implements Obstacle {
         for (int i = 0; i < 4; i++) {
             switch (i) {
                 case 0:
-                    if (map.getPosition(_x, Math.min(_y + flameLength * Sprite.SCALED_SIZE, 18 * Sprite.SCALED_SIZE)) instanceof Obstacle) {
+                    if (map.getPosition(_x, Math.min(_y + flameLength * Sprite.SCALED_SIZE, WINDOW_HEIGHT * Sprite.SCALED_SIZE - 1)) instanceof Obstacle) {
                         downCheck = false;
                     }
                     if (downCheck) {
@@ -121,7 +123,7 @@ public class Bomb extends Entity implements Obstacle {
                     }
                     break;
                 case 3:
-                    if (map.getPosition(Math.min(_x + flameLength * Sprite.SCALED_SIZE, 32 * Sprite.SCALED_SIZE), _y) instanceof Obstacle) {
+                    if (map.getPosition(Math.min(_x + flameLength * Sprite.SCALED_SIZE, WINDOW_WIDTH * Sprite.SCALED_SIZE - 1), _y) instanceof Obstacle) {
                         rightCheck = false;
                     }
                     if (rightCheck) {
@@ -168,6 +170,33 @@ public class Bomb extends Entity implements Obstacle {
 
     public void setBombStatus(status S) {
         this.bombStatus = S;
+    }
+
+    public boolean hasFlameAt(int thisLong, DIRECTION direction) {
+        switch (direction) {
+            case LEFT:
+                if (thisLong - 1 > LeftFlame.size()) {
+                    return false;
+                }
+                return true;
+            case RIGHT:
+                if (thisLong - 1 > RightFlame.size()) {
+                    return false;
+                }
+                return true;
+            case UP:
+                if (thisLong - 1 > UpFlame.size()) {
+                    return false;
+                }
+                return true;
+            case DOWN:
+                if (thisLong - 1 > DownFlame.size()) {
+                    return false;
+                }
+                return true;
+            default:
+                return false;
+        }
     }
 
     @Override

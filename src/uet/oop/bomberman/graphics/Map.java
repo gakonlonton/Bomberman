@@ -64,6 +64,11 @@ public class Map {
                         Enemy balloon = new EnemyBalloon(j, i, Sprite.balloom_left1.getFxImage(), new CollisionManager(this));
                         GameMaster.entities.get(level).add(balloon);
                         break;
+                    case '2':
+                        map.get(i).add(new Grass(j, i, Sprite.grass.getFxImage()));
+                        Enemy oneal = new EnemyOneal(j, i, Sprite.oneal_left1.getFxImage(), new CollisionManager(this));
+                        GameMaster.entities.get(level).add(oneal);
+                        break;
                     case 'x':
                         map.get(i).add(new Brick(j, i, Sprite.brick.getFxImage()));
                         itemList[i][j] = ItemPortal.code;
@@ -109,6 +114,15 @@ public class Map {
 
     public int getItems(int x, int y) {
         return itemList[y][x];
+    }
+
+    public Bomber getBomber() {
+        for (int i = 0; i < GameMaster.entities.get(level).size(); i++) {
+            if(GameMaster.entities.get(level).get(i) instanceof Bomber) {
+                return (Bomber) GameMaster.entities.get(level).get(i);
+            }
+        }
+        return null;
     }
 
     public void replace(int x, int y, Entity entity) {
