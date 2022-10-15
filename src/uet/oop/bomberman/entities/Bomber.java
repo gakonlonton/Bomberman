@@ -245,7 +245,7 @@ public class Bomber extends EntityAnimation {
                     for (int dir = 0; dir < 4; dir++) {
                         switch (dir) {
                             case 0:
-                                if (bomb.hasFlameAt(len, DIRECTION.UP) || len == 1) {
+                                if (bomb.hasFlameAt(len, DIRECTION.UP)) {
                                     if (map.getMap().get(Math.max(yTile - len, 0)).get(xTile) instanceof Brick) {
                                         if (!setItems(xTile, Math.max(yTile - len, 0))) {
                                             map.replace(xTile, Math.max(yTile - len, 0), new Grass(xTile, Math.max(yTile - len, 0), Sprite.grass.getFxImage()));
@@ -254,7 +254,7 @@ public class Bomber extends EntityAnimation {
                                 }
                                 break;
                             case 1:
-                                if (bomb.hasFlameAt(len, DIRECTION.DOWN) || len == 1) {
+                                if (bomb.hasFlameAt(len, DIRECTION.DOWN)) {
                                     if (map.getMap().get(Math.min(yTile + len, 18)).get(xTile) instanceof Brick) {
                                         if (!setItems(xTile, Math.min(yTile + len, 18))) {
                                             map.replace(xTile, Math.min(yTile + len, 18), new Grass(xTile, Math.min(yTile + len, 18), Sprite.grass.getFxImage()));
@@ -263,7 +263,7 @@ public class Bomber extends EntityAnimation {
                                 }
                                 break;
                             case 2:
-                                if (bomb.hasFlameAt(len, DIRECTION.LEFT) || len == 1) {
+                                if (bomb.hasFlameAt(len, DIRECTION.LEFT)) {
                                     if (map.getMap().get(yTile).get(Math.max(xTile - len, 0)) instanceof Brick) {
                                         if (!setItems(Math.max(xTile - len, 0), yTile)) {
                                             map.replace(Math.max(xTile - len, 0), yTile, new Grass(Math.max(xTile - len, 0), yTile, Sprite.grass.getFxImage()));
@@ -272,7 +272,7 @@ public class Bomber extends EntityAnimation {
                                 }
                                 break;
                             case 3:
-                                if (bomb.hasFlameAt(len, DIRECTION.RIGHT) || len == 1) {
+                                if (bomb.hasFlameAt(len, DIRECTION.RIGHT)) {
                                     if (map.getMap().get(yTile).get(Math.min(xTile + len, 32)) instanceof Brick) {
                                         if (!setItems(Math.min(xTile + len, 32), yTile)) {
                                             map.replace(Math.min(xTile + len, 32), yTile, new Grass(Math.min(xTile + len, 32), yTile, Sprite.grass.getFxImage()));

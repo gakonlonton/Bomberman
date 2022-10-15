@@ -60,32 +60,56 @@ public class Bomb extends Entity implements Obstacle {
             for (int i = 0; i < 4; i++) {
                 switch (i) {
                     case 0:
-                        if (map.getPosition(_x, Math.min(_y + len * Sprite.SCALED_SIZE, WINDOW_HEIGHT * Sprite.SCALED_SIZE - 1)) instanceof Obstacle) {
+                        if (map.getPosition(_x, Math.min(_y + len * Sprite.SCALED_SIZE,
+                                                        WINDOW_HEIGHT * Sprite.SCALED_SIZE - 1)) instanceof Obstacle) {
+                            if (downCheck && map.getPosition(_x, Math.min(_y + len * Sprite.SCALED_SIZE,
+                                    WINDOW_HEIGHT * Sprite.SCALED_SIZE - 1)) instanceof Brick) {
+                                DownFlame.add(new Flame(x, Math.min(y + len, WINDOW_HEIGHT), Flame.flameType.VERTICAL, map));
+                            }
                             downCheck = false;
+                            break;
                         }
                         if (downCheck) {
                             DownFlame.add(new Flame(x, Math.min(y + len, WINDOW_HEIGHT), Flame.flameType.VERTICAL, map));
                         }
                         break;
                     case 1:
-                        if (map.getPosition(_x, Math.max(_y - len * Sprite.SCALED_SIZE, 0 * Sprite.SCALED_SIZE)) instanceof Obstacle) {
+                        if (map.getPosition(_x, Math.max(_y - len * Sprite.SCALED_SIZE,
+                                                        0 * Sprite.SCALED_SIZE)) instanceof Obstacle) {
+                            if (upCheck && map.getPosition(_x, Math.max(_y - len * Sprite.SCALED_SIZE,
+                                    0 * Sprite.SCALED_SIZE)) instanceof Brick) {
+                                UpFlame.add(new Flame(x, Math.max(y - len, 0), Flame.flameType.VERTICAL, map));
+                            }
                             upCheck = false;
+                            break;
                         }
                         if (upCheck) {
                             UpFlame.add(new Flame(x, Math.max(y - len, 0), Flame.flameType.VERTICAL, map));
                         }
                         break;
                     case 2:
-                        if (map.getPosition(Math.max(_x - len * Sprite.SCALED_SIZE, 0 * Sprite.SCALED_SIZE), _y) instanceof Obstacle) {
+                        if (map.getPosition(Math.max(_x - len * Sprite.SCALED_SIZE,
+                                                    0 * Sprite.SCALED_SIZE), _y) instanceof Obstacle) {
+                            if (leftCheck && map.getPosition(Math.max(_x - len * Sprite.SCALED_SIZE,
+                                    0 * Sprite.SCALED_SIZE), _y) instanceof Brick) {
+                                LeftFlame.add(new Flame(Math.max(x - len, 0), y, Flame.flameType.HORIZON, map));
+                            }
                             leftCheck = false;
+                            break;
                         }
                         if (leftCheck) {
                             LeftFlame.add(new Flame(Math.max(x - len, 0), y, Flame.flameType.HORIZON, map));
                         }
                         break;
                     case 3:
-                        if (map.getPosition(Math.min(_x + len * Sprite.SCALED_SIZE, WINDOW_WIDTH * Sprite.SCALED_SIZE - 1), _y) instanceof Obstacle) {
+                        if (map.getPosition(Math.min(_x + len * Sprite.SCALED_SIZE,
+                                                    WINDOW_WIDTH * Sprite.SCALED_SIZE - 1), _y) instanceof Obstacle) {
+                            if (rightCheck && map.getPosition(Math.min(_x + len * Sprite.SCALED_SIZE,
+                                    WINDOW_WIDTH * Sprite.SCALED_SIZE - 1), _y) instanceof Brick) {
+                                RightFlame.add(new Flame(Math.min(x + len, WINDOW_WIDTH), y, Flame.flameType.HORIZON, map));
+                            }
                             rightCheck = false;
+                            break;
                         }
                         if (rightCheck) {
                             RightFlame.add(new Flame(Math.min(x + len, WINDOW_WIDTH), y, Flame.flameType.HORIZON, map));
@@ -99,15 +123,25 @@ public class Bomb extends Entity implements Obstacle {
         for (int i = 0; i < 4; i++) {
             switch (i) {
                 case 0:
-                    if (map.getPosition(_x, Math.min(_y + flameLength * Sprite.SCALED_SIZE, WINDOW_HEIGHT * Sprite.SCALED_SIZE - 1)) instanceof Obstacle) {
+                    if (map.getPosition(_x, Math.min(_y + flameLength * Sprite.SCALED_SIZE,
+                                                    WINDOW_HEIGHT * Sprite.SCALED_SIZE - 1)) instanceof Obstacle) {
+                        if (downCheck && map.getPosition(_x, Math.min(_y + flameLength * Sprite.SCALED_SIZE,
+                                WINDOW_HEIGHT * Sprite.SCALED_SIZE - 1)) instanceof Brick) {
+                            DownFlame.add(new Flame(x, Math.min(y + flameLength, WINDOW_HEIGHT), Flame.flameType.DOWN, map));
+                        }
                         downCheck = false;
                     }
                     if (downCheck) {
-                        DownFlame.add(new Flame(x, Math.min(y + flameLength, 18), Flame.flameType.DOWN, map));
+                        DownFlame.add(new Flame(x, Math.min(y + flameLength, WINDOW_HEIGHT), Flame.flameType.DOWN, map));
                     }
                     break;
                 case 1:
-                    if (map.getPosition(_x, Math.max(_y - flameLength * Sprite.SCALED_SIZE, 0 * Sprite.SCALED_SIZE)) instanceof Obstacle) {
+                    if (map.getPosition(_x, Math.max(_y - flameLength * Sprite.SCALED_SIZE,
+                                                    0 * Sprite.SCALED_SIZE)) instanceof Obstacle) {
+                        if (upCheck && map.getPosition(_x, Math.max(_y - flameLength * Sprite.SCALED_SIZE,
+                                0 * Sprite.SCALED_SIZE)) instanceof Brick) {
+                            UpFlame.add(new Flame(x, Math.max(y - flameLength, 0), Flame.flameType.UP, map));
+                        }
                         upCheck = false;
                     }
                     if (upCheck) {
@@ -115,7 +149,12 @@ public class Bomb extends Entity implements Obstacle {
                     }
                     break;
                 case 2:
-                    if (map.getPosition(Math.max(_x - flameLength * Sprite.SCALED_SIZE, 0 * Sprite.SCALED_SIZE), _y) instanceof Obstacle) {
+                    if (map.getPosition(Math.max(_x - flameLength * Sprite.SCALED_SIZE,
+                                                0 * Sprite.SCALED_SIZE), _y) instanceof Obstacle) {
+                        if (leftCheck && map.getPosition(Math.max(_x - flameLength * Sprite.SCALED_SIZE,
+                                0 * Sprite.SCALED_SIZE), _y) instanceof Brick) {
+                            LeftFlame.add(new Flame(Math.max(x - flameLength, 0), y, Flame.flameType.LEFT, map));
+                        }
                         leftCheck = false;
                     }
                     if (leftCheck) {
@@ -123,11 +162,16 @@ public class Bomb extends Entity implements Obstacle {
                     }
                     break;
                 case 3:
-                    if (map.getPosition(Math.min(_x + flameLength * Sprite.SCALED_SIZE, WINDOW_WIDTH * Sprite.SCALED_SIZE - 1), _y) instanceof Obstacle) {
+                    if (map.getPosition(Math.min(_x + flameLength * Sprite.SCALED_SIZE,
+                                                WINDOW_WIDTH * Sprite.SCALED_SIZE - 1), _y) instanceof Obstacle) {
+                        if (rightCheck && map.getPosition(Math.min(_x + flameLength * Sprite.SCALED_SIZE,
+                                WINDOW_WIDTH * Sprite.SCALED_SIZE - 1), _y) instanceof Brick) {
+                            RightFlame.add(new Flame(Math.min(x + flameLength, WINDOW_WIDTH), y, Flame.flameType.RIGHT, map));
+                        }
                         rightCheck = false;
                     }
                     if (rightCheck) {
-                        RightFlame.add(new Flame(Math.min(x + flameLength, 32), y, Flame.flameType.RIGHT, map));
+                        RightFlame.add(new Flame(Math.min(x + flameLength, WINDOW_WIDTH), y, Flame.flameType.RIGHT, map));
                     }
                     break;
                 default:
@@ -162,10 +206,10 @@ public class Bomb extends Entity implements Obstacle {
         int xBomb = x / Sprite.SCALED_SIZE;
         int yBomb = y / Sprite.SCALED_SIZE;
         return (xTile == xBomb && yTile == yBomb)
-                || (xTile == xBomb && yTile + flameLength == yBomb)
-                || (xTile == xBomb && yTile - flameLength == yBomb)
-                || (xTile == xBomb + flameLength && yTile == yBomb)
-                || (xTile == xBomb - flameLength && yTile == yBomb);
+                || (xTile == xBomb && yBomb - LeftFlame.size() <= yTile && yTile < yBomb)
+                || (xTile == xBomb && yBomb + RightFlame.size() >= yTile && yTile > yBomb)
+                || (xTile > xBomb && xBomb + DownFlame.size() >= xTile && yTile == yBomb)
+                || (xTile < xBomb && xBomb - UpFlame.size() <= xTile && yTile == yBomb);
     }
 
     public void setBombStatus(status S) {
@@ -175,22 +219,22 @@ public class Bomb extends Entity implements Obstacle {
     public boolean hasFlameAt(int thisLong, DIRECTION direction) {
         switch (direction) {
             case LEFT:
-                if (thisLong - 1 > LeftFlame.size()) {
+                if (thisLong > LeftFlame.size()) {
                     return false;
                 }
                 return true;
             case RIGHT:
-                if (thisLong - 1 > RightFlame.size()) {
+                if (thisLong > RightFlame.size()) {
                     return false;
                 }
                 return true;
             case UP:
-                if (thisLong - 1 > UpFlame.size()) {
+                if (thisLong > UpFlame.size()) {
                     return false;
                 }
                 return true;
             case DOWN:
-                if (thisLong - 1 > DownFlame.size()) {
+                if (thisLong > DownFlame.size()) {
                     return false;
                 }
                 return true;
