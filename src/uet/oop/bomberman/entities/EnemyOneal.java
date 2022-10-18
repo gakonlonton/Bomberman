@@ -3,6 +3,8 @@ package uet.oop.bomberman.entities;
 import javafx.scene.image.Image;
 import uet.oop.bomberman.controller.CollisionManager;
 import uet.oop.bomberman.controller.Direction.DIRECTION;
+import uet.oop.bomberman.controller.Graph;
+import uet.oop.bomberman.controller.Vertices;
 import uet.oop.bomberman.graphics.Map;
 import uet.oop.bomberman.graphics.Sprite;
 
@@ -10,91 +12,111 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EnemyOneal extends Enemy {
-    private int spriteIndex = 0;
-    private List<List<Entity>> map;
-    private Bomber bomber;
+    public static final int WIDTH = 30;
+    public static final int HEIGHT = 30;
+
+    public enum OnealStatus {
+        CHASING,
+        WALKING,
+        INVALID
+    }
+    OnealStatus onealStatus;
+
+    private Entity bomber;
+    private List<List<Entity>> map = new ArrayList<>();
+    private List<Vertices> path;
 
     public EnemyOneal(int x, int y, Image img, CollisionManager collisionManager) {
         super(x, y, img, collisionManager);
+        onealStatus = OnealStatus.WALKING;
         this.speed = 2;
         this.map = collisionManager.getMap().getMap();
         this.bomber = collisionManager.getMap().getBomber();
     }
 
-    public void die() {
-        if (!death) {
-            death = true;
-            spriteIndex = 0;
-        }
+    public int getDistanceFromBomber() {
+        if (path == null) return -1;
+        return path.size();
     }
 
-    public void pickSprite(Image img) {
-        this.img = img;
-    }
-
-    public void update() {
+    public void chasing() {
+        Vertices src = path.get(0);
+        Vertices dst = path.get(1);
         spriteIndex++;
-        if (death) return;
-        if (spriteIndex % 2 == 0) return;
-        if (spriteIndex % 32 == 1) {
-            int moddedX = Math.round(bomber.x / Sprite.SCALED_SIZE);
-            int moddedY = Math.round(bomber.y / Sprite.SCALED_SIZE);
-            List<List<Integer>> graph = formatGraph(map, moddedX, moddedY);
-            direction = getDirectWithDijkstra(graph, map.size(), map.get(0).size(), moddedY, moddedX);
-            if (direction == DIRECTION.CENTER) {
-                sizeCollision = speed;
-                goRandom();
-                return;
-            }
-        }
-        sizeCollision = speed;
-        if (direction == DIRECTION.LEFT) {
-            super.update(DIRECTION.LEFT, true, this.speed);
-            pickSprite(Sprite.movingSprite(Sprite.oneal_left1,
-                    Sprite.oneal_left2,
-                    Sprite.oneal_left3, spriteIndex, 20).getFxImage());
-        }
-        else if (direction == DIRECTION.RIGHT) {
-            super.update(DIRECTION.RIGHT, true, this.speed);
-            pickSprite(Sprite.movingSprite(Sprite.oneal_right1,
-                    Sprite.oneal_right2,
-                    Sprite.oneal_right3, spriteIndex, 20).getFxImage());
-        }
-        else if (direction == DIRECTION.DOWN) {
-            super.update(DIRECTION.DOWN, true, this.speed);
-            pickSprite(Sprite.movingSprite(Sprite.oneal_left1,
-                    Sprite.oneal_left2,
-                    Sprite.oneal_left3, spriteIndex, 20).getFxImage());
-        }
-        else if (direction == DIRECTION.UP) {
-            super.update(DIRECTION.UP, true, this.speed);
-            pickSprite(Sprite.movingSprite(Sprite.oneal_right1,
-                    Sprite.oneal_right2,
-                    Sprite.oneal_right3, spriteIndex, 20).getFxImage());
-        }
-    }
 
-    protected List<List<Integer>> formatGraph(List<List<Entity>> map, int xBomber, int yBomber) {
-        List<List<Integer>> graph = new ArrayList<>();
-        int height = map.size();
-        int width = map.get(0).size();
-        for (int i = 0; i < height; i++) {
-            graph.add(new ArrayList<>());
-            for (int j = 0; j < width; j++) {
-                if (map.get(i).get(j) instanceof Wall || map.get(i).get(j) instanceof Brick) {
-                    graph.get(i).add(OBSTACLE);
-                }
-                else {
-                    graph.get(i).add(GRASS);
+        if (src.getXTilePos() >= dst.getXTilePos()) {
+            if (x > dst.getXTilePos() * Sprite.SCALED_SIZE) {
+                if (!collisionManager.touchObstacle(x, y, "LEFT")) {
+                    pickSprite(Sprite.movingSprite(
+                            leftSprites[0],
+                            leftSprites[1],
+                            leftSprites[2], spriteIndex, 20).getFxImage());
+                    x -= speed;
                 }
             }
         }
-        int moddedX = Math.round(x  / Sprite.SCALED_SIZE);
-        int moddedY = Math.round(y  / Sprite.SCALED_SIZE);
-        graph.get(yBomber).set(xBomber, BOMBER);
-        graph.get(moddedY).set(moddedX, ENEMY);
-        return graph;
+
+        if (src.getXTilePos() <= dst.getXTilePos()) {
+            if (x < dst.getXTilePos() * Sprite.SCALED_SIZE) {
+                if (!collisionManager.touchObstacle(x, y, "RIGHT")) {
+                    pickSprite(Sprite.movingSprite(
+                            rightSprites[0],
+                            rightSprites[1],
+                            rightSprites[2], spriteIndex, 20).getFxImage());
+                    x += speed;
+                }
+            }
+        }
+
+        if (src.getYTilePos() >= dst.getYTilePos()) {
+            if (y > dst.getYTilePos() * Sprite.SCALED_SIZE) {
+                if (!collisionManager.touchObstacle(x, y, "UP")) {
+                    pickSprite(Sprite.movingSprite(
+                            rightSprites[0],
+                            rightSprites[1],
+                            rightSprites[2], spriteIndex, 20).getFxImage());
+                    y -= speed;
+                }
+            }
+        }
+
+        if (src.getYTilePos() <= dst.getYTilePos()) {
+            if (y < dst.getYTilePos() * Sprite.SCALED_SIZE) {
+                if (!collisionManager.touchObstacle(x, y, "DOWN")) {
+                    pickSprite(Sprite.movingSprite(
+                            leftSprites[0],
+                            leftSprites[1],
+                            leftSprites[2], spriteIndex, 20).getFxImage());
+                    y += speed;
+                }
+            }
+        }
     }
 
+    public void move() {
+        int onealIndex = Graph.getVerticesIndex(x + EnemyOneal.WIDTH / 2, y + EnemyOneal.HEIGHT / 2);
+        int bomberIndex = Graph.getVerticesIndex(bomber.getX(), bomber.getY());
 
+        if (onealStatus == OnealStatus.WALKING) {
+            path = collisionManager.getMap().getGraph().breathFirstSearch(onealIndex, bomberIndex);
+            if (path != null) onealStatus = OnealStatus.CHASING;
+        }
+
+        if (onealStatus != OnealStatus.CHASING) {
+            goRandom();
+        } else {
+            path = collisionManager.getMap().getGraph().breathFirstSearch(onealIndex, bomberIndex);
+            if (path != null) {
+                chasing();
+            }
+        }
+    }
+
+    public void setOnealStatus(OnealStatus onealStatus) {
+        this.onealStatus = onealStatus;
+    }
+
+    public OnealStatus getOnealStatus() {
+        return onealStatus;
+    }
 }

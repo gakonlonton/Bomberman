@@ -9,15 +9,6 @@ public class Brick extends EntityDestroyable implements Obstacle {
         super(x, y, img);
     }
 
-    private void pickSprite(Image img) {
-        this.img = img;
-    }
-
-    @Override
-    public void disapear() {
-        death = true;
-    }
-
     @Override
     public void update() {
         spriteIndex++;

@@ -3,6 +3,8 @@ package uet.oop.bomberman.graphics;
 import javafx.scene.canvas.GraphicsContext;
 import uet.oop.bomberman.controller.CollisionManager;
 import uet.oop.bomberman.controller.GameMaster;
+import uet.oop.bomberman.controller.Graph;
+import uet.oop.bomberman.controller.Vertices;
 import uet.oop.bomberman.entities.*;
 
 import java.io.File;
@@ -21,6 +23,7 @@ public class Map {
     private int level;
     protected int[][] itemList;
     protected List<List<Entity>> map = new ArrayList<>();
+    private Graph graph;
 
     public Map(int level) {
         this.level = level;
@@ -50,7 +53,8 @@ public class Map {
                 switch (tempLine.charAt(j)) {
                     case 'p':
                         map.get(i).add(new Grass(j, i, Sprite.grass.getFxImage()));
-                        Entity bomber = new Bomber(j, i, Sprite.player_right.getFxImage(), new CollisionManager(this));
+                        Entity bomber = new Bomber(j, i, Sprite.player_right.getFxImage(),
+                                                    new CollisionManager(this, Bomber.HEIGHT, Bomber.WIDTH));
                         GameMaster.entities.get(level).add(bomber);
                         break;
                     case '#':
@@ -61,12 +65,14 @@ public class Map {
                         break;
                     case '1':
                         map.get(i).add(new Grass(j, i, Sprite.grass.getFxImage()));
-                        Enemy balloon = new EnemyBalloon(j, i, Sprite.balloom_left1.getFxImage(), new CollisionManager(this));
+                        Enemy balloon = new EnemyBalloon(j, i, Sprite.balloom_left1.getFxImage(),
+                                                        new CollisionManager(this, EnemyBalloon.HEIGHT, EnemyBalloon.WIDTH));
                         GameMaster.entities.get(level).add(balloon);
                         break;
                     case '2':
                         map.get(i).add(new Grass(j, i, Sprite.grass.getFxImage()));
-                        Enemy oneal = new EnemyOneal(j, i, Sprite.oneal_left1.getFxImage(), new CollisionManager(this));
+                        Enemy oneal = new EnemyOneal(j, i, Sprite.oneal_left1.getFxImage(),
+                                                    new CollisionManager(this, EnemyOneal.HEIGHT, EnemyOneal.WIDTH));
                         GameMaster.entities.get(level).add(oneal);
                         break;
                     case 'x':
@@ -94,6 +100,10 @@ public class Map {
         sc.close();
     }
 
+    /*
+        Render map on screen
+     */
+
     public void mapRender(GraphicsContext gc) {
         for (int i = 0; i < map.size(); i++) {
             for (int j = 0; j < map.get(i).size(); j++) {
@@ -102,18 +112,59 @@ public class Map {
         }
     }
 
+    /*
+        Convert map to Graph
+     */
+
+    public void convertToGraph() {
+        List<Vertices> verticesList = new ArrayList<>();
+        for (int i = 0; i < map.size(); i++) {
+            for (int j = 0; j < map.get(i).size(); j++) {
+                verticesList.add(new Vertices(j, i));
+            }
+        }
+        graph = new Graph(verticesList);
+        for (int i = 0; i < verticesList.size() - 1; i++) {
+            for (int j = i + 1; j < verticesList.size(); j++) {
+                boolean isAdj = false;
+                int x1 = verticesList.get(i).getXTilePos();
+                int x2 = verticesList.get(j).getXTilePos();
+                int y1 = verticesList.get(i).getYTilePos();
+                int y2 = verticesList.get(j).getYTilePos();
+                if (map.get(y1).get(x1) instanceof Grass
+                        && map.get(y2).get(x2) instanceof Grass) {
+                    if (x1 == x2) {
+                        if (y1 == y2 + 1) isAdj = true;
+                        else if (y1 == y2 - 1) isAdj = true;
+                    } else if (y1 == y2) {
+                        if (x1 == x2 + 1) isAdj = true;
+                        else if (x1 == x2 - 1) isAdj = true;
+                    }
+                }
+                if (isAdj) graph.addAdjVertices(i, j);
+            }
+        }
+    }
+
+    /*
+        Getter functions
+     */
     public List<List<Entity>> getMap() {
         return map;
+    }
+
+    public Graph getGraph() {
+        return graph;
+    }
+
+    public int getItems(int x, int y) {
+        return itemList[y][x];
     }
 
     public Entity getPosition(int x, int y) {
         int roundedX = Math.round(x / Sprite.SCALED_SIZE);
         int roundedY = Math.round(y / Sprite.SCALED_SIZE);
         return map.get(roundedY).get(roundedX);
-    }
-
-    public int getItems(int x, int y) {
-        return itemList[y][x];
     }
 
     public Bomber getBomber() {
@@ -132,6 +183,7 @@ public class Map {
     public void reset() {
         map.clear();
         GameMaster.entities.get(level).clear();
+        GameMaster.bombsList.clear();
         mapReader();
     }
 }

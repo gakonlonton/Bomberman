@@ -2,6 +2,7 @@ package uet.oop.bomberman.controller;
 
 import uet.oop.bomberman.controller.Direction.DIRECTION;
 import uet.oop.bomberman.entities.Bomb;
+import uet.oop.bomberman.entities.Bomber;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.Obstacle;
 import uet.oop.bomberman.graphics.Map;
@@ -12,25 +13,31 @@ import java.util.List;
 
 public class CollisionManager {
     private Map map;
+    private int fixHeight;
+    private int fixWidth;
 
-    public CollisionManager(Map map) {
+    public CollisionManager(Map map, int height, int width) {
+
         this.map = map;
+        fixHeight = height;
+        fixWidth = width;
     }
 
-    public Map getMap() {
-        return map;
-    }
-
-    public boolean touchObstacle(int x, int y, int type) {
-        int fixHeight = 0, fixWidth = 0;
-        switch (type) {
-            case 0:
-                fixHeight = 20;
-                fixWidth = 29;
+    public boolean touchObstacle(int x, int y, String dir) {
+        int curX = x;
+        int curY = y;
+        switch (dir) {
+            case "UP":
+                curY -= Bomber.speed;
                 break;
-            case 1:
-                fixHeight = 30;
-                fixWidth = 30;
+            case "DOWN":
+                curY += Bomber.speed;
+                break;
+            case "LEFT":
+                curX -= Bomber.speed;
+                break;
+            case "RIGHT":
+                curX += Bomber.speed;
                 break;
             default:
                 break;
@@ -44,11 +51,7 @@ public class CollisionManager {
                 || downLeft instanceof Obstacle || downRight instanceof Obstacle;
     }
 
-    public boolean touchBomb(int x, int y) {
-        return false;
-    }
-
-    public Entity getEntityAt(int x, int y) {
-        return map.getMap().get(y).get(x);
+    public Map getMap() {
+        return map;
     }
 }

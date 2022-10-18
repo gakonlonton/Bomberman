@@ -6,10 +6,10 @@ import uet.oop.bomberman.graphics.Map;
 import uet.oop.bomberman.graphics.Sprite;
 
 public class Flame extends Entity {
+    private int spriteIndex = 0;
     enum flameType {
         UP, DOWN, LEFT, RIGHT, CENTER, VERTICAL, HORIZON
     }
-    private int spriteIndex = 0;
     private flameType type;
     private Map map;
     public Bomb.status status;
@@ -48,10 +48,6 @@ public class Flame extends Entity {
         this.type = type;
         this.map = map;
         status = Bomb.status.EXPLODED;
-    }
-
-    public void pickSprite(Image img) {
-        this.img = img;
     }
 
     @Override
@@ -103,7 +99,9 @@ public class Flame extends Entity {
             default:
                 break;
         }
-        if (spriteIndex == 20) status = Bomb.status.DISAPPEAR;
+        if (spriteIndex == 20) {
+            status = Bomb.status.DISAPPEAR;
+        }
     }
 
     @Override
