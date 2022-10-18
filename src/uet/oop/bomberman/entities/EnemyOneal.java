@@ -29,7 +29,7 @@ public class EnemyOneal extends Enemy {
     public EnemyOneal(int x, int y, Image img, CollisionManager collisionManager) {
         super(x, y, img, collisionManager);
         onealStatus = OnealStatus.WALKING;
-        this.speed = 2;
+        this.speed = 1;
         this.map = collisionManager.getMap().getMap();
         this.bomber = collisionManager.getMap().getBomber();
     }

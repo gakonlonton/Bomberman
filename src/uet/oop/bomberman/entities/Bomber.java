@@ -28,7 +28,7 @@ public class Bomber extends EntityDestroyable {
     private boolean goUp = false, goDown = false, goLeft = false, goRight = false;
     private KeyCode lastKey = KeyCode.D;
     public List<Bomb> bombManager = new LinkedList<>();
-    private Audio audio;
+    private Audio audio = new Audio();
     private int spriteIndex = 0;
 
     /*
@@ -48,7 +48,7 @@ public class Bomber extends EntityDestroyable {
         status = bomberStatus.ALIVE;
         // reset stats
         speed = 2;
-        flameLength = 3;
+        flameLength = 1;
         bombCount = 1;
         pickSprite(Sprite.player_right.getFxImage());
     }
@@ -191,25 +191,6 @@ public class Bomber extends EntityDestroyable {
         for (int i = 1; i < GameMaster.entities.get(GameMaster.level).size(); i++) {
             if (((Enemy) GameMaster.entities.get(GameMaster.level).get(i)).touchBomber(x, y))
                 status = bomberStatus.DEAD;
-        }
-    }
-
-    public boolean setItems(int xTile, int yTile) {
-        switch (collisionManager.getMap().getItems(xTile, yTile)) {
-            case ItemSpeed.code:
-                collisionManager.getMap().replace(xTile, yTile,
-                                                new ItemSpeed(xTile, yTile, Sprite.powerup_speed.getFxImage()));
-                return true;
-            case ItemFlame.code:
-                collisionManager.getMap().replace(xTile, yTile,
-                                                new ItemFlame(xTile, yTile, Sprite.powerup_flames.getFxImage()));
-                return true;
-            case ItemBomb.code:
-                collisionManager.getMap().replace(xTile, yTile,
-                                                new ItemBomb(xTile, yTile, Sprite.powerup_bombs.getFxImage()));
-                return true;
-            default:
-                return false;
         }
     }
 

@@ -28,6 +28,7 @@ public class Bomb extends Entity implements Obstacle {
     private int spriteIndex = 0;
     private CollisionManager collisionManager;
     private Map map;
+    private boolean checkUp = true, checkDown = true, checkLeft = true, checkRight = true;
 
     Timer timer = new Timer();
     TimerTask task = new TimerTask() {
@@ -79,12 +80,31 @@ public class Bomb extends Entity implements Obstacle {
         int yBomb = y / Sprite.SCALED_SIZE;
         for (int i = 1; i <= flameLength; i++) {
             if ((xTile == xBomb && yTile == yBomb)
-                    || (xTile == xBomb && yTile + i == yBomb)
-                    || (xTile == xBomb && yTile - i == yBomb)
-                    || (xTile == xBomb + i && yTile == yBomb)
-                    || (xTile == xBomb - i && yTile == yBomb)) return true;
+                    || (xTile == xBomb && yTile + i == yBomb && checkDown)
+                    || (xTile == xBomb && yTile - i == yBomb && checkUp)
+                    || (xTile == xBomb + i && yTile == yBomb && checkRight)
+                    || (xTile == xBomb - i && yTile == yBomb && checkLeft)) return true;
         }
         return false;
+    }
+
+    public boolean setItems(int xTile, int yTile) {
+        switch (collisionManager.getMap().getItems(xTile, yTile)) {
+            case ItemSpeed.code:
+                collisionManager.getMap().replace(xTile, yTile,
+                        new ItemSpeed(xTile, yTile, Sprite.powerup_speed.getFxImage()));
+                return true;
+            case ItemFlame.code:
+                collisionManager.getMap().replace(xTile, yTile,
+                        new ItemFlame(xTile, yTile, Sprite.powerup_flames.getFxImage()));
+                return true;
+            case ItemBomb.code:
+                collisionManager.getMap().replace(xTile, yTile,
+                        new ItemBomb(xTile, yTile, Sprite.powerup_bombs.getFxImage()));
+                return true;
+            default:
+                return false;
+        }
     }
 
     public void Exploded() {
@@ -98,16 +118,25 @@ public class Bomb extends Entity implements Obstacle {
                     .getPosition(xTile * Sprite.SCALED_SIZE, yTile * Sprite.SCALED_SIZE);
 
             if (nearTile instanceof Wall) {
+                checkUp = false;
                 if (bombStatus == bombStatus.EXPLODED) {
                     distance = (double) y / Sprite.SCALED_SIZE - (double) UpFlame.get(i).getY() / Sprite.SCALED_SIZE;
-                    for (int j = UpFlame.size() - 1; j >= distance - 1; j--) UpFlame.remove(j);
+                    for (int j = UpFlame.size() - 1; j >= distance - 1; j--) {
+                        UpFlame.remove(j);
+                    }
                 }
                 break;
             } else if (nearTile instanceof Brick) {
+                checkUp = false;
                 if (bombStatus == bombStatus.EXPLODED) {
+                    if (!setItems(xTile, yTile)) {
+                        map.replace(yTile, xTile, new Grass(xTile, yTile, Sprite.grass.getFxImage()));
+                    }
                     map.convertToGraph();
                     distance = (double) y / Sprite.SCALED_SIZE - (double) UpFlame.get(i).getY() / Sprite.SCALED_SIZE;
-                    for (int j = UpFlame.size() - 1; j >= distance - 1; j--) UpFlame.remove(j);
+                    for (int j = UpFlame.size() - 1; j >= distance - 1; j--) {
+                        UpFlame.remove(j);
+                    }
                 }
                 break;
             }
@@ -122,16 +151,25 @@ public class Bomb extends Entity implements Obstacle {
                     .getPosition(xTile * Sprite.SCALED_SIZE, yTile * Sprite.SCALED_SIZE);
 
             if (nearTile instanceof Wall) {
+                checkDown = false;
                 if (bombStatus == bombStatus.EXPLODED) {
                     distance = (double) DownFlame.get(i).getY() / Sprite.SCALED_SIZE - (double) y / Sprite.SCALED_SIZE;
-                    for (int j = DownFlame.size() - 1; j >= distance - 1; j--) DownFlame.remove(j);
+                    for (int j = DownFlame.size() - 1; j >= distance - 1; j--) {
+                        DownFlame.remove(j);
+                    }
                 }
                 break;
             } else if (nearTile instanceof Brick) {
+                checkDown = false;
                 if (bombStatus == bombStatus.EXPLODED) {
+                    if (!setItems(xTile, yTile)) {
+                        map.replace(yTile, xTile, new Grass(xTile, yTile, Sprite.grass.getFxImage()));
+                    }
                     map.convertToGraph();
                     distance = (double) DownFlame.get(i).getY() / Sprite.SCALED_SIZE - (double) y / Sprite.SCALED_SIZE;
-                    for (int j = DownFlame.size() - 1; j >= distance - 1; j--) DownFlame.remove(j);
+                    for (int j = DownFlame.size() - 1; j >= distance - 1; j--) {
+                        DownFlame.remove(j);
+                    }
                 }
                 break;
             }
@@ -146,16 +184,25 @@ public class Bomb extends Entity implements Obstacle {
                     .getPosition(Math.max(xTile * Sprite.SCALED_SIZE, 0), yTile * Sprite.SCALED_SIZE);
 
             if (nearTile instanceof Wall) {
+                checkLeft = false;
                 if (bombStatus == bombStatus.EXPLODED) {
                     distance = (double) x / Sprite.SCALED_SIZE - (double) LeftFlame.get(i).getX() / Sprite.SCALED_SIZE;
-                    for (int j = LeftFlame.size() - 1; j >= distance - 1; j--) LeftFlame.remove(j);
+                    for (int j = LeftFlame.size() - 1; j >= distance - 1; j--) {
+                        LeftFlame.remove(j);
+                    }
                 }
                 break;
             } else if (nearTile instanceof Brick) {
+                checkLeft = false;
                 if (bombStatus == bombStatus.EXPLODED) {
+                    if (!setItems(xTile, yTile)) {
+                        map.replace(yTile, xTile, new Grass(xTile, yTile, Sprite.grass.getFxImage()));
+                    }
                     map.convertToGraph();
                     distance = (double) x / Sprite.SCALED_SIZE - (double) LeftFlame.get(i).getX() / Sprite.SCALED_SIZE;
-                    for (int j = LeftFlame.size() - 1; j >= distance - 1; j--) LeftFlame.remove(j);
+                    for (int j = LeftFlame.size() - 1; j >= distance - 1; j--) {
+                        LeftFlame.remove(j);
+                    }
                 }
                 break;
             }
@@ -170,16 +217,25 @@ public class Bomb extends Entity implements Obstacle {
                     .getPosition(Math.max(xTile * Sprite.SCALED_SIZE, 0), yTile * Sprite.SCALED_SIZE);
 
             if (nearTile instanceof Wall) {
+                checkRight = false;
                 if (bombStatus == bombStatus.EXPLODED) {
                     distance = (double) RightFlame.get(i).getX() / Sprite.SCALED_SIZE - (double) x / Sprite.SCALED_SIZE;
-                    for (int j = RightFlame.size() - 1; j >= distance - 1; j--) RightFlame.remove(j);
+                    for (int j = RightFlame.size() - 1; j >= distance - 1; j--) {
+                        RightFlame.remove(j);
+                    }
                 }
                 break;
             } else if (nearTile instanceof Brick) {
+                checkRight = false;
                 if (bombStatus == bombStatus.EXPLODED) {
+                    if (!setItems(xTile, yTile)) {
+                        map.replace(yTile, xTile, new Grass(xTile, yTile, Sprite.grass.getFxImage()));
+                    }
                     map.convertToGraph();
                     distance = (double) RightFlame.get(i).getX() / Sprite.SCALED_SIZE - (double) x / Sprite.SCALED_SIZE;
-                    for (int j = RightFlame.size() - 1; j >= distance - 1; j--) RightFlame.remove(j);
+                    for (int j = RightFlame.size() - 1; j >= distance - 1; j--) {
+                        RightFlame.remove(j);
+                    }
                 }
                 break;
             }
@@ -188,12 +244,12 @@ public class Bomb extends Entity implements Obstacle {
 
     @Override
     public void update() {
+        Exploded();
         if (bombStatus == status.REMAIN) {
             spriteIndex = (spriteIndex + 1) % 1000;
             pickSprite(Sprite.movingSprite(Sprite.bomb, Sprite.bomb_1, Sprite.bomb_2, spriteIndex, 30).getFxImage());
         }
         if (bombStatus == status.EXPLODED) {
-            Exploded();
             bombStatus = CenterFlame.getStatus();
             for (List<Flame> flames : Arrays.asList(UpFlame, DownFlame, LeftFlame, RightFlame)) {
                 flames.forEach(Entity::update);
@@ -204,6 +260,7 @@ public class Bomb extends Entity implements Obstacle {
 
     @Override
     public void render(GraphicsContext gc) {
+        Exploded();
         if (bombStatus == status.REMAIN) {
             super.render(gc);
         }
