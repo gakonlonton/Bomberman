@@ -17,7 +17,6 @@ public class CollisionManager {
     private int fixWidth;
 
     public CollisionManager(Map map, int height, int width) {
-
         this.map = map;
         fixHeight = height;
         fixWidth = width;
@@ -43,10 +42,10 @@ public class CollisionManager {
                 break;
         }
         Entity topLeft, downLeft, topRight, downRight;
-        topLeft = map.getPosition(x, y);
-        topRight = map.getPosition(x + fixHeight, y);
-        downLeft = map.getPosition(x, y + fixWidth);
-        downRight = map.getPosition(x + fixHeight, y + fixWidth);
+        topLeft = map.getPosition(curX, curY);
+        topRight = map.getPosition(curX + fixWidth, curY);
+        downLeft = map.getPosition(curX, curY + fixHeight);
+        downRight = map.getPosition(curX + fixWidth, curY + fixHeight);
         return topLeft instanceof Obstacle || topRight instanceof Obstacle
                 || downLeft instanceof Obstacle || downRight instanceof Obstacle;
     }

@@ -13,9 +13,10 @@ import uet.oop.bomberman.scene.IngameScene;
 
 import java.security.Key;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
-public class Bomber extends EntityAnimation {
+public class Bomber extends EntityDestroyable {
     public static final int HEIGHT = 30;
     public static final int WIDTH = 20;
     enum bomberStatus {
@@ -26,7 +27,7 @@ public class Bomber extends EntityAnimation {
     private boolean placedBomb = false;
     private boolean goUp = false, goDown = false, goLeft = false, goRight = false;
     private KeyCode lastKey = KeyCode.D;
-    public List<Bomb> bombManager = new ArrayList<>();
+    public List<Bomb> bombManager = new LinkedList<>();
     private Audio audio;
     private int spriteIndex = 0;
 
@@ -46,9 +47,10 @@ public class Bomber extends EntityAnimation {
         this.collisionManager = collisionManager;
         status = bomberStatus.ALIVE;
         // reset stats
-        speed = 3;
-        flameLength = 1;
+        speed = 2;
+        flameLength = 3;
         bombCount = 1;
+        pickSprite(Sprite.player_right.getFxImage());
     }
 
     public void isPressed(KeyCode keyCode, boolean isPress) {
@@ -81,16 +83,12 @@ public class Bomber extends EntityAnimation {
     }
 
     private void updatePosition() {
-        isRunning = false;
         boolean pressed = false;
         if (goUp) {
             pressed = true;
             spriteIndex++;
-            if (collisionManager.touchObstacle(x, y - speed, "UP")) {
-                super.update(DIRECTION.UP, false);
-            }
-            else {
-                super.update(DIRECTION.UP, true);
+            if (!collisionManager.touchObstacle(x, y, "UP")) {
+                y -= speed;
             }
             pickSprite(Sprite.movingSprite(Sprite.player_up,
                                         Sprite.player_up_1,
@@ -99,11 +97,8 @@ public class Bomber extends EntityAnimation {
         if (goDown) {
             pressed = true;
             spriteIndex++;
-            if (collisionManager.touchObstacle(x, y + speed, "DOWN")) {
-                super.update(DIRECTION.DOWN, false);
-            }
-            else {
-                super.update(DIRECTION.DOWN, true);
+            if (!collisionManager.touchObstacle(x, y, "DOWN")) {
+                y += speed;
             }
             pickSprite(Sprite.movingSprite(Sprite.player_down,
                                         Sprite.player_down_1,
@@ -112,11 +107,8 @@ public class Bomber extends EntityAnimation {
         if (goLeft) {
             pressed = true;
             spriteIndex++;
-            if (collisionManager.touchObstacle(x - speed, y, "LEFT")) {
-                super.update(DIRECTION.LEFT, false);
-            }
-            else {
-                super.update(DIRECTION.LEFT, true);
+            if (!collisionManager.touchObstacle(x, y, "LEFT")) {
+                x -= speed;
             }
             pickSprite(Sprite.movingSprite(Sprite.player_left,
                                         Sprite.player_left_1,
@@ -125,11 +117,8 @@ public class Bomber extends EntityAnimation {
         if (goRight) {
             pressed = true;
             spriteIndex++;
-            if (collisionManager.touchObstacle(x + speed, y, "RIGHT")) {
-                super.update(DIRECTION.RIGHT, false);
-            }
-            else {
-                super.update(DIRECTION.RIGHT, true);
+            if (!collisionManager.touchObstacle(x, y, "RIGHT")) {
+                x += speed;
             }
             pickSprite(Sprite.movingSprite(Sprite.player_right,
                                         Sprite.player_right_1,

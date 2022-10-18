@@ -28,6 +28,7 @@ public class Map {
     public Map(int level) {
         this.level = level;
         mapReader();
+        convertToGraph();
     }
 
     /*

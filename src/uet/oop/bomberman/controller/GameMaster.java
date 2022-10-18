@@ -18,14 +18,14 @@ public class GameMaster {
     public static int level = 0;
     private LobbyScene lobby = new LobbyScene();
     private IngameScene ingame = new IngameScene();
-    private Audio audio;
+    private Audio audio = new Audio();
     public static final List<Map> mapList = new ArrayList<>();
     public static List<List<Entity>> entities = new ArrayList<>();
     public static List<Entity> bombsList = new ArrayList<>();
     public enum ingameSatus {
         LOBBY, INGAME, PAUSE, WIN, LOSE
     }
-    public static ingameSatus gameStatus;
+    public static ingameSatus gameStatus = ingameSatus.LOBBY;
 
     /*
         Constructor
@@ -64,15 +64,15 @@ public class GameMaster {
 
     public void update() {
         if (gameStatus == ingameSatus.INGAME) {
-            if (!stage.getScene().equals(ingame)) {
+            if (!stage.getScene().equals(ingame.getScene())) {
                 stage.setScene(ingame.getScene());
                 audio.playAlone(Audio.AudioType.PLAYING, -1);
             }
-            entities.get(level).forEach(g -> g.render(ingame.getGc()));
+            entities.get(level).forEach(Entity::update);
             entitiesUpdate();
         }
         else if (gameStatus == ingameSatus.LOBBY) {
-            if (!stage.getScene().equals(lobby)) {
+            if (!stage.getScene().equals(lobby.getScene())) {
                 stage.setScene(lobby.getScene());
             }
             audio.playAlone(Audio.AudioType.LOBBY, -1);

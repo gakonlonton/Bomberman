@@ -40,6 +40,13 @@ public class EnemyOneal extends Enemy {
     }
 
     public void chasing() {
+        leftSprites[0] = Sprite.oneal_left1;
+        leftSprites[1] = Sprite.oneal_left2;
+        leftSprites[2] = Sprite.oneal_left3;
+        rightSprites[0] = Sprite.oneal_right1;
+        rightSprites[1] = Sprite.oneal_right2;
+        rightSprites[2] = Sprite.oneal_right3;
+
         Vertices src = path.get(0);
         Vertices dst = path.get(1);
         spriteIndex++;

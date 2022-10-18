@@ -24,19 +24,6 @@ public class Graph {
         adj[v2].add(v1);
     }
 
-    @Override
-    public String toString() {
-        String graphInfo = "New graph: \n";
-        for (int i = 0; i < numOfVerticess; i++) {
-            System.out.print(i + ": ");
-            for (int j = 0; j < adj[i].size(); j++) {
-                System.out.print(adj[i].get(j) + " ");
-            }
-            System.out.println();
-        }
-        return graphInfo;
-    }
-
     public List<Vertices> breathFirstSearch(int start, int end) {
         boolean[] marked = new boolean[numOfVerticess];
         int[] trace = new int[numOfVerticess];
@@ -80,9 +67,9 @@ public class Graph {
 
     }
 
-    public static int getVerticesIndex(int xPixel, int yPixel) {
-        int x = xPixel / Sprite.SCALED_SIZE;
-        int y = yPixel / Sprite.SCALED_SIZE;
+    public static int getVerticesIndex(int xTile, int yTile) {
+        int x = xTile / Sprite.SCALED_SIZE;
+        int y = yTile / Sprite.SCALED_SIZE;
         return y * BombermanGame.WINDOW_WIDTH + x;
     }
 }

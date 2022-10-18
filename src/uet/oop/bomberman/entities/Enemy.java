@@ -22,8 +22,8 @@ public abstract class Enemy extends EntityDestroyable {
     }
     EnemyStatus enemyStatus;
     protected CollisionManager collisionManager;
-    Sprite[] leftSprites = new Sprite[3];
-    Sprite[] rightSprites = new Sprite[3];
+    protected Sprite[] leftSprites = new Sprite[3];
+    protected Sprite[] rightSprites = new Sprite[3];
 
     public Enemy(int x, int y, Image img, CollisionManager collisionManager) {
         super(x, y, img);
@@ -115,8 +115,10 @@ public abstract class Enemy extends EntityDestroyable {
     }
 
     public boolean touchBomber(int xTile, int yTile) {
-        return (!(xTile + Bomber.WIDTH < x || xTile > x + Sprite.SCALED_SIZE))
-            || (!(yTile + Bomber.HEIGHT < y || yTile > y + Sprite.SCALED_SIZE));
+        boolean check = true;
+        if (xTile + Bomber.WIDTH < x || xTile > x + Sprite.SCALED_SIZE) check = false;
+        if (yTile + Bomber.HEIGHT < y || yTile > y + Sprite.SCALED_SIZE) check = false;
+        return check;
     }
 
     @Override

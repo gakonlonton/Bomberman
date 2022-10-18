@@ -54,16 +54,16 @@ public class Bomb extends Entity implements Obstacle {
         int _y = y * Sprite.SCALED_SIZE;
         for (int i = 1; i <= flameLength; i++) {
             if (i == flameLength) {
-                UpFlame.add(new Flame(x, y - i, Flame.flameType.UP, map));
-                DownFlame.add(new Flame(x, y + i, Flame.flameType.DOWN, map));
-                LeftFlame.add(new Flame(x - i, y, Flame.flameType.LEFT, map));
-                RightFlame.add(new Flame(x + i, y, Flame.flameType.RIGHT, map));
+                UpFlame.add(new Flame(x, Math.max(y - i, 0), Flame.flameType.UP, map));
+                DownFlame.add(new Flame(x, Math.min(y + i, WINDOW_WIDTH), Flame.flameType.DOWN, map));
+                LeftFlame.add(new Flame(Math.max(x - i, 0), y, Flame.flameType.LEFT, map));
+                RightFlame.add(new Flame(Math.min(x + i, WINDOW_HEIGHT), y, Flame.flameType.RIGHT, map));
             }
             else {
-                UpFlame.add(new Flame(x, y - i, Flame.flameType.VERTICAL, map));
-                DownFlame.add(new Flame(x, y + i, Flame.flameType.VERTICAL, map));
-                LeftFlame.add(new Flame(x - i, y, Flame.flameType.HORIZON, map));
-                RightFlame.add(new Flame(x + i, y, Flame.flameType.HORIZON, map));
+                UpFlame.add(new Flame(x, Math.max(y - i, 0), Flame.flameType.VERTICAL, map));
+                DownFlame.add(new Flame(x, Math.min(y + i, WINDOW_WIDTH), Flame.flameType.VERTICAL, map));
+                LeftFlame.add(new Flame(Math.max(x - i, 0), y, Flame.flameType.HORIZON, map));
+                RightFlame.add(new Flame(Math.min(x + i, WINDOW_HEIGHT), y, Flame.flameType.HORIZON, map));
             }
         }
     }
