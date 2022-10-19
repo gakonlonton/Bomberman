@@ -24,7 +24,7 @@ public class Graph {
         adj[v2].add(v1);
     }
 
-    public List<Vertices> breathFirstSearch(int start, int end) {
+    public List<Vertices> BFS(int start, int end) {
         boolean[] marked = new boolean[numOfVerticess];
         int[] trace = new int[numOfVerticess];
 

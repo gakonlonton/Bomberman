@@ -72,7 +72,7 @@ public abstract class Enemy extends EntityDestroyable {
                     break;
             }
         }
-        if (collisionManager.touchObstacle(x, y, dir)) {
+        if (collisionManager.touchObstacle(x, y, dir) || touchBomb(x, y, dir)) {
             goNext = false;
             spriteIndex = 0;
         } else {
@@ -112,6 +112,42 @@ public abstract class Enemy extends EntityDestroyable {
 
     public EnemyStatus getEnemyStatus() {
         return enemyStatus;
+    }
+
+    public boolean touchBomb(int x, int y, String dir) {
+        int curX = x;
+        int curY = y;
+        switch (dir) {
+            case "UP":
+                curY -= speed;
+                break;
+            case "DOWN":
+                curY += speed;
+                break;
+            case "LEFT":
+                curX -= speed;
+                break;
+            case "RIGHT":
+                curX += speed;
+                break;
+            default:
+                break;
+        }
+        int xTile = curX / Sprite.SCALED_SIZE;
+        int yTile = curY / Sprite.SCALED_SIZE;
+        int xWidth = (curX + Bomber.WIDTH) / Sprite.SCALED_SIZE;
+        int yHeight = (curY + Bomber.HEIGHT) / Sprite.SCALED_SIZE;
+        for (Bomb bomb: collisionManager.getBombList()) {
+            int xBomb = (bomb.x + Sprite.SCALED_SIZE / 2) / Sprite.SCALED_SIZE;
+            int yBomb = (bomb.y + Sprite.SCALED_SIZE / 2) / Sprite.SCALED_SIZE;
+            if ((xTile == xBomb && yTile == yBomb)
+                    || (xWidth == xBomb && yTile == yBomb)
+                    || (xTile == xBomb && yHeight == yBomb)
+                    || (xWidth == xBomb && yHeight == yBomb)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean touchBomber(int xTile, int yTile) {

@@ -3,6 +3,7 @@ package uet.oop.bomberman.entities;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
+import javafx.util.Pair;
 import uet.oop.bomberman.controller.Audio;
 import uet.oop.bomberman.controller.CollisionManager;
 import uet.oop.bomberman.controller.Direction.DIRECTION;
@@ -87,7 +88,7 @@ public class Bomber extends EntityDestroyable {
         if (goUp) {
             pressed = true;
             spriteIndex++;
-            if (!collisionManager.touchObstacle(x, y, "UP")) {
+            if (!collisionManager.touchObstacle(x, y, "UP") && !collideWithBomb(x, y, "UP")) {
                 y -= speed;
             }
             pickSprite(Sprite.movingSprite(Sprite.player_up,
@@ -97,7 +98,7 @@ public class Bomber extends EntityDestroyable {
         if (goDown) {
             pressed = true;
             spriteIndex++;
-            if (!collisionManager.touchObstacle(x, y, "DOWN")) {
+            if (!collisionManager.touchObstacle(x, y, "DOWN") && !collideWithBomb(x, y, "DOWN")) {
                 y += speed;
             }
             pickSprite(Sprite.movingSprite(Sprite.player_down,
@@ -107,7 +108,7 @@ public class Bomber extends EntityDestroyable {
         if (goLeft) {
             pressed = true;
             spriteIndex++;
-            if (!collisionManager.touchObstacle(x, y, "LEFT")) {
+            if (!collisionManager.touchObstacle(x, y, "LEFT") && !collideWithBomb(x, y, "LEFT")) {
                 x -= speed;
             }
             pickSprite(Sprite.movingSprite(Sprite.player_left,
@@ -117,7 +118,7 @@ public class Bomber extends EntityDestroyable {
         if (goRight) {
             pressed = true;
             spriteIndex++;
-            if (!collisionManager.touchObstacle(x, y, "RIGHT")) {
+            if (!collisionManager.touchObstacle(x, y, "RIGHT") && !collideWithBomb(x, y, "RIGHT")) {
                 x += speed;
             }
             pickSprite(Sprite.movingSprite(Sprite.player_right,
@@ -148,6 +149,8 @@ public class Bomber extends EntityDestroyable {
         }
     }
 
+    private Pair<Integer, Integer> lastBomb;
+
     public void updateBomb() {
         if (placedBomb) {
             if (bombManager.size() < bombCount) {
@@ -162,6 +165,7 @@ public class Bomber extends EntityDestroyable {
                     }
                 }
                 if (!hasBomb) {
+                    lastBomb = new Pair<>(_x, _y);
                     bombManager.add(bomb);
                 }
                 placedBomb = false;
@@ -204,6 +208,62 @@ public class Bomber extends EntityDestroyable {
             audio.playParallel(Audio.AudioType.EAT_ITEM, 1);
             collisionManager.getMap().replace(xTile, yTile, new Grass(xTile, yTile, Sprite.grass.getFxImage()));
         }
+    }
+
+    public boolean collideWithBomb(int x, int y, String dir) {
+        int curX = x;
+        int curY = y;
+        switch (dir) {
+            case "UP":
+                curY -= speed;
+                break;
+            case "DOWN":
+                curY += speed;
+                break;
+            case "LEFT":
+                curX -= speed;
+                break;
+            case "RIGHT":
+                curX += speed;
+                break;
+            default:
+                break;
+        }
+        int xTile = curX / Sprite.SCALED_SIZE;
+        int yTile = curY / Sprite.SCALED_SIZE;
+        int xWidth = (curX + WIDTH) / Sprite.SCALED_SIZE;
+        int yHeight = (curY + HEIGHT) / Sprite.SCALED_SIZE;
+        boolean result = false, touchLastBomb = false;
+        for (int i = 0; i < bombManager.size(); i++) {
+            Bomb bomb = (Bomb) bombManager.get(i);
+            int xBomb = (bomb.x + Sprite.SCALED_SIZE / 2) / Sprite.SCALED_SIZE;
+            int yBomb = (bomb.y + Sprite.SCALED_SIZE / 2) / Sprite.SCALED_SIZE;
+            if ((xTile == xBomb && yTile == yBomb)
+                || (xWidth == xBomb && yTile == yBomb)
+                || (xTile == xBomb && yHeight == yBomb)
+                || (xWidth == xBomb && yHeight == yBomb)) {
+                if (lastBomb != null) {
+                    if (xBomb == lastBomb.getKey() && yBomb == lastBomb.getValue()) {
+                        result = false;
+                        touchLastBomb = true;
+                    } else {
+                        if (i == bombManager.size() - 2) {
+                            return false;
+                        }
+                        result = true;
+                        break;
+                    }
+                }
+                else {
+                    result = true;
+                    break;
+                }
+            }
+        }
+        if (!touchLastBomb) {
+            lastBomb = null;
+        }
+        return result;
     }
 
     @Override

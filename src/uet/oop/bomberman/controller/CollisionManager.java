@@ -53,4 +53,12 @@ public class CollisionManager {
     public Map getMap() {
         return map;
     }
+
+    public List<Bomb> getBombList() {
+        List<Bomb> result = new ArrayList<>();
+        for (Bomb bomb: map.getBomber().bombManager) {
+            result.add(bomb);
+        }
+        return result;
+    }
 }

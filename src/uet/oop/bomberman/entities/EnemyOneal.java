@@ -53,7 +53,7 @@ public class EnemyOneal extends Enemy {
 
         if (src.getXTilePos() >= dst.getXTilePos()) {
             if (x > dst.getXTilePos() * Sprite.SCALED_SIZE) {
-                if (!collisionManager.touchObstacle(x, y, "LEFT")) {
+                if (!collisionManager.touchObstacle(x, y, "LEFT") && !touchBomb(x, y, "LEFT")) {
                     pickSprite(Sprite.movingSprite(
                             leftSprites[0],
                             leftSprites[1],
@@ -65,7 +65,7 @@ public class EnemyOneal extends Enemy {
 
         if (src.getXTilePos() <= dst.getXTilePos()) {
             if (x < dst.getXTilePos() * Sprite.SCALED_SIZE) {
-                if (!collisionManager.touchObstacle(x, y, "RIGHT")) {
+                if (!collisionManager.touchObstacle(x, y, "RIGHT") && !touchBomb(x, y, "RIGHT")) {
                     pickSprite(Sprite.movingSprite(
                             rightSprites[0],
                             rightSprites[1],
@@ -77,7 +77,7 @@ public class EnemyOneal extends Enemy {
 
         if (src.getYTilePos() >= dst.getYTilePos()) {
             if (y > dst.getYTilePos() * Sprite.SCALED_SIZE) {
-                if (!collisionManager.touchObstacle(x, y, "UP")) {
+                if (!collisionManager.touchObstacle(x, y, "UP") && !touchBomb(x, y, "UP")) {
                     pickSprite(Sprite.movingSprite(
                             rightSprites[0],
                             rightSprites[1],
@@ -89,7 +89,7 @@ public class EnemyOneal extends Enemy {
 
         if (src.getYTilePos() <= dst.getYTilePos()) {
             if (y < dst.getYTilePos() * Sprite.SCALED_SIZE) {
-                if (!collisionManager.touchObstacle(x, y, "DOWN")) {
+                if (!collisionManager.touchObstacle(x, y, "DOWN") && !touchBomb(x, y, "DOWN")) {
                     pickSprite(Sprite.movingSprite(
                             leftSprites[0],
                             leftSprites[1],
@@ -105,14 +105,14 @@ public class EnemyOneal extends Enemy {
         int bomberIndex = Graph.getVerticesIndex(bomber.getX(), bomber.getY());
 
         if (onealStatus == OnealStatus.WALKING) {
-            path = collisionManager.getMap().getGraph().breathFirstSearch(onealIndex, bomberIndex);
+            path = collisionManager.getMap().getGraph().BFS(onealIndex, bomberIndex);
             if (path != null) onealStatus = OnealStatus.CHASING;
         }
 
         if (onealStatus != OnealStatus.CHASING) {
             goRandom();
         } else {
-            path = collisionManager.getMap().getGraph().breathFirstSearch(onealIndex, bomberIndex);
+            path = collisionManager.getMap().getGraph().BFS(onealIndex, bomberIndex);
             if (path != null) {
                 chasing();
             }

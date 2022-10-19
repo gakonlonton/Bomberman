@@ -13,7 +13,7 @@ import java.util.*;
 import static uet.oop.bomberman.BombermanGame.*;
 import static uet.oop.bomberman.entities.Bomber.*;
 
-public class Bomb extends Entity implements Obstacle {
+public class Bomb extends Entity {
     public enum status {
         REMAIN, EXPLODED, DISAPPEAR
     }
