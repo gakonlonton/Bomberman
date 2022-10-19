@@ -21,6 +21,7 @@ public abstract class Enemy extends EntityDestroyable {
         DEAD
     }
     EnemyStatus enemyStatus;
+    private String dir = "";
     protected CollisionManager collisionManager;
     protected Sprite[] leftSprites = new Sprite[3];
     protected Sprite[] rightSprites = new Sprite[3];
@@ -35,7 +36,6 @@ public abstract class Enemy extends EntityDestroyable {
     private boolean goNext = false;
 
     public void goRandom() {
-        String dir = "";
         if (this instanceof EnemyBalloon) {
             leftSprites[0] = Sprite.balloom_left1;
             leftSprites[1] = Sprite.balloom_left2;
@@ -54,8 +54,8 @@ public abstract class Enemy extends EntityDestroyable {
         }
         spriteIndex++;
         if (!goNext) {
-            int rand = (int) (Math.random() * 4);
-            switch (rand) {
+            int rand = (int) (Math.random() * 16);
+            switch (rand % 4) {
                 case 0:
                     dir = "LEFT";
                     break;

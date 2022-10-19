@@ -130,7 +130,7 @@ public class Bomb extends Entity implements Obstacle {
                 checkUp = false;
                 if (bombStatus == bombStatus.EXPLODED) {
                     if (!setItems(xTile, yTile)) {
-                        map.replace(yTile, xTile, new Grass(xTile, yTile, Sprite.grass.getFxImage()));
+                        map.replace(xTile, yTile, new Grass(xTile, yTile, Sprite.grass.getFxImage()));
                     }
                     map.convertToGraph();
                     distance = (double) y / Sprite.SCALED_SIZE - (double) UpFlame.get(i).getY() / Sprite.SCALED_SIZE;
@@ -163,7 +163,7 @@ public class Bomb extends Entity implements Obstacle {
                 checkDown = false;
                 if (bombStatus == bombStatus.EXPLODED) {
                     if (!setItems(xTile, yTile)) {
-                        map.replace(yTile, xTile, new Grass(xTile, yTile, Sprite.grass.getFxImage()));
+                        map.replace(xTile, yTile, new Grass(xTile, yTile, Sprite.grass.getFxImage()));
                     }
                     map.convertToGraph();
                     distance = (double) DownFlame.get(i).getY() / Sprite.SCALED_SIZE - (double) y / Sprite.SCALED_SIZE;
@@ -196,7 +196,7 @@ public class Bomb extends Entity implements Obstacle {
                 checkLeft = false;
                 if (bombStatus == bombStatus.EXPLODED) {
                     if (!setItems(xTile, yTile)) {
-                        map.replace(yTile, xTile, new Grass(xTile, yTile, Sprite.grass.getFxImage()));
+                        map.replace(xTile, yTile, new Grass(xTile, yTile, Sprite.grass.getFxImage()));
                     }
                     map.convertToGraph();
                     distance = (double) x / Sprite.SCALED_SIZE - (double) LeftFlame.get(i).getX() / Sprite.SCALED_SIZE;
@@ -229,7 +229,7 @@ public class Bomb extends Entity implements Obstacle {
                 checkRight = false;
                 if (bombStatus == bombStatus.EXPLODED) {
                     if (!setItems(xTile, yTile)) {
-                        map.replace(yTile, xTile, new Grass(xTile, yTile, Sprite.grass.getFxImage()));
+                        map.replace(xTile, yTile, new Grass(xTile, yTile, Sprite.grass.getFxImage()));
                     }
                     map.convertToGraph();
                     distance = (double) RightFlame.get(i).getX() / Sprite.SCALED_SIZE - (double) x / Sprite.SCALED_SIZE;
