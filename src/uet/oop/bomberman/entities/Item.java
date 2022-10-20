@@ -19,6 +19,4 @@ public abstract class Item extends Entity {
         return (xTile == this.x / Sprite.SCALED_SIZE
                 && yTile == this.y / Sprite.SCALED_SIZE);
     }
-
-    public abstract void powerUp(Bomber bomber);
 }

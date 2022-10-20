@@ -4,10 +4,9 @@ import javafx.event.EventHandler;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.HBox;
 import uet.oop.bomberman.controller.GameMaster;
 
-public class InGameScene extends RootScene {
+public class InGame extends Root {
     private static final int WIDTH_PIXEL_STATUS_FRAME = WINDOW_HEIGHT_PIXEL;
     private static final int HEIGHT_PIXEL_STATUS_FRAME = 30;
     private static final int WIDTH_PIXEL_PLAYING_FRAME = WIDTH_PIXEL_STATUS_FRAME;
@@ -17,7 +16,7 @@ public class InGameScene extends RootScene {
     GraphicsContext statusGc;
     GraphicsContext playingGc;
 
-    public InGameScene() {
+    public InGame() {
         statusFrame = new Canvas(WIDTH_PIXEL_STATUS_FRAME, HEIGHT_PIXEL_STATUS_FRAME);
         playingFrame = new Canvas(WIDTH_PIXEL_PLAYING_FRAME, HEIGHT_PIXEL_PLAYING_FRAME);
         playingGc = playingFrame.getGraphicsContext2D();

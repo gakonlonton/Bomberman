@@ -4,9 +4,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import uet.oop.bomberman.BombermanGame;
 
-public class LobbyScene extends RootScene {
+public class Lobby extends Root {
 
-    public LobbyScene() {
+    public Lobby() {
         FXMLLoader fxmlLoader = new FXMLLoader(BombermanGame.class.getResource("/ScoreBoard.fxml"));
         try {
             scene = new Scene(fxmlLoader.load());

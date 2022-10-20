@@ -9,8 +9,4 @@ public class ItemPortal extends Item {
         super(x, y, img);
     }
 
-    @Override
-    public void powerUp(Bomber bomber) {
-
-    }
 }

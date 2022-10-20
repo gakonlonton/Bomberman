@@ -4,7 +4,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.util.Pair;
-import uet.oop.bomberman.BombermanGame;
 import uet.oop.bomberman.controller.Audio;
 import uet.oop.bomberman.controller.CollisionManager;
 import uet.oop.bomberman.controller.GameMaster;
@@ -173,7 +172,7 @@ public class Bomber extends EntityDestroyable {
     private void updateBombManager() {
         bombManager.forEach(Entity::update);
         if (!bombManager.isEmpty()) {
-            if (((Bomb) bombManager.get(0)).getbombStatus() == Bomb.status.DISAPPEAR) {
+            if (((Bomb) bombManager.get(0)).getBombStatus() == Bomb.status.DISAPPEAR) {
                 bombManager.remove(0);
             }
         }
@@ -182,7 +181,7 @@ public class Bomber extends EntityDestroyable {
     public void updateBomberStatus() {
         for (Bomb e: bombManager) {
             if (e.inRange(x + Bomber.WIDTH / 2, y + Bomber.HEIGHT / 2)
-                && e.getbombStatus() == Bomb.status.EXPLODED) {
+                && e.getBombStatus() == Bomb.status.EXPLODED) {
                 status = bomberStatus.DEAD;
                 spriteIndex = 0;
                 return;
@@ -201,7 +200,7 @@ public class Bomber extends EntityDestroyable {
         int Bomber_yPixel = entities.get(level).get(0).getY();
         if (item instanceof Item) {
             Item tmp = (Item) item;
-            tmp.powerUp(this);
+            tmp.update();
             int xTile = (x + Sprite.SCALED_SIZE / 2) / Sprite.SCALED_SIZE;
             int yTile = (y + Sprite.SCALED_SIZE / 2) / Sprite.SCALED_SIZE;
             audio.playParallel(Audio.AudioType.EAT_ITEM, 1);

@@ -77,7 +77,7 @@ public class Map {
                     case '2':
                         map.get(i).add(new Grass(j, i, Sprite.grass.getFxImage()));
                         Enemy oneal = new EnemyOneal(j, i, Sprite.oneal_left1.getFxImage(),
-                                                    new CollisionManager(this, EnemyOneal.HEIGHT, EnemyOneal.WIDTH));
+                                                    new CollisionManager(this, EnemyOneal.HEIGHT, EnemyOneal.WIDTH), GameMaster.entities.get(level).get(0));
                         GameMaster.entities.get(level).add(oneal);
                         break;
                     case 'x':
@@ -183,9 +183,9 @@ public class Map {
     }
 
     public Entity getPosition(int x, int y) {
-        int roundedX = Math.round(x / Sprite.SCALED_SIZE);
-        int roundedY = Math.round(y / Sprite.SCALED_SIZE);
-        return map.get(roundedY).get(roundedX);
+        int xTile = x / Sprite.SCALED_SIZE;
+        int yTile = y / Sprite.SCALED_SIZE;
+        return map.get(yTile).get(xTile);
     }
 
     public Bomber getBomber() {
@@ -206,5 +206,6 @@ public class Map {
         GameMaster.entities.get(level).clear();
         GameMaster.bombsList.clear();
         mapReader();
+        convertToGraph();
     }
 }

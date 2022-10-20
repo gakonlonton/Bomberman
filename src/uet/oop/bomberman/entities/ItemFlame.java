@@ -9,7 +9,7 @@ public class ItemFlame extends Item {
     }
 
     @Override
-    public void powerUp(Bomber bomber) {
-
+    public void update() {
+        Bomber.flameLength += 1;
     }
 }

@@ -2,16 +2,9 @@ package uet.oop.bomberman.entities;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.util.Pair;
 import uet.oop.bomberman.controller.CollisionManager;
-import uet.oop.bomberman.controller.Direction.DIRECTION;
 import uet.oop.bomberman.graphics.Sprite;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.PriorityQueue;
-
-import static uet.oop.bomberman.BombermanGame.*;
 import static uet.oop.bomberman.controller.GameMaster.bombsList;
 
 public abstract class Enemy extends EntityDestroyable {
@@ -161,7 +154,7 @@ public abstract class Enemy extends EntityDestroyable {
     public void update() {
         for (Entity i : bombsList) {
             if (((Bomb) i).inRange(x + Bomber.WIDTH / 2, y + Bomber.HEIGHT / 2)
-                    && ((Bomb) i).getbombStatus() == Bomb.status.EXPLODED) {
+                    && ((Bomb) i).getBombStatus() == Bomb.status.EXPLODED) {
                 enemyStatus = EnemyStatus.DEAD;
             }
         }

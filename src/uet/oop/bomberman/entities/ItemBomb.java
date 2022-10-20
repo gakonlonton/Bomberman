@@ -10,7 +10,7 @@ public class ItemBomb extends Item {
     }
 
     @Override
-    public void powerUp(Bomber bomber) {
-
+    public void update() {
+        Bomber.bombCount += 1;
     }
 }

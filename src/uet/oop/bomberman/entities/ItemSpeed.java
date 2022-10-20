@@ -10,7 +10,7 @@ public class ItemSpeed extends Item {
     }
 
     @Override
-    public void powerUp(Bomber bomber) {
-
+    public void update() {
+        Bomber.speed += 1;
     }
 }

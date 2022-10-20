@@ -26,12 +26,12 @@ public class EnemyOneal extends Enemy {
     private List<List<Entity>> map = new ArrayList<>();
     private List<Vertices> path;
 
-    public EnemyOneal(int x, int y, Image img, CollisionManager collisionManager) {
+    public EnemyOneal(int x, int y, Image img, CollisionManager collisionManager, Entity bomber) {
         super(x, y, img, collisionManager);
         onealStatus = OnealStatus.WALKING;
         this.speed = 1;
         this.map = collisionManager.getMap().getMap();
-        this.bomber = collisionManager.getMap().getBomber();
+        this.bomber = bomber;
     }
 
     public int getDistanceFromBomber() {
@@ -40,12 +40,6 @@ public class EnemyOneal extends Enemy {
     }
 
     public void chasing() {
-        leftSprites[0] = Sprite.oneal_left1;
-        leftSprites[1] = Sprite.oneal_left2;
-        leftSprites[2] = Sprite.oneal_left3;
-        rightSprites[0] = Sprite.oneal_right1;
-        rightSprites[1] = Sprite.oneal_right2;
-        rightSprites[2] = Sprite.oneal_right3;
 
         Vertices src = path.get(0);
         Vertices dst = path.get(1);

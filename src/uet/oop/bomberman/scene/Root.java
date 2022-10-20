@@ -1,16 +1,11 @@
 package uet.oop.bomberman.scene;
 
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.VBox;
-import uet.oop.bomberman.graphics.Sprite;
 
-import static uet.oop.bomberman.BombermanGame.WINDOW_HEIGHT;
-import static uet.oop.bomberman.BombermanGame.WINDOW_WIDTH;
-
-public class RootScene {
+public class Root {
     protected static final int WINDOW_WIDTH_PIXEL = 700;
     protected static final int WINDOW_HEIGHT_PIXEL = 400;
     Canvas canvas, scoreCanvas;
@@ -18,7 +13,7 @@ public class RootScene {
     VBox root;
     Scene scene;
 
-    public RootScene() {
+    public Root() {
         canvas = new Canvas(WINDOW_WIDTH_PIXEL, WINDOW_HEIGHT_PIXEL - 30);
         scoreCanvas = new Canvas(WINDOW_WIDTH_PIXEL, 30);
         gc = canvas.getGraphicsContext2D();

@@ -7,18 +7,17 @@ import uet.oop.bomberman.entities.Enemy;
 import uet.oop.bomberman.entities.EnemyOneal;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.graphics.Map;
-import uet.oop.bomberman.scene.InGameScene;
-import uet.oop.bomberman.scene.LobbyScene;
-import javafx.fxml.FXMLLoader;
+import uet.oop.bomberman.scene.InGame;
+import uet.oop.bomberman.scene.Lobby;
 
 import java.util.*;
 
 public class GameMaster {
-    private Stage stage;
     private static final int MAX_LEVEL = 0;
     public static int level = 0;
-    private LobbyScene lobby = new LobbyScene();
-    private InGameScene inGame = new InGameScene();
+    private Stage stage;
+    private Lobby lobby = new Lobby();
+    private InGame inGame = new InGame();
     private Audio audio = new Audio();
     public static final List<Map> mapList = new ArrayList<>();
     public static List<List<Entity>> entities = new ArrayList<>();
@@ -153,8 +152,8 @@ public class GameMaster {
     }
 
     public void reset() {
-        inGame = new InGameScene();
-        lobby = new LobbyScene();
+        inGame = new InGame();
+        lobby = new Lobby();
         for (int i = 0; i <= level; i++) {
             mapList.get(level).reset();
         }
