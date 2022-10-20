@@ -10,22 +10,27 @@
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
-            <version>15</version>
+            <version>19</version>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-fxml</artifactId>
-            <version>15</version>
+            <version>19</version>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-base</artifactId>
-            <version>15</version>
+            <version>19</version>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-graphics</artifactId>
-            <version>15</version>
+            <version>19</version>
+        </dependency>
+        <dependency>
+            <groupId>uet.oop</groupId>
+            <artifactId>bomberman</artifactId>
+            <version>v0.1</version>
         </dependency>
     </dependencies>
 
@@ -60,6 +65,14 @@
                             <mainClass>uet.oop.bomberman.BombermanGame</mainClass>
                         </manifest>
                     </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M5</version>
+                <configuration>
+                    <argLine> --add-exports javafx.graphics/com.sun.javafx.application=ALL-UNNAMED </argLine>
                 </configuration>
             </plugin>
         </plugins>

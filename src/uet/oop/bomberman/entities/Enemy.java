@@ -72,7 +72,7 @@ public abstract class Enemy extends EntityDestroyable {
                     break;
             }
         }
-        if (collisionManager.touchObstacle(x, y, dir) || touchBomb(x, y, dir)) {
+        if (collisionManager.touchObstacle(x, y, dir, speed) || touchBomb(x, y, dir)) {
             goNext = false;
             spriteIndex = 0;
         } else {

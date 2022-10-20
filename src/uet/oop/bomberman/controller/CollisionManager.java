@@ -22,21 +22,21 @@ public class CollisionManager {
         fixWidth = width;
     }
 
-    public boolean touchObstacle(int x, int y, String dir) {
+    public boolean touchObstacle(int x, int y, String dir, int speed) {
         int curX = x;
         int curY = y;
         switch (dir) {
             case "UP":
-                curY -= Bomber.speed;
+                curY -= speed;
                 break;
             case "DOWN":
-                curY += Bomber.speed;
+                curY += speed;
                 break;
             case "LEFT":
-                curX -= Bomber.speed;
+                curX -= speed;
                 break;
             case "RIGHT":
-                curX += Bomber.speed;
+                curX += speed;
                 break;
             default:
                 break;

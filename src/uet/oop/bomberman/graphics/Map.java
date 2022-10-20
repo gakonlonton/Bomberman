@@ -16,10 +16,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import static uet.oop.bomberman.BombermanGame.WINDOW_HEIGHT;
-import static uet.oop.bomberman.BombermanGame.WINDOW_WIDTH;
-
 public class Map {
+    private int WIDTH;
+    private int HEIGHT;
+
     private int level;
     protected int[][] itemList;
     protected List<List<Entity>> map = new ArrayList<>();
@@ -45,12 +45,16 @@ public class Map {
         catch (FileNotFoundException e) {
             System.out.println("Map file not found!");
         }
-        sc.nextLine();
-        itemList = new int[WINDOW_HEIGHT][WINDOW_WIDTH];
-        for (int i = 0; i < WINDOW_HEIGHT; i++) {
-            String tempLine = sc.nextLine();
+        String tempLine = "";
+        tempLine = sc.nextLine();
+        String[] tmp = tempLine.split(" ");
+        HEIGHT = Integer.parseInt(tmp[1]);
+        WIDTH = Integer.parseInt(tmp[2]);
+        itemList = new int[HEIGHT][WIDTH];
+        for (int i = 0; i < HEIGHT; i++) {
+            tempLine = sc.nextLine();
             map.add(new ArrayList<>());
-            for (int j = 0; j < WINDOW_WIDTH; j++) {
+            for (int j = 0; j < WIDTH; j++) {
                 switch (tempLine.charAt(j)) {
                     case 'p':
                         map.get(i).add(new Grass(j, i, Sprite.grass.getFxImage()));
@@ -150,6 +154,22 @@ public class Map {
     /*
         Getter functions
      */
+
+    public int getHeightTile() {
+        return HEIGHT;
+    }
+
+    public int getWidthTile() {
+        return WIDTH;
+    }
+
+    public int getWidthPixel() {
+        return WIDTH * Sprite.SCALED_SIZE;
+    }
+
+    public int getHeightPixel() {
+        return HEIGHT * Sprite.SCALED_SIZE;
+    }
     public List<List<Entity>> getMap() {
         return map;
     }

@@ -5,8 +5,8 @@ import javafx.stage.Stage;
 import uet.oop.bomberman.controller.GameMaster;
 
 public class BombermanGame extends Application {
-    public static final int WINDOW_WIDTH = 32;
-    public static final int WINDOW_HEIGHT = 18;
+    public static final int WINDOW_WIDTH = 31;
+    public static final int WINDOW_HEIGHT = 13;
 
     public static void main(String[] args) {
         Application.launch(BombermanGame.class);

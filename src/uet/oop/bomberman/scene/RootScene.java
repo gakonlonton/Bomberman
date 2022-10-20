@@ -4,22 +4,26 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.layout.VBox;
 import uet.oop.bomberman.graphics.Sprite;
-
 
 import static uet.oop.bomberman.BombermanGame.WINDOW_HEIGHT;
 import static uet.oop.bomberman.BombermanGame.WINDOW_WIDTH;
 
 public class RootScene {
-    Canvas canvas;
+    protected static final int WINDOW_WIDTH_PIXEL = 700;
+    protected static final int WINDOW_HEIGHT_PIXEL = 400;
+    Canvas canvas, scoreCanvas;
     GraphicsContext gc;
-    Group root;
+    VBox root;
     Scene scene;
 
     public RootScene() {
-        canvas = new Canvas(WINDOW_WIDTH * Sprite.SCALED_SIZE, WINDOW_HEIGHT * Sprite.SCALED_SIZE);
+        canvas = new Canvas(WINDOW_WIDTH_PIXEL, WINDOW_HEIGHT_PIXEL - 30);
+        scoreCanvas = new Canvas(WINDOW_WIDTH_PIXEL, 30);
         gc = canvas.getGraphicsContext2D();
-        root = new Group();
+        root = new VBox();
+        root.getChildren().add(scoreCanvas);
         root.getChildren().add(canvas);
         scene = new Scene(root);
     }

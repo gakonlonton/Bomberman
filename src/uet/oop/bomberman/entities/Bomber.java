@@ -4,18 +4,15 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.util.Pair;
+import uet.oop.bomberman.BombermanGame;
 import uet.oop.bomberman.controller.Audio;
 import uet.oop.bomberman.controller.CollisionManager;
-import uet.oop.bomberman.controller.Direction.DIRECTION;
 import uet.oop.bomberman.controller.GameMaster;
-import uet.oop.bomberman.graphics.Map;
 import uet.oop.bomberman.graphics.Sprite;
-import uet.oop.bomberman.scene.IngameScene;
 
-import java.security.Key;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import static uet.oop.bomberman.controller.GameMaster.*;
 
 public class Bomber extends EntityDestroyable {
     public static final int HEIGHT = 30;
@@ -88,7 +85,7 @@ public class Bomber extends EntityDestroyable {
         if (goUp) {
             pressed = true;
             spriteIndex++;
-            if (!collisionManager.touchObstacle(x, y, "UP") && !collideWithBomb(x, y, "UP")) {
+            if (!collisionManager.touchObstacle(x, y, "UP", speed) && !collideWithBomb(x, y, "UP")) {
                 y -= speed;
             }
             pickSprite(Sprite.movingSprite(Sprite.player_up,
@@ -98,7 +95,7 @@ public class Bomber extends EntityDestroyable {
         if (goDown) {
             pressed = true;
             spriteIndex++;
-            if (!collisionManager.touchObstacle(x, y, "DOWN") && !collideWithBomb(x, y, "DOWN")) {
+            if (!collisionManager.touchObstacle(x, y, "DOWN", speed) && !collideWithBomb(x, y, "DOWN")) {
                 y += speed;
             }
             pickSprite(Sprite.movingSprite(Sprite.player_down,
@@ -108,7 +105,7 @@ public class Bomber extends EntityDestroyable {
         if (goLeft) {
             pressed = true;
             spriteIndex++;
-            if (!collisionManager.touchObstacle(x, y, "LEFT") && !collideWithBomb(x, y, "LEFT")) {
+            if (!collisionManager.touchObstacle(x, y, "LEFT", speed) && !collideWithBomb(x, y, "LEFT")) {
                 x -= speed;
             }
             pickSprite(Sprite.movingSprite(Sprite.player_left,
@@ -118,7 +115,7 @@ public class Bomber extends EntityDestroyable {
         if (goRight) {
             pressed = true;
             spriteIndex++;
-            if (!collisionManager.touchObstacle(x, y, "RIGHT") && !collideWithBomb(x, y, "RIGHT")) {
+            if (!collisionManager.touchObstacle(x, y, "RIGHT", speed) && !collideWithBomb(x, y, "RIGHT")) {
                 x += speed;
             }
             pickSprite(Sprite.movingSprite(Sprite.player_right,
@@ -200,11 +197,13 @@ public class Bomber extends EntityDestroyable {
 
     public void updateItemState() {
         Entity item = collisionManager.getMap().getPosition(x + 16, y + 16);
+        int Bomber_xPixel = entities.get(level).get(0).getX();
+        int Bomber_yPixel = entities.get(level).get(0).getY();
         if (item instanceof Item) {
             Item tmp = (Item) item;
             tmp.powerUp(this);
-            int xTile = (x + 16) / Sprite.SCALED_SIZE;
-            int yTile = (y + 16) / Sprite.SCALED_SIZE;
+            int xTile = (x + Sprite.SCALED_SIZE / 2) / Sprite.SCALED_SIZE;
+            int yTile = (y + Sprite.SCALED_SIZE / 2) / Sprite.SCALED_SIZE;
             audio.playParallel(Audio.AudioType.EAT_ITEM, 1);
             collisionManager.getMap().replace(xTile, yTile, new Grass(xTile, yTile, Sprite.grass.getFxImage()));
         }
@@ -271,9 +270,9 @@ public class Bomber extends EntityDestroyable {
         if (status == bomberStatus.ALIVE) {
             updatePosition();
             updateBomb();
+            updateBomberStatus();
             updateBombManager();
             updateItemState();
-            updateBomberStatus();
         }
         if (status == bomberStatus.DEAD) {
             spriteIndex++;
@@ -281,7 +280,7 @@ public class Bomber extends EntityDestroyable {
                     Sprite.player_dead2,
                     Sprite.player_dead3, spriteIndex, 20).getFxImage());
             if (spriteIndex >= 20) {
-                GameMaster.gameStatus = GameMaster.ingameSatus.LOSE;
+                GameMaster.gameStatus = GameMaster.inGameStatus.LOSE;
             }
             speed = 2;
             bombCount = 1;

@@ -6,15 +6,15 @@ import uet.oop.bomberman.graphics.Sprite;
 import java.util.*;
 
 public class Graph {
-    private final int numOfVerticess;
+    private final int VerticesCount;
     private final List<Vertices> verticesList;
     private final List<Integer>[] adj;
 
     public Graph(List<Vertices> verticesList) {
         this.verticesList = verticesList;
-        numOfVerticess = verticesList.size();
-        adj = new List[numOfVerticess];
-        for (int i = 0; i < numOfVerticess; i++) {
+        VerticesCount = verticesList.size();
+        adj = new List[VerticesCount];
+        for (int i = 0; i < VerticesCount; i++) {
             adj[i] = new ArrayList<>();
         }
     }
@@ -25,8 +25,8 @@ public class Graph {
     }
 
     public List<Vertices> BFS(int start, int end) {
-        boolean[] marked = new boolean[numOfVerticess];
-        int[] trace = new int[numOfVerticess];
+        boolean[] marked = new boolean[VerticesCount];
+        int[] trace = new int[VerticesCount];
 
         for (boolean i : marked) {
             i = false;
