@@ -1,6 +1,7 @@
 package uet.oop.bomberman.entities;
 
 import javafx.scene.image.Image;
+import uet.oop.bomberman.controller.GameMaster;
 import uet.oop.bomberman.graphics.Sprite;
 
 public class Brick extends EntityDestroyable implements Obstacle {
@@ -9,13 +10,13 @@ public class Brick extends EntityDestroyable implements Obstacle {
         super(x, y, img);
     }
 
-    @Override
-    public void update() {
+    public void update(int xTile, int yTile) {
         spriteIndex++;
-        if (spriteIndex == 15) {
-            pickSprite(Sprite.movingSprite(Sprite.brick_exploded,
-                    Sprite.brick_exploded1,
-                    Sprite.brick_exploded2, spriteIndex, 15).getFxImage());
+        pickSprite(Sprite.movingSprite(Sprite.brick_exploded,
+                Sprite.brick_exploded1,
+                Sprite.brick_exploded2, spriteIndex, 15).getFxImage());
+        if (spriteIndex == 40) {
+            GameMaster.mapList.get(GameMaster.level).replace(xTile, yTile, new Grass(xTile, yTile, Sprite.grass.getFxImage()));
             spriteIndex = 0;
         }
     }

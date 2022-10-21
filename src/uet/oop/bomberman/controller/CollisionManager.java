@@ -1,6 +1,5 @@
 package uet.oop.bomberman.controller;
 
-import uet.oop.bomberman.controller.Direction.DIRECTION;
 import uet.oop.bomberman.entities.Bomb;
 import uet.oop.bomberman.entities.Bomber;
 import uet.oop.bomberman.entities.Entity;

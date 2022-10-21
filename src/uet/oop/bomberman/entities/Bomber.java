@@ -189,8 +189,11 @@ public class Bomber extends EntityDestroyable {
         }
 
         for (int i = 1; i < GameMaster.entities.get(GameMaster.level).size(); i++) {
-            if (((Enemy) GameMaster.entities.get(GameMaster.level).get(i)).touchBomber(x, y))
+            if (((Enemy) GameMaster.entities.get(GameMaster.level).get(i)).touchBomber(x, y)) {
                 status = bomberStatus.DEAD;
+                spriteIndex = 0;
+                break;
+            }
         }
     }
 

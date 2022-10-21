@@ -139,6 +139,7 @@ public class Bomb extends Entity {
                 if (bombStatus == bombStatus.EXPLODED) {
                     if (!setItems(xTile, yTile)) {
                         map.replace(xTile, yTile, new Grass(xTile, yTile, Sprite.grass.getFxImage()));
+                        ((Brick) nearTile).update(xTile, yTile);
                     } else {
                         // map.replace(xTile, yTile, new Grass(xTile, yTile, Sprite.grass.getFxImage()));
                     }
@@ -172,6 +173,7 @@ public class Bomb extends Entity {
                 if (bombStatus == bombStatus.EXPLODED) {
                     if (!setItems(xTile, yTile)) {
                         map.replace(xTile, yTile, new Grass(xTile, yTile, Sprite.grass.getFxImage()));
+                        ((Brick) nearTile).update(xTile, yTile);
                     } else {
                         // map.replace(xTile, yTile, new Grass(xTile, yTile, Sprite.grass.getFxImage()));
                     }
@@ -205,6 +207,7 @@ public class Bomb extends Entity {
                 if (bombStatus == bombStatus.EXPLODED) {
                     if (!setItems(xTile, yTile)) {
                         map.replace(xTile, yTile, new Grass(xTile, yTile, Sprite.grass.getFxImage()));
+                        ((Brick) nearTile).update(xTile, yTile);
                     } else {
                         // map.replace(xTile, yTile, new Grass(xTile, yTile, Sprite.grass.getFxImage()));
                     }
@@ -238,6 +241,7 @@ public class Bomb extends Entity {
                 if (bombStatus == bombStatus.EXPLODED) {
                     if (!setItems(xTile, yTile)) {
                         map.replace(xTile, yTile, new Grass(xTile, yTile, Sprite.grass.getFxImage()));
+                        ((Brick) nearTile).update(xTile, yTile);
                     } else {
                         // map.replace(xTile, yTile, new Grass(xTile, yTile, Sprite.grass.getFxImage()));
                     }
