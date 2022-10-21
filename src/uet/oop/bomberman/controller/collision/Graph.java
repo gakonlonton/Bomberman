@@ -72,6 +72,6 @@ public class Graph {
     public static int getVerticesIndex(int xTile, int yTile) {
         int x = xTile / Sprite.SCALED_SIZE;
         int y = yTile / Sprite.SCALED_SIZE;
-        return y * SceneMaster.SCREEN_WIDTH / Sprite.SCALED_SIZE + x;
+        return y * 31 + x;
     }
 }

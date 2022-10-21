@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="uet.oop.bomberman.scene.SceneMaster"
-            prefHeight="400.0" prefWidth="600.0">
-
-</AnchorPane>
+<VBox alignment="CENTER"
+      maxHeight="-Infinity" maxWidth="-Infinity"
+      minHeight="-Infinity" minWidth="-Infinity"
+      prefHeight="400.0" prefWidth="700.0"
+      xmlns="http://javafx.com/javafx/19"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="uet.oop.bomberman.scene.SceneMaster">
+    <children>
+        <AnchorPane prefHeight="30.0" prefWidth="700.0">
+            <children>
+                <Button fx:id="ButtonReturn" mnemonicParsing="false" onMouseClicked="#SwitchToLobby" text="Return" />
+            </children>
+        </AnchorPane>
+    </children>
+</VBox>

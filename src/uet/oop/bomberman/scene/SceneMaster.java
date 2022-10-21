@@ -1,6 +1,7 @@
 package uet.oop.bomberman.scene;
 
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,6 +10,9 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.effect.Effect;
+import javafx.scene.effect.Glow;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
@@ -29,17 +33,20 @@ public class SceneMaster implements Initializable {
     private Parent root;
     @FXML
     private Button ButtonOption;
+    @FXML
     private Button ButtonPlay;
+    @FXML
     private Button ButtonReturn;
+    @FXML
     private Button ButtonQuit;
+    @FXML
     private Button ButtonHighScore;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         URL lobby, playing;
         lobby = BombermanGame.class.getResource("/Lobby.fxml");
-        playing = BombermanGame.class.getResource("/InGame.fxml");
-
+        playing = BombermanGame.class.getResource("/Playing.fxml");
         if (url.equals(lobby)) {
             ButtonPlay.setFocusTraversable(false);
             ButtonOption.setFocusTraversable(false);
@@ -51,7 +58,22 @@ public class SceneMaster implements Initializable {
         }
     }
 
-    public void switchToPlayingScene(ActionEvent event) {
+    public void SwitchToLobby(MouseEvent event) {
+        URL url = BombermanGame.class.getResource("/Lobby.fxml");
+        FXMLLoader fxmlLoader = new FXMLLoader(url);
+        try {
+            root = fxmlLoader.load();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        scene = new Scene(root);
+        stage = (Stage) (((Node) (event.getSource())).getScene().getWindow());
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public void SwitchToInGame(ActionEvent event) {
         GameMaster.gameStatus = GameMaster.gameStatus.PLAY;
         URL url = BombermanGame.class.getResource("/Playing.fxml");
         FXMLLoader fxmlLoader = new FXMLLoader(url);
@@ -82,6 +104,15 @@ public class SceneMaster implements Initializable {
         stage = (Stage) (((Node) (event.getSource())).getScene().getWindow());
         stage.setScene(scene);
         stage.show();
+    }
+
+    public void setEffect(MouseEvent event) {
+        Effect shadow = new Glow();
+        ((Button) event.getSource()).setEffect(shadow);
+    }
+
+    public void removeEffect(MouseEvent event) {
+        ((Button) event.getSource()).setEffect(null);
     }
 
     public static void clearScreen() {
