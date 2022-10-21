@@ -1,11 +1,9 @@
-package uet.oop.bomberman.controller;
+package uet.oop.bomberman.controller.collision;
 
-import uet.oop.bomberman.entities.Bomb;
-import uet.oop.bomberman.entities.Bomber;
+import uet.oop.bomberman.entities.bomber.Bomb;
 import uet.oop.bomberman.entities.Entity;
-import uet.oop.bomberman.entities.Obstacle;
+import uet.oop.bomberman.entities.obstacle.Obstacle;
 import uet.oop.bomberman.graphics.Map;
-import uet.oop.bomberman.graphics.Sprite;
 
 import java.util.ArrayList;
 import java.util.List;

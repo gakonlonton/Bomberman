@@ -1,17 +1,16 @@
-package uet.oop.bomberman.entities;
+package uet.oop.bomberman.entities.enemies;
 
 import javafx.scene.image.Image;
-import uet.oop.bomberman.controller.CollisionManager;
-import uet.oop.bomberman.controller.Direction.DIRECTION;
-import uet.oop.bomberman.controller.Graph;
-import uet.oop.bomberman.controller.Vertices;
-import uet.oop.bomberman.graphics.Map;
-import uet.oop.bomberman.graphics.Sprite;
+import uet.oop.bomberman.controller.collision.CollisionManager;
+import uet.oop.bomberman.controller.collision.Graph;
+import uet.oop.bomberman.controller.collision.Vertices;
+import uet.oop.bomberman.entities.Entity;
+import uet.oop.bomberman.graphics.sprite.Sprite;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class EnemyOneal extends Enemy {
+public class Oneal extends Enemy {
     public static final int WIDTH = 30;
     public static final int HEIGHT = 30;
 
@@ -26,7 +25,7 @@ public class EnemyOneal extends Enemy {
     private List<List<Entity>> map = new ArrayList<>();
     private List<Vertices> path;
 
-    public EnemyOneal(int x, int y, Image img, CollisionManager collisionManager, Entity bomber) {
+    public Oneal(int x, int y, Image img, CollisionManager collisionManager, Entity bomber) {
         super(x, y, img, collisionManager);
         onealStatus = OnealStatus.WALKING;
         this.speed = 1;
@@ -95,7 +94,7 @@ public class EnemyOneal extends Enemy {
     }
 
     public void move() {
-        int onealIndex = Graph.getVerticesIndex(x + EnemyOneal.WIDTH / 2, y + EnemyOneal.HEIGHT / 2);
+        int onealIndex = Graph.getVerticesIndex(x + Oneal.WIDTH / 2, y + Oneal.HEIGHT / 2);
         int bomberIndex = Graph.getVerticesIndex(bomber.getX(), bomber.getY());
 
         if (onealStatus == OnealStatus.WALKING) {

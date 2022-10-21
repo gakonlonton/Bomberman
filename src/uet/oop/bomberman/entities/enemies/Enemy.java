@@ -1,9 +1,13 @@
-package uet.oop.bomberman.entities;
+package uet.oop.bomberman.entities.enemies;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import uet.oop.bomberman.controller.CollisionManager;
-import uet.oop.bomberman.graphics.Sprite;
+import uet.oop.bomberman.controller.collision.CollisionManager;
+import uet.oop.bomberman.entities.bomber.Bomb;
+import uet.oop.bomberman.entities.bomber.Bomber;
+import uet.oop.bomberman.entities.Entity;
+import uet.oop.bomberman.entities.EntityDestroyable;
+import uet.oop.bomberman.graphics.sprite.Sprite;
 
 import static uet.oop.bomberman.controller.GameMaster.bombsList;
 
@@ -29,7 +33,7 @@ public abstract class Enemy extends EntityDestroyable {
     private boolean goNext = false;
 
     public void goRandom() {
-        if (this instanceof EnemyBalloon) {
+        if (this instanceof Balloon) {
             leftSprites[0] = Sprite.balloom_left1;
             leftSprites[1] = Sprite.balloom_left2;
             leftSprites[2] = Sprite.balloom_left3;
@@ -37,7 +41,7 @@ public abstract class Enemy extends EntityDestroyable {
             rightSprites[1] = Sprite.balloom_right2;
             rightSprites[2] = Sprite.balloom_right3;
         }
-        if (this instanceof EnemyOneal) {
+        if (this instanceof Oneal) {
             leftSprites[0] = Sprite.oneal_left1;
             leftSprites[1] = Sprite.oneal_left2;
             leftSprites[2] = Sprite.oneal_left3;

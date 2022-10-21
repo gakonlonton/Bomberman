@@ -1,4 +1,4 @@
-package uet.oop.bomberman.controller;
+package uet.oop.bomberman.controller.audio;
 
 import javax.sound.sampled.*;
 import java.io.File;

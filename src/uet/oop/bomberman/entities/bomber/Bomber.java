@@ -1,13 +1,18 @@
-package uet.oop.bomberman.entities;
+package uet.oop.bomberman.entities.bomber;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.util.Pair;
-import uet.oop.bomberman.controller.Audio;
-import uet.oop.bomberman.controller.CollisionManager;
+import uet.oop.bomberman.controller.audio.Audio;
+import uet.oop.bomberman.controller.collision.CollisionManager;
 import uet.oop.bomberman.controller.GameMaster;
-import uet.oop.bomberman.graphics.Sprite;
+import uet.oop.bomberman.entities.Entity;
+import uet.oop.bomberman.entities.EntityDestroyable;
+import uet.oop.bomberman.entities.obstacle.Grass;
+import uet.oop.bomberman.entities.enemies.Enemy;
+import uet.oop.bomberman.entities.items.Item;
+import uet.oop.bomberman.graphics.sprite.Sprite;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -206,7 +211,7 @@ public class Bomber extends EntityDestroyable {
             tmp.update();
             int xTile = (x + Sprite.SCALED_SIZE / 2) / Sprite.SCALED_SIZE;
             int yTile = (y + Sprite.SCALED_SIZE / 2) / Sprite.SCALED_SIZE;
-            audio.playParallel(Audio.AudioType.EAT_ITEM, 1);
+            audio.playOnBackground(Audio.AudioType.PICKUP, 1);
             collisionManager.getMap().replace(xTile, yTile, new Grass(xTile, yTile, Sprite.grass.getFxImage()));
         }
     }

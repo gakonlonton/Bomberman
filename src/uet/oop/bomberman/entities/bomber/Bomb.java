@@ -1,15 +1,22 @@
-package uet.oop.bomberman.entities;
+package uet.oop.bomberman.entities.bomber;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import uet.oop.bomberman.controller.CollisionManager;
+import uet.oop.bomberman.controller.collision.CollisionManager;
 import uet.oop.bomberman.controller.GameMaster;
+import uet.oop.bomberman.entities.obstacle.Brick;
+import uet.oop.bomberman.entities.Entity;
+import uet.oop.bomberman.entities.obstacle.Grass;
+import uet.oop.bomberman.entities.obstacle.Wall;
+import uet.oop.bomberman.entities.items.ItemBomb;
+import uet.oop.bomberman.entities.items.ItemFlame;
+import uet.oop.bomberman.entities.items.ItemSpeed;
 import uet.oop.bomberman.graphics.Map;
-import uet.oop.bomberman.graphics.Sprite;
+import uet.oop.bomberman.graphics.sprite.Sprite;
 
 import java.util.*;
 
-import static uet.oop.bomberman.entities.Bomber.*;
+import static uet.oop.bomberman.entities.bomber.Bomber.*;
 
 public class Bomb extends Entity {
     public enum status {

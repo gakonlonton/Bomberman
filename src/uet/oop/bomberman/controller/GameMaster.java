@@ -3,8 +3,9 @@ package uet.oop.bomberman.controller;
 import javafx.animation.AnimationTimer;
 import javafx.stage.Stage;
 import javafx.util.Pair;
-import uet.oop.bomberman.entities.Enemy;
-import uet.oop.bomberman.entities.EnemyOneal;
+import uet.oop.bomberman.controller.audio.Audio;
+import uet.oop.bomberman.entities.enemies.Enemy;
+import uet.oop.bomberman.entities.enemies.Oneal;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.graphics.Map;
 import uet.oop.bomberman.scene.InGame;
@@ -88,9 +89,9 @@ public class GameMaster {
         for (int i = entities.get(level).size() - 1; i >= 0; i--) {
             if (entities.get(level).get(i) instanceof Enemy) {
                 if (((Enemy) entities.get(level).get(i)).getEnemyStatus() == Enemy.EnemyStatus.DEAD) {
-                    if (entities.get(level).get(i) instanceof EnemyOneal) {
+                    if (entities.get(level).get(i) instanceof Oneal) {
                         for (Entity k : entities.get(level)) {
-                            if (k instanceof EnemyOneal) ((EnemyOneal) k).setOnealStatus(EnemyOneal.OnealStatus.WALKING);
+                            if (k instanceof Oneal) ((Oneal) k).setOnealStatus(Oneal.OnealStatus.WALKING);
                         }
                     }
                     entities.get(level).remove(i);
@@ -102,17 +103,17 @@ public class GameMaster {
         Queue<Pair> dis = new PriorityQueue<>(Comparator.comparingDouble(o -> (int) o.getValue()));
 
         for (int i = 1; i < entities.get(level).size(); i++) {
-            if (entities.get(level).get(i) instanceof EnemyOneal) {
-                if (((EnemyOneal) entities.get(level).get(i)).getOnealStatus() == EnemyOneal.OnealStatus.CHASING) {
-                    dis.add(new Pair(i, ((EnemyOneal) entities.get(level).get(i)).getDistanceFromBomber()));
+            if (entities.get(level).get(i) instanceof Oneal) {
+                if (((Oneal) entities.get(level).get(i)).getOnealStatus() == Oneal.OnealStatus.CHASING) {
+                    dis.add(new Pair(i, ((Oneal) entities.get(level).get(i)).getDistanceFromBomber()));
                 }
             }
         }
 
         if (!dis.isEmpty()) {
             for (Entity j : entities.get(level)) {
-                if (!j.equals(entities.get(level).get((Integer) dis.peek().getKey())) && j instanceof EnemyOneal) {
-                    ((EnemyOneal) j).setOnealStatus(EnemyOneal.OnealStatus.INVALID);
+                if (!j.equals(entities.get(level).get((Integer) dis.peek().getKey())) && j instanceof Oneal) {
+                    ((Oneal) j).setOnealStatus(Oneal.OnealStatus.INVALID);
                 }
             }
         }

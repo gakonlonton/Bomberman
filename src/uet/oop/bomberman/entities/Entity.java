@@ -4,12 +4,12 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import uet.oop.bomberman.controller.GameMaster;
-import uet.oop.bomberman.graphics.Sprite;
+import uet.oop.bomberman.graphics.sprite.Sprite;
 
 public abstract class Entity {
-    protected int x;
-    protected int y;
-    protected Image img;
+    public int x;
+    public int y;
+    public Image img;
 
     public Entity(int xUnit, int yUnit, Image img) {
         this.x = xUnit * Sprite.SCALED_SIZE;

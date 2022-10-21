@@ -1,8 +1,9 @@
-package uet.oop.bomberman.entities;
+package uet.oop.bomberman.entities.obstacle;
 
 import javafx.scene.image.Image;
 import uet.oop.bomberman.controller.GameMaster;
-import uet.oop.bomberman.graphics.Sprite;
+import uet.oop.bomberman.entities.EntityDestroyable;
+import uet.oop.bomberman.graphics.sprite.Sprite;
 
 public class Brick extends EntityDestroyable implements Obstacle {
     private int spriteIndex = 0;

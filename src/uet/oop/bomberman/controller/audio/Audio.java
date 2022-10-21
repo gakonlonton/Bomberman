@@ -1,26 +1,40 @@
-package uet.oop.bomberman.controller;
+package uet.oop.bomberman.controller.audio;
 
 public class Audio {
     public enum AudioType {
-        LOBBY, PLAYING, EXPLODING, EAT_ITEM, KILL_ENEMY, LOSE, WIN, CHOOSE, DIE
+        LOBBY, PLAYING, EXPLODING, PICKUP, KILL_ENEMY, LOSE, WIN, CHOOSE, DIE
     }
 
     AudioMaster[] audiosList = new AudioMaster[5];
+    private boolean muted = false;
 
     public Audio() {
-        audiosList[AudioType.LOBBY.ordinal()] = new AudioMaster("res/audio/Title Screen.wav");
+        audiosList[AudioType.LOBBY.ordinal()] = new AudioMaster("res/audio/lobby.wav");
         audiosList[AudioType.PLAYING.ordinal()] = new AudioMaster("res/audio/playing.wav");
         audiosList[AudioType.EXPLODING.ordinal()] = new AudioMaster("res/audio/exploding.wav");
-        audiosList[AudioType.EAT_ITEM.ordinal()] = new AudioMaster("res/audio/eatItem.wav");
+        audiosList[AudioType.PICKUP.ordinal()] = new AudioMaster("res/audio/pick_up.wav");
     }
 
-    public void playParallel(AudioType audioName, int time) {
+    public void setAudioOption(boolean muted) {
+        this.muted = muted;
+        if (muted) {
+            for (AudioMaster audio: audiosList) {
+                if (audio != null) {
+                    audio.stop();
+                }
+            }
+        }
+    }
+
+    public void playOnBackground(AudioType audioName, int time) {
+        if (muted) return;
         AudioMaster audio = audiosList[audioName.ordinal()].copyAudio();
         audio.play(time);
     }
 
 
     public void playAlone(AudioType audioName, int time) {
+        if (muted) return;
         for (int i = 0; i < audiosList.length; i++) {
             if (i != audioName.ordinal()) {
                 if (audiosList[i] != null) {

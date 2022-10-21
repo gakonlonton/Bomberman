@@ -1,11 +1,23 @@
 package uet.oop.bomberman.graphics;
 
 import javafx.scene.canvas.GraphicsContext;
-import uet.oop.bomberman.controller.CollisionManager;
+import uet.oop.bomberman.controller.collision.CollisionManager;
 import uet.oop.bomberman.controller.GameMaster;
-import uet.oop.bomberman.controller.Graph;
-import uet.oop.bomberman.controller.Vertices;
+import uet.oop.bomberman.controller.collision.Graph;
+import uet.oop.bomberman.controller.collision.Vertices;
 import uet.oop.bomberman.entities.*;
+import uet.oop.bomberman.entities.bomber.Bomber;
+import uet.oop.bomberman.entities.enemies.Enemy;
+import uet.oop.bomberman.entities.enemies.Balloon;
+import uet.oop.bomberman.entities.enemies.Oneal;
+import uet.oop.bomberman.entities.items.ItemBomb;
+import uet.oop.bomberman.entities.items.ItemFlame;
+import uet.oop.bomberman.entities.items.ItemPortal;
+import uet.oop.bomberman.entities.items.ItemSpeed;
+import uet.oop.bomberman.entities.obstacle.Brick;
+import uet.oop.bomberman.entities.obstacle.Grass;
+import uet.oop.bomberman.entities.obstacle.Wall;
+import uet.oop.bomberman.graphics.sprite.Sprite;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -70,14 +82,14 @@ public class Map {
                         break;
                     case '1':
                         map.get(i).add(new Grass(j, i, Sprite.grass.getFxImage()));
-                        Enemy balloon = new EnemyBalloon(j, i, Sprite.balloom_left1.getFxImage(),
-                                                        new CollisionManager(this, EnemyBalloon.HEIGHT, EnemyBalloon.WIDTH));
+                        Enemy balloon = new Balloon(j, i, Sprite.balloom_left1.getFxImage(),
+                                                        new CollisionManager(this, Balloon.HEIGHT, Balloon.WIDTH));
                         GameMaster.entities.get(level).add(balloon);
                         break;
                     case '2':
                         map.get(i).add(new Grass(j, i, Sprite.grass.getFxImage()));
-                        Enemy oneal = new EnemyOneal(j, i, Sprite.oneal_left1.getFxImage(),
-                                                    new CollisionManager(this, EnemyOneal.HEIGHT, EnemyOneal.WIDTH), GameMaster.entities.get(level).get(0));
+                        Enemy oneal = new Oneal(j, i, Sprite.oneal_left1.getFxImage(),
+                                                    new CollisionManager(this, Oneal.HEIGHT, Oneal.WIDTH), GameMaster.entities.get(level).get(0));
                         GameMaster.entities.get(level).add(oneal);
                         break;
                     case 'x':

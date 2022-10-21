@@ -1,4 +1,4 @@
-package uet.oop.bomberman.controller;
+package uet.oop.bomberman.controller.collision;
 
 public class Direction {
     public static enum DIRECTION {

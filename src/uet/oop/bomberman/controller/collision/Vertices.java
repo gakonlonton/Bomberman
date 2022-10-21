@@ -1,8 +1,8 @@
-package uet.oop.bomberman.controller;
+package uet.oop.bomberman.controller.collision;
 
 import uet.oop.bomberman.entities.Entity;
-import uet.oop.bomberman.entities.Grass;
-import uet.oop.bomberman.entities.Obstacle;
+import uet.oop.bomberman.entities.obstacle.Grass;
+import uet.oop.bomberman.entities.obstacle.Obstacle;
 
 import java.util.List;
 

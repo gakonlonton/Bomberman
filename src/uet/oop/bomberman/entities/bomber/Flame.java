@@ -1,9 +1,10 @@
-package uet.oop.bomberman.entities;
+package uet.oop.bomberman.entities.bomber;
 
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
+import uet.oop.bomberman.entities.Entity;
+import uet.oop.bomberman.entities.obstacle.Grass;
 import uet.oop.bomberman.graphics.Map;
-import uet.oop.bomberman.graphics.Sprite;
+import uet.oop.bomberman.graphics.sprite.Sprite;
 
 public class Flame extends Entity {
     private int spriteIndex = 0;
