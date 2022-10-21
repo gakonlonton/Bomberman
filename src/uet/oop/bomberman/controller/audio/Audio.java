@@ -15,6 +15,10 @@ public class Audio {
         audiosList[AudioType.PICKUP.ordinal()] = new AudioMaster("res/audio/pick_up.wav");
     }
 
+    public boolean isMuted() {
+        return muted;
+    }
+
     public void setAudioOption(boolean muted) {
         this.muted = muted;
         if (muted) {

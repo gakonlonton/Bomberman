@@ -1,6 +1,10 @@
 package uet.oop.bomberman.controller;
 
 import javafx.animation.AnimationTimer;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 import uet.oop.bomberman.controller.audio.Audio;
@@ -8,25 +12,37 @@ import uet.oop.bomberman.entities.enemies.Enemy;
 import uet.oop.bomberman.entities.enemies.Oneal;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.graphics.Map;
-import uet.oop.bomberman.scene.InGame;
-import uet.oop.bomberman.scene.Lobby;
+import uet.oop.bomberman.scene.SceneMaster;
 
+import java.io.IOException;
 import java.util.*;
 
 public class GameMaster {
     private static final int MAX_LEVEL = 0;
     public static int level = 0;
-    private Stage stage;
-    private Lobby lobby = new Lobby();
-    private InGame inGame = new InGame();
-    private Audio audio = new Audio();
-    public static final List<Map> mapList = new ArrayList<>();
-    public static List<List<Entity>> entities = new ArrayList<>();
-    public static List<Entity> bombsList = new ArrayList<>();
+    private boolean isReset = false;
+
     public enum inGameStatus {
         LOBBY, PLAY, PAUSE, WIN, LOSE
     }
     public static inGameStatus gameStatus = inGameStatus.LOBBY;
+
+    /*
+        Stage controller
+     */
+
+    public static Canvas canvas = new Canvas(700, 370);
+    public static final GraphicsContext gc = canvas.getGraphicsContext2D();
+    private Stage stage;
+    public static Audio audio = new Audio();
+
+    /*
+        Entities controller
+     */
+
+    public static List<Map> mapList = new ArrayList<>();
+    public static List<List<Entity>> entities = new ArrayList<>();
+    public static List<Entity> bombsList = new ArrayList<>();
 
     /*
         Constructor
@@ -65,19 +81,14 @@ public class GameMaster {
 
     public void update() {
         if (gameStatus == inGameStatus.PLAY) {
-            if (!stage.getScene().equals(inGame.getScene())) {
-                stage.setScene(inGame.getScene());
-                audio.playAlone(Audio.AudioType.PLAYING, -1);
-            }
+            isReset = true;
+            audio.playAlone(Audio.AudioType.PLAYING, -1);
             entities.get(level).forEach(Entity::update);
             updateCamera();
             entitiesUpdate();
         }
         else if (gameStatus == inGameStatus.LOBBY) {
-            if (!stage.getScene().equals(lobby.getScene())) {
-                stage.setScene(lobby.getScene());
-            }
-            audio.playAlone(Audio.AudioType.LOBBY, -1);
+            reset();
         }
         else if (gameStatus == inGameStatus.LOSE) {
             reset();
@@ -125,27 +136,27 @@ public class GameMaster {
         int bomber_xPixel = entities.get(level).get(0).getX();
         int bomber_yPixel = entities.get(level).get(0).getY();
 
-        if (bomber_xPixel < inGame.getWidthPixelPlayingFrame() / 2) {
+        if (bomber_xPixel < SceneMaster.SCREEN_WIDTH / 2) {
             xCamera = 0;
-        } else if (bomber_xPixel < mapList.get(level).getWidthPixel() - inGame.getWidthPixelPlayingFrame() / 2) {
-            xCamera = bomber_xPixel - inGame.getWidthPixelPlayingFrame() / 2;
+        } else if (bomber_xPixel < mapList.get(level).getWidthPixel() - SceneMaster.SCREEN_WIDTH / 2) {
+            xCamera = bomber_xPixel - SceneMaster.SCREEN_WIDTH / 2;
         } else {
-            xCamera = mapList.get(level).getWidthPixel() - inGame.getWidthPixelPlayingFrame();
+            xCamera = mapList.get(level).getWidthPixel() - SceneMaster.SCREEN_WIDTH;
         }
-        if (bomber_yPixel < inGame.getHeightPixelPlayingFrame() / 2) {
+        if (bomber_yPixel < (SceneMaster.SCREEN_HEIGHT - 30) / 2) {
             yCamera = 0;
-        } else if (bomber_yPixel < mapList.get(level).getHeightPixel() - inGame.getHeightPixelPlayingFrame() / 2) {
-            yCamera = bomber_yPixel - inGame.getHeightPixelPlayingFrame()/ 2;
+        } else if (bomber_yPixel < mapList.get(level).getHeightPixel() - (SceneMaster.SCREEN_HEIGHT - 30) / 2) {
+            yCamera = bomber_yPixel - (SceneMaster.SCREEN_HEIGHT - 30) / 2;
         } else {
-            yCamera = mapList.get(level).getHeightPixel() - inGame.getHeightPixelPlayingFrame();
+            yCamera = mapList.get(level).getHeightPixel() - SceneMaster.SCREEN_HEIGHT + 30;
         }
     }
 
     public void render() {
         if (gameStatus == inGameStatus.PLAY) {
-            inGame.clearScreen();
-            mapList.get(level).mapRender(inGame.getGc());
-            entities.get(level).forEach(g -> g.render(inGame.getGc()));
+            SceneMaster.clearScreen();
+            mapList.get(level).mapRender(gc);
+            entities.get(level).forEach(g -> g.render(gc));
         }
         else if (gameStatus == inGameStatus.LOBBY) {
 
@@ -153,15 +164,27 @@ public class GameMaster {
     }
 
     public void reset() {
-        inGame = new InGame();
-        lobby = new Lobby();
-        for (int i = 0; i <= level; i++) {
-            mapList.get(level).reset();
+        if (isReset) {
+            try {
+                stage.setScene(new Scene(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Lobby.fxml")))));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            stage.show();
+            for (int i = 0; i <= level; i++) {
+                mapList.get(level).reset();
+            }
         }
+        isReset = false;
+        audio.playAlone(Audio.AudioType.LOBBY, -1);
     }
 
     public void run() {
-        stage.setScene(lobby.getScene());
+        try {
+            stage.setScene(new Scene(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Lobby.fxml")))));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         stage.show();
         timer.start();
     }

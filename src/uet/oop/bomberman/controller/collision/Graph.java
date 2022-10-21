@@ -1,7 +1,9 @@
 package uet.oop.bomberman.controller.collision;
 
 import uet.oop.bomberman.BombermanGame;
+import uet.oop.bomberman.controller.GameMaster;
 import uet.oop.bomberman.graphics.sprite.Sprite;
+import uet.oop.bomberman.scene.SceneMaster;
 
 import java.util.*;
 
@@ -70,6 +72,6 @@ public class Graph {
     public static int getVerticesIndex(int xTile, int yTile) {
         int x = xTile / Sprite.SCALED_SIZE;
         int y = yTile / Sprite.SCALED_SIZE;
-        return y * BombermanGame.WINDOW_WIDTH + x;
+        return y * SceneMaster.SCREEN_WIDTH / Sprite.SCALED_SIZE + x;
     }
 }
