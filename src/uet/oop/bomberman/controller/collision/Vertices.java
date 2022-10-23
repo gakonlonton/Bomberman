@@ -7,8 +7,8 @@ import uet.oop.bomberman.entities.obstacle.Obstacle;
 import java.util.List;
 
 public class Vertices {
-    private int xTilePos;
-    private int yTilePos;
+    private final int xTilePos;
+    private final int yTilePos;
 
     public Vertices(int xTilePos, int yTilePos) {
         this.xTilePos = xTilePos;
@@ -21,22 +21,6 @@ public class Vertices {
 
     public int getYTilePos() {
         return yTilePos;
-    }
-
-    public boolean isAVerticesInGraph(List<List<Entity>> map) {
-        if (map.get(yTilePos).get(xTilePos) instanceof Grass) {
-            if (!(map.get(yTilePos + 1).get(xTilePos) instanceof Obstacle
-                    && map.get(yTilePos - 1).get(xTilePos) instanceof Obstacle
-                    && map.get(yTilePos).get(xTilePos + 1) instanceof Grass
-                    && map.get(yTilePos).get(xTilePos - 1) instanceof Grass)
-            && !(map.get(yTilePos + 1).get(xTilePos) instanceof Grass
-                    && map.get(yTilePos - 1).get(xTilePos) instanceof Grass
-                    && map.get(yTilePos).get(xTilePos + 1) instanceof Obstacle
-                    && map.get(yTilePos).get(xTilePos - 1) instanceof Obstacle)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     @Override

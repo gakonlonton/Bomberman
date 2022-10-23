@@ -19,8 +19,8 @@ import java.util.List;
 import static uet.oop.bomberman.controller.GameMaster.*;
 
 public class Bomber extends EntityDestroyable {
-    public static final int HEIGHT = 30;
-    public static final int WIDTH = 20;
+    public static final int HEIGHT = Sprite.SCALED_SIZE * 30 / 32;
+    public static final int WIDTH = Sprite.SCALED_SIZE * 20 / 32;
     enum bomberStatus {
         ALIVE, DEAD
     }
@@ -160,7 +160,7 @@ public class Bomber extends EntityDestroyable {
                 Bomb bomb = new Bomb(_x, _y, Sprite.bomb.getFxImage(), collisionManager);
                 boolean hasBomb = false;
                 for (Entity i : bombManager) {
-                    if (i.x == bomb.x && i.y == bomb.y) {
+                    if (i.getX() == bomb.getX() && i.getY() == bomb.getY()) {
                         hasBomb = true;
                         break;
                     }

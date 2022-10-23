@@ -2,7 +2,6 @@ package uet.oop.bomberman.controller;
 
 import javafx.animation.AnimationTimer;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.stage.Stage;
@@ -12,13 +11,14 @@ import uet.oop.bomberman.entities.enemies.Enemy;
 import uet.oop.bomberman.entities.enemies.Oneal;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.graphics.Map;
-import uet.oop.bomberman.scene.SceneMaster;
+import uet.oop.bomberman.scene.Lobby;
+import uet.oop.bomberman.scene.Master;
 
 import java.io.IOException;
 import java.util.*;
 
 public class GameMaster {
-    private static final int MAX_LEVEL = 0;
+    private static final int MAX_LEVEL = 1;
     public static int level = 0;
     private boolean isReset = false;
 
@@ -136,25 +136,25 @@ public class GameMaster {
         int bomber_xPixel = entities.get(level).get(0).getX();
         int bomber_yPixel = entities.get(level).get(0).getY();
 
-        if (bomber_xPixel < SceneMaster.SCREEN_WIDTH / 2) {
+        if (bomber_xPixel < Master.SCREEN_WIDTH / 2) {
             xCamera = 0;
-        } else if (bomber_xPixel < mapList.get(level).getWidthPixel() - SceneMaster.SCREEN_WIDTH / 2) {
-            xCamera = bomber_xPixel - SceneMaster.SCREEN_WIDTH / 2;
+        } else if (bomber_xPixel < mapList.get(level).getWidthPixel() - Master.SCREEN_WIDTH / 2) {
+            xCamera = bomber_xPixel - Master.SCREEN_WIDTH / 2;
         } else {
-            xCamera = mapList.get(level).getWidthPixel() - SceneMaster.SCREEN_WIDTH;
+            xCamera = mapList.get(level).getWidthPixel() - Master.SCREEN_WIDTH;
         }
-        if (bomber_yPixel < (SceneMaster.SCREEN_HEIGHT - 30) / 2) {
+        if (bomber_yPixel < (Master.SCREEN_HEIGHT - 30) / 2) {
             yCamera = 0;
-        } else if (bomber_yPixel < mapList.get(level).getHeightPixel() - (SceneMaster.SCREEN_HEIGHT - 30) / 2) {
-            yCamera = bomber_yPixel - (SceneMaster.SCREEN_HEIGHT - 30) / 2;
+        } else if (bomber_yPixel < mapList.get(level).getHeightPixel() - (Master.SCREEN_HEIGHT - 30) / 2) {
+            yCamera = bomber_yPixel - (Master.SCREEN_HEIGHT - 30) / 2;
         } else {
-            yCamera = mapList.get(level).getHeightPixel() - SceneMaster.SCREEN_HEIGHT + 30;
+            yCamera = mapList.get(level).getHeightPixel() - Master.SCREEN_HEIGHT + 30;
         }
     }
 
     public void render() {
         if (gameStatus == inGameStatus.PLAY) {
-            SceneMaster.clearScreen();
+            Lobby.clearScreen();
             mapList.get(level).mapRender(gc);
             entities.get(level).forEach(g -> g.render(gc));
         }
@@ -166,7 +166,7 @@ public class GameMaster {
     public void reset() {
         if (isReset) {
             try {
-                stage.setScene(new Scene(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Lobby.fxml")))));
+                stage.setScene(new javafx.scene.Scene(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Lobby.fxml")))));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -181,7 +181,7 @@ public class GameMaster {
 
     public void run() {
         try {
-            stage.setScene(new Scene(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Lobby.fxml")))));
+            stage.setScene(new javafx.scene.Scene(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Lobby.fxml")))));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

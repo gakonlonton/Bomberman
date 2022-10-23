@@ -1,9 +1,6 @@
 package uet.oop.bomberman.controller.collision;
 
-import uet.oop.bomberman.BombermanGame;
-import uet.oop.bomberman.controller.GameMaster;
 import uet.oop.bomberman.graphics.sprite.Sprite;
-import uet.oop.bomberman.scene.SceneMaster;
 
 import java.util.*;
 
