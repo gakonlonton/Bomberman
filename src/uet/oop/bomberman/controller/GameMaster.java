@@ -7,6 +7,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 import uet.oop.bomberman.controller.audio.Audio;
+import uet.oop.bomberman.entities.bomber.Bomb;
 import uet.oop.bomberman.entities.enemies.Enemy;
 import uet.oop.bomberman.entities.enemies.Oneal;
 import uet.oop.bomberman.entities.Entity;
@@ -18,7 +19,7 @@ import java.io.IOException;
 import java.util.*;
 
 public class GameMaster {
-    private static final int MAX_LEVEL = 1;
+    public static final int MAX_LEVEL = 1;
     public static int level = 0;
     private boolean isReset = false;
 
@@ -31,7 +32,7 @@ public class GameMaster {
         Stage controller
      */
 
-    public static Canvas canvas = new Canvas(700, 370);
+    public static Canvas canvas = new Canvas(Master.SCREEN_WIDTH, Master.SCREEN_HEIGHT - 30);
     public static final GraphicsContext gc = canvas.getGraphicsContext2D();
     private Stage stage;
     public static Audio audio = new Audio();
@@ -42,7 +43,7 @@ public class GameMaster {
 
     public static List<Map> mapList = new ArrayList<>();
     public static List<List<Entity>> entities = new ArrayList<>();
-    public static List<Entity> bombsList = new ArrayList<>();
+    public static List<Bomb> bombsList = new ArrayList<>();
 
     /*
         Constructor

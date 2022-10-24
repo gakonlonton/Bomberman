@@ -12,6 +12,7 @@ public class CollisionManager {
     private Map map;
     private int fixHeight;
     private int fixWidth;
+    public Entity topLeft, downLeft, topRight, downRight;
 
     public CollisionManager(Map map, int height, int width) {
         this.map = map;
@@ -38,7 +39,6 @@ public class CollisionManager {
             default:
                 break;
         }
-        Entity topLeft, downLeft, topRight, downRight;
         topLeft = map.getPosition(curX, curY);
         topRight = map.getPosition(curX + fixWidth, curY);
         downLeft = map.getPosition(curX, curY + fixHeight);
@@ -49,13 +49,5 @@ public class CollisionManager {
 
     public Map getMap() {
         return map;
-    }
-
-    public List<Bomb> getBombList() {
-        List<Bomb> result = new ArrayList<>();
-        for (Bomb bomb: map.getBomber().bombManager) {
-            result.add(bomb);
-        }
-        return result;
     }
 }

@@ -39,7 +39,6 @@ public class Oneal extends Enemy {
     }
 
     public void chasing() {
-
         Vertices src = path.get(0);
         Vertices dst = path.get(1);
         spriteIndex++;

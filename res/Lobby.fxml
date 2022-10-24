@@ -10,14 +10,14 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity"
             minHeight="-Infinity" minWidth="-Infinity"
-            prefHeight="400.0" prefWidth="800.0"
+            prefHeight="400.0" prefWidth="700.0"
             xmlns="http://javafx.com/javafx/19"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="uet.oop.bomberman.scene.Lobby">
     <children>
-        <ImageView fitHeight="400.0" fitWidth="800.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true">
+        <ImageView fitHeight="400.0" fitWidth="700.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true">
             <image>
-                <Image url="@../lobbyTexture/2.png" />
+                <Image url="/textures/menu.png" />
             </image>
         </ImageView>
         <ImageView fitHeight="306.0" fitWidth="263.0" layoutX="88.0" layoutY="105.0" pickOnBounds="true" preserveRatio="true">
@@ -72,9 +72,15 @@
                         </ImageView>
                     </graphic>
                 </Button>
-                <Button fx:id="ButtonQuit" focusTraversable="false" mnemonicParsing="false" onMouseClicked="#QUIT" onMouseEntered="#setEffect" onMouseExited="#removeEffect" style="-fx-background-color: transparent;">
+                <Button fx:id="ButtonQuit"
+                        focusTraversable="false"
+                        mnemonicParsing="false"
+                        onMouseClicked="#QUIT"
+                        onMouseEntered="#setEffect"
+                        onMouseExited="#removeEffect"
+                        style="-fx-background-color: transparent;">
                     <graphic>
-                        <ImageView fitHeight="60.0" fitWidth="161.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="60.0" fitWidth="147.0" pickOnBounds="true" preserveRatio="true">
                             <image>
                                 <Image url="/textures/quit.png" />
                             </image>

@@ -4,13 +4,9 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import uet.oop.bomberman.controller.collision.CollisionManager;
 import uet.oop.bomberman.controller.GameMaster;
-import uet.oop.bomberman.entities.obstacle.Brick;
+import uet.oop.bomberman.entities.items.*;
+import uet.oop.bomberman.entities.obstacle.*;
 import uet.oop.bomberman.entities.Entity;
-import uet.oop.bomberman.entities.obstacle.Grass;
-import uet.oop.bomberman.entities.obstacle.Wall;
-import uet.oop.bomberman.entities.items.ItemBomb;
-import uet.oop.bomberman.entities.items.ItemFlame;
-import uet.oop.bomberman.entities.items.ItemSpeed;
 import uet.oop.bomberman.graphics.Map;
 import uet.oop.bomberman.graphics.sprite.Sprite;
 
@@ -101,6 +97,9 @@ public class Bomb extends Entity {
                 yFlame = i.getY() / Sprite.SCALED_SIZE;
                 if (xFlame == xTile && yFlame == yTile) return true;
             }
+            xFlame = CenterFlame.getX() / Sprite.SCALED_SIZE;
+            yFlame = CenterFlame.getY() / Sprite.SCALED_SIZE;
+            return xFlame == xTile && yFlame == yTile;
         }
         return false;
     }
@@ -118,6 +117,10 @@ public class Bomb extends Entity {
             case ItemBomb.code:
                 collisionManager.getMap().replace(xTile, yTile,
                         new ItemBomb(xTile, yTile, Sprite.powerup_bombs.getFxImage()));
+                return true;
+            case ItemPortal.code:
+                collisionManager.getMap().replace(xTile, yTile,
+                        new ItemPortal(xTile, yTile, Sprite.portal.getFxImage()));
                 return true;
             default:
                 return false;

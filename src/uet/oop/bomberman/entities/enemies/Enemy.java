@@ -9,12 +9,15 @@ import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.EntityDestroyable;
 import uet.oop.bomberman.graphics.sprite.Sprite;
 
+import javax.swing.text.html.HTMLDocument;
+
 import static uet.oop.bomberman.controller.GameMaster.bombsList;
 
 public abstract class Enemy extends EntityDestroyable {
     public int spriteIndex = 0;
     public enum EnemyStatus {
         ALIVE,
+        LAST,
         DEAD
     }
     EnemyStatus enemyStatus;
@@ -22,17 +25,19 @@ public abstract class Enemy extends EntityDestroyable {
     protected CollisionManager collisionManager;
     protected Sprite[] leftSprites = new Sprite[3];
     protected Sprite[] rightSprites = new Sprite[3];
+    protected Sprite[] deadSprites = new Sprite[1];
 
     public Enemy(int x, int y, Image img, CollisionManager collisionManager) {
         super(x, y, img);
         this.collisionManager = collisionManager;
         enemyStatus = EnemyStatus.ALIVE;
         this.speed = 1;
+        loadSprite();
     }
 
     private boolean goNext = false;
 
-    public void goRandom() {
+    private void loadSprite() {
         if (this instanceof Balloon) {
             leftSprites[0] = Sprite.balloom_left1;
             leftSprites[1] = Sprite.balloom_left2;
@@ -40,6 +45,7 @@ public abstract class Enemy extends EntityDestroyable {
             rightSprites[0] = Sprite.balloom_right1;
             rightSprites[1] = Sprite.balloom_right2;
             rightSprites[2] = Sprite.balloom_right3;
+            deadSprites[0] = Sprite.balloom_dead;
         }
         if (this instanceof Oneal) {
             leftSprites[0] = Sprite.oneal_left1;
@@ -48,7 +54,20 @@ public abstract class Enemy extends EntityDestroyable {
             rightSprites[0] = Sprite.oneal_right1;
             rightSprites[1] = Sprite.oneal_right2;
             rightSprites[2] = Sprite.oneal_right3;
+            deadSprites[0] = Sprite.oneal_dead;
         }
+        if (this instanceof Doll) {
+            leftSprites[0] = Sprite.doll_left1;
+            leftSprites[1] = Sprite.doll_left2;
+            leftSprites[2] = Sprite.doll_left3;
+            rightSprites[0] = Sprite.doll_right1;
+            rightSprites[1] = Sprite.doll_right2;
+            rightSprites[2] = Sprite.doll_right3;
+            deadSprites[0] = Sprite.doll_dead;
+        }
+    }
+
+    public void goRandom() {
         spriteIndex++;
         if (!goNext) {
             int rand = (int) (Math.random() * 16);
@@ -134,7 +153,7 @@ public abstract class Enemy extends EntityDestroyable {
         int yTile = curY / Sprite.SCALED_SIZE;
         int xWidth = (curX + Bomber.WIDTH) / Sprite.SCALED_SIZE;
         int yHeight = (curY + Bomber.HEIGHT) / Sprite.SCALED_SIZE;
-        for (Bomb bomb: collisionManager.getBombList()) {
+        for (Bomb bomb: bombsList) {
             int xBomb = (bomb.x + Sprite.SCALED_SIZE / 2) / Sprite.SCALED_SIZE;
             int yBomb = (bomb.y + Sprite.SCALED_SIZE / 2) / Sprite.SCALED_SIZE;
             if ((xTile == xBomb && yTile == yBomb)
@@ -147,6 +166,10 @@ public abstract class Enemy extends EntityDestroyable {
         return false;
     }
 
+    public void randomSpeed(int L, int R) {
+        speed = (int) ((Math.random() * (R - L)) + L);
+    }
+
     public boolean touchBomber(int xTile, int yTile) {
         boolean check = true;
         if (xTile + Bomber.WIDTH < x || xTile > x + Sprite.SCALED_SIZE) check = false;
@@ -156,20 +179,31 @@ public abstract class Enemy extends EntityDestroyable {
 
     @Override
     public void update() {
-        for (Entity i : bombsList) {
-            if (((Bomb) i).inRange(x + Bomber.WIDTH / 2, y + Bomber.HEIGHT / 2)
-                    && ((Bomb) i).getBombStatus() == Bomb.status.EXPLODED) {
-                enemyStatus = EnemyStatus.DEAD;
+        if (enemyStatus == EnemyStatus.ALIVE) {
+            for (Entity i : bombsList) {
+                if (((Bomb) i).inRange(x + 30 / 2, y + 30 / 2)
+                        && ((Bomb) i).getBombStatus() == Bomb.status.EXPLODED) {
+                    enemyStatus = EnemyStatus.LAST;
+                    spriteIndex = 0;
+                }
             }
         }
         if (enemyStatus == EnemyStatus.ALIVE) {
             move();
         }
+        if (enemyStatus == EnemyStatus.LAST) {
+            if (spriteIndex == 20) {
+                enemyStatus = EnemyStatus.DEAD;
+            } else {
+                pickSprite(deadSprites[spriteIndex % deadSprites.length].getFxImage());
+            }
+            spriteIndex++;
+        }
     }
 
     @Override
     public void render(GraphicsContext gc) {
-        if (enemyStatus == EnemyStatus.ALIVE) {
+        if (enemyStatus != EnemyStatus.DEAD) {
             super.render(gc);
         }
     }
