@@ -5,7 +5,7 @@ public class Audio {
         LOBBY, PLAYING, EXPLODING, PICKUP, KILL_ENEMY, LOSE, WIN, CHOOSE, DIE
     }
 
-    AudioMaster[] audiosList = new AudioMaster[5];
+    AudioMaster[] audiosList = new AudioMaster[8];
     private boolean muted = false;
 
     public Audio() {
@@ -13,6 +13,8 @@ public class Audio {
         audiosList[AudioType.PLAYING.ordinal()] = new AudioMaster("res/audio/playing.wav");
         audiosList[AudioType.EXPLODING.ordinal()] = new AudioMaster("res/audio/exploding.wav");
         audiosList[AudioType.PICKUP.ordinal()] = new AudioMaster("res/audio/pick_up.wav");
+        audiosList[AudioType.KILL_ENEMY.ordinal()] = new AudioMaster("res/audio/pick_up.wav");
+        audiosList[AudioType.CHOOSE.ordinal()] = new AudioMaster("res/audio/choose.wav");
     }
 
     public boolean isMuted() {

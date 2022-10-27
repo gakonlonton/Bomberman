@@ -27,10 +27,10 @@ public class Graphics {
     public Graphics(Canvas canvas) {
         gc = canvas.getGraphicsContext2D();
         try {
-            default_font = Font.loadFont(Files.newInputStream(Paths.get("res/font/default.ttf")), 30);
-            font = Font.loadFont(Files.newInputStream(Paths.get("res/font/Future Techno Italic 400.ttf")), 25);
-            thin_font = Font.loadFont(Files.newInputStream(Paths.get("res/font/Future Techno Italic 400.ttf")), 15);
-            menu_image = new Image(Files.newInputStream(Paths.get("res/lobby/BG.png")));
+            default_font = Font.loadFont(Files.newInputStream(Paths.get("res/font/PixelGameFont.ttf")), 30);
+            font = Font.loadFont(Files.newInputStream(Paths.get("res/font/PixelGameFont.ttf")), 25);
+            thin_font = Font.loadFont(Files.newInputStream(Paths.get("res/font/PixelGameFont.ttf")), 15);
+            menu_image = new Image(Files.newInputStream(Paths.get("res/textures/menu.png")));
         } catch (IOException e) {
             System.out.println("Wrong file path");
         }

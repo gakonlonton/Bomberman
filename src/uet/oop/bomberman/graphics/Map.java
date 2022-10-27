@@ -221,9 +221,9 @@ public class Map {
     }
 
     public void reset() {
-        map.clear();
         GameMaster.entities.get(level).clear();
         GameMaster.bombsList.clear();
+        map.clear();
         mapReader();
         convertToGraph();
     }

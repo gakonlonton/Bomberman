@@ -1,9 +1,6 @@
 package uet.oop.bomberman.controller;
 
-import javafx.animation.*;
 import javafx.application.Platform;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
@@ -13,7 +10,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import javafx.util.Duration;
 import javafx.util.Pair;
 import uet.oop.bomberman.controller.audio.Audio;
 import uet.oop.bomberman.entities.bomber.Bomb;
@@ -72,6 +68,11 @@ public class GameMaster {
                 updateCamera();
                 entitiesUpdate();
                 break;
+            case MAP_RELOAD:
+                System.out.println("here");
+                resetCurrentLevel();
+                menu.setMenuState(Menu.MenuState.SINGLE_PLAY);
+                break;
             case MENU:
             case PAUSE:
             case MULTIPLAYER:
@@ -96,6 +97,8 @@ public class GameMaster {
                 mapList.get(level).mapRender(gc);
                 entities.get(level).forEach(g -> g.render(gc));
                 break;
+            case MAP_RELOAD:
+            case OPTION:
             case END:
                 break;
             default:
@@ -132,6 +135,12 @@ public class GameMaster {
             entities.add(new ArrayList<>());
             mapList.add(new Map(i));
         }
+    }
+
+    public void resetCurrentLevel() {
+        int lifeCount = ((Bomber) entities.get(level).get(0)).getLifeCount();
+        mapList.get(level).reset();
+        ((Bomber) entities.get(level).get(0)).setLifeCount(lifeCount);
     }
 
     /*

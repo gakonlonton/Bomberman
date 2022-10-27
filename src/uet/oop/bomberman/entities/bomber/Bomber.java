@@ -14,6 +14,7 @@ import uet.oop.bomberman.entities.obstacle.Grass;
 import uet.oop.bomberman.entities.enemies.Enemy;
 import uet.oop.bomberman.entities.items.Item;
 import uet.oop.bomberman.entities.obstacle.Obstacle;
+import uet.oop.bomberman.graphics.Menu;
 import uet.oop.bomberman.graphics.sprite.Sprite;
 
 import java.util.LinkedList;
@@ -345,10 +346,14 @@ public class Bomber extends EntityDestroyable {
             pickSprite(Sprite.movingSprite(Sprite.player_dead1,
                     Sprite.player_dead2,
                     Sprite.player_dead3, spriteIndex, 20).getFxImage());
-            if (spriteIndex >= 30) {
-                // GameMaster.gameStatus = GameMaster.inGameStatus.LOSE;
+            if (spriteIndex >= 20) {
+                lifeCount--;
+                if (lifeCount > 0) {
+                    menu.setMenuState(Menu.MenuState.MAP_RELOAD);
+                } else {
+                    menu.setMenuState(Menu.MenuState.END_STATE);
+                }
             }
-            resetStats();
         }
     }
     @Override

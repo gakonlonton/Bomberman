@@ -6,6 +6,7 @@ import javafx.scene.text.Text;
 import uet.oop.bomberman.controller.GameMaster;
 import uet.oop.bomberman.controller.KeyListener;
 import uet.oop.bomberman.controller.Timer;
+import uet.oop.bomberman.controller.audio.Audio;
 import uet.oop.bomberman.graphics.sprite.Sprite;
 
 import javafx.scene.input.KeyCode;
@@ -15,10 +16,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static uet.oop.bomberman.graphics.Graphics.menu_image;
+import static uet.oop.bomberman.controller.GameMaster.*;
 
 public class Menu {
     public enum MenuState {
-        MENU, SINGLE_PLAY, MULTIPLAYER, PAUSE, END, END_STATE
+        MENU, SINGLE_PLAY, MULTIPLAYER, OPTION, PAUSE, END, END_STATE, MAP_RELOAD
     }
     public static MenuState menuState;
     private KeyListener keyListener;
@@ -28,14 +30,16 @@ public class Menu {
     List<Button> buttons = new ArrayList<>();
     Button ButtonStart, ButtonReady, ButtonPause, ButtonReturn;
     private int choseButton;
+
     /*
         Game State code
      */
 
     private final int SingleGameCode = 0;
     private final int MultiplayerCode = 1;
-    private final int AutoPlayCode = 2;
-    private final int ExitCode = 3;
+    private final int OptionCode = 2;
+    private final int AutoPlayCode = 3;
+    private final int ExitCode = 4;
 
     /*
         Constructor
@@ -45,62 +49,62 @@ public class Menu {
         this.menuState = MenuState.MENU;
         this.keyListener = keyListener;
 
-        Text text = new Text("SINGLE PLAY");
+        Text text = new Text("NEW GAME");
         text.setFont(Graphics.font);
         text.setFill(Color.WHITE);
-        buttons.add(new Button(Graphics.SCREEN_WIDTH / Sprite.SCALED_SIZE / 2 * Sprite.SCALED_SIZE - (int) text.getLayoutBounds().getWidth() / 2,
-                Graphics.SCREEN_HEIGHT / Sprite.SCALED_SIZE / 2 * Sprite.SCALED_SIZE + (int) text.getLayoutBounds().getHeight() / 2, text));
+        buttons.add(new Button(Graphics.SCREEN_WIDTH / 2 - (int) text.getLayoutBounds().getWidth() / 2,
+                Graphics.SCREEN_HEIGHT / 2 + (int) text.getLayoutBounds().getHeight() / 2, text));
 
         text = new Text("MULTIPLAYER");
         text.setFont(Graphics.font);
         text.setFill(Color.WHITE);
-        buttons.add(new Button(Graphics.SCREEN_WIDTH / Sprite.SCALED_SIZE / 2 * Sprite.SCALED_SIZE - (int) text.getLayoutBounds().getWidth() / 2,
-                Graphics.SCREEN_HEIGHT / Sprite.SCALED_SIZE / 2 * Sprite.SCALED_SIZE + 3 * (int) text.getLayoutBounds().getHeight() / 2, text));
+        buttons.add(new Button(Graphics.SCREEN_WIDTH / 2 - (int) text.getLayoutBounds().getWidth() / 2,
+                Graphics.SCREEN_HEIGHT / 2 + 3 * (int) text.getLayoutBounds().getHeight() / 2, text));
 
-        text = new Text("SURVIVAL PLAY");
+        text = new Text("OPTIONS");
         text.setFont(Graphics.font);
         text.setFill(Color.WHITE);
 
-        buttons.add(new Button(Graphics.SCREEN_WIDTH / Sprite.SCALED_SIZE / 2 * Sprite.SCALED_SIZE - (int) text.getLayoutBounds().getWidth() / 2,
-                Graphics.SCREEN_HEIGHT / Sprite.SCALED_SIZE / 2 * Sprite.SCALED_SIZE + 5 * (int) text.getLayoutBounds().getHeight() / 2, text));
-        text = new Text("BOT PLAY");
+        buttons.add(new Button(Graphics.SCREEN_WIDTH / 2 - (int) text.getLayoutBounds().getWidth() / 2,
+                Graphics.SCREEN_HEIGHT / 2 + 5 * (int) text.getLayoutBounds().getHeight() / 2, text));
+        text = new Text("AUTO PLAY");
         text.setFont(Graphics.font);
         text.setFill(Color.WHITE);
-        buttons.add(new Button(Graphics.SCREEN_WIDTH / Sprite.SCALED_SIZE / 2 * Sprite.SCALED_SIZE - (int) text.getLayoutBounds().getWidth() / 2,
-                Graphics.SCREEN_HEIGHT / Sprite.SCALED_SIZE / 2 * Sprite.SCALED_SIZE + 7 * (int) text.getLayoutBounds().getHeight() / 2, text));
+        buttons.add(new Button(Graphics.SCREEN_WIDTH / 2 - (int) text.getLayoutBounds().getWidth() / 2,
+                Graphics.SCREEN_HEIGHT / 2 + 7 * (int) text.getLayoutBounds().getHeight() / 2, text));
 
         text = new Text("EXIT");
         text.setFont(Graphics.font);
         text.setFill(Color.WHITE);
-        buttons.add(new Button(Graphics.SCREEN_WIDTH / Sprite.SCALED_SIZE / 2 * Sprite.SCALED_SIZE - (int) text.getLayoutBounds().getWidth() / 2,
-                Graphics.SCREEN_HEIGHT / Sprite.SCALED_SIZE / 2 * Sprite.SCALED_SIZE + 9 * (int) text.getLayoutBounds().getHeight() / 2, text));
+        buttons.add(new Button(Graphics.SCREEN_WIDTH / 2 - (int) text.getLayoutBounds().getWidth() / 2,
+                Graphics.SCREEN_HEIGHT / 2 + 9 * (int) text.getLayoutBounds().getHeight() / 2, text));
 
         text = new Text("START");
         text.setFont(Graphics.font);
         text.setFill(Color.WHITE);
 
-        ButtonStart = new Button(Graphics.SCREEN_WIDTH / Sprite.SCALED_SIZE / 2 * Sprite.SCALED_SIZE - (int) text.getLayoutBounds().getWidth() / 2,
-                Graphics.SCREEN_HEIGHT / Sprite.SCALED_SIZE * Sprite.SCALED_SIZE - (int) text.getLayoutBounds().getHeight() / 3 + 4, text);
+        ButtonStart = new Button(Graphics.SCREEN_WIDTH / 2 - (int) text.getLayoutBounds().getWidth() / 2,
+                Graphics.SCREEN_HEIGHT - (int) text.getLayoutBounds().getHeight() / 3 + 4, text);
 
         text = new Text("READY");
         text.setFont(Graphics.font);
         text.setFill(Color.WHITE);
 
-        ButtonReady = new Button(Graphics.SCREEN_WIDTH / Sprite.SCALED_SIZE / 2 * Sprite.SCALED_SIZE - (int) text.getLayoutBounds().getWidth() / 2,
-                Graphics.SCREEN_HEIGHT / Sprite.SCALED_SIZE * Sprite.SCALED_SIZE - (int) text.getLayoutBounds().getHeight() / 3 + 4, text);
+        ButtonReady = new Button(Graphics.SCREEN_WIDTH / 2 - (int) text.getLayoutBounds().getWidth() / 2,
+                Graphics.SCREEN_HEIGHT - (int) text.getLayoutBounds().getHeight() / 3 + 4, text);
 
         text = new Text("CONTINUE GAME");
         text.setFont(Graphics.font);
         text.setFill(Color.WHITE);
 
-        ButtonPause = new Button(Graphics.SCREEN_WIDTH / Sprite.SCALED_SIZE / 7 * Sprite.SCALED_SIZE,
-                Graphics.SCREEN_HEIGHT / Sprite.SCALED_SIZE / 8 * 10 * Sprite.SCALED_SIZE - (int) text.getLayoutBounds().getHeight() / 3, text);
+        ButtonPause = new Button(Graphics.SCREEN_WIDTH / 7,
+                Graphics.SCREEN_HEIGHT / 8 * 10 - (int) text.getLayoutBounds().getHeight() / 3, text);
 
         text = new Text("GO TO MENU");
         text.setFont(Graphics.font);
         text.setFill(Color.WHITE);
-        ButtonReturn = new Button(Graphics.SCREEN_WIDTH / Sprite.SCALED_SIZE / 7 * Sprite.SCALED_SIZE,
-                Graphics.SCREEN_HEIGHT / Sprite.SCALED_SIZE / 8 * 10 * Sprite.SCALED_SIZE - (int) text.getLayoutBounds().getHeight() / 2, text);
+        ButtonReturn = new Button(Graphics.SCREEN_WIDTH / 7,
+                Graphics.SCREEN_HEIGHT/ 8 * 10 - (int) text.getLayoutBounds().getHeight() / 2, text);
 
         choseButton = SingleGameCode;
     }
@@ -138,14 +142,16 @@ public class Menu {
                         // playAudio
                         switch (choseButton) {
                             case SingleGameCode:
-                                // playAudio
+                                audio.playOnBackground(Audio.AudioType.PLAYING, -1);
                                 menuState = MenuState.SINGLE_PLAY;
-                                // GameMaster.mapList.get() = new Map(0);
                                 break;
                             case MultiplayerCode:
                                 menuState = MenuState.MULTIPLAYER;
                                 // Do something
                                 System.exit(0);
+                                break;
+                            case OptionCode:
+                                menuState = MenuState.OPTION;
                                 break;
                             case AutoPlayCode:
                                 menuState = MenuState.END;
@@ -156,11 +162,11 @@ public class Menu {
                         }
                     } else {
                         if (keyListener.pressed(KeyCode.S)) {
-                            // playAudio
+                            audio.playAlone(Audio.AudioType.CHOOSE, 1);
                             choseButton++;
                             if (choseButton == buttons.size()) choseButton = 0;
                         } else if (keyListener.pressed(KeyCode.W)) {
-                            // playAudio
+                            audio.playAlone(Audio.AudioType.CHOOSE, 1);
                             choseButton--;
                             if (choseButton == -1) choseButton = buttons.size() - 1;
                         } else if (keyListener.pressed(KeyCode.ESCAPE)) {
