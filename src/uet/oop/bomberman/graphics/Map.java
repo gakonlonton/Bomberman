@@ -7,10 +7,7 @@ import uet.oop.bomberman.controller.collision.Graph;
 import uet.oop.bomberman.controller.collision.Vertices;
 import uet.oop.bomberman.entities.*;
 import uet.oop.bomberman.entities.bomber.Bomber;
-import uet.oop.bomberman.entities.enemies.Doll;
-import uet.oop.bomberman.entities.enemies.Enemy;
-import uet.oop.bomberman.entities.enemies.Balloon;
-import uet.oop.bomberman.entities.enemies.Oneal;
+import uet.oop.bomberman.entities.enemies.*;
 import uet.oop.bomberman.entities.items.ItemBomb;
 import uet.oop.bomberman.entities.items.ItemFlame;
 import uet.oop.bomberman.entities.items.ItemPortal;
@@ -98,6 +95,12 @@ public class Map {
                         Enemy doll = new Doll(j, i, Sprite.doll_left1.getFxImage(),
                                                     new CollisionManager(this, Doll.HEIGHT, Doll.WIDTH));
                         GameMaster.entities.get(level).add(doll);
+                        break;
+                    case '4':
+                        map.get(i).add(new Grass(j, i, Sprite.grass.getFxImage()));
+                        Enemy duplicate = new Duplicate(j, i, Sprite.minvo_left1.getFxImage(),
+                                new CollisionManager(this, Duplicate.HEIGHT, Duplicate.WIDTH), GameMaster.entities.get(level).get(0));
+                        GameMaster.entities.get(level).add(duplicate);
                         break;
                     case 'x':
                         map.get(i).add(new Brick(j, i, Sprite.brick.getFxImage()));

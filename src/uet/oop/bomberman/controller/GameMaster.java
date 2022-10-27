@@ -14,6 +14,7 @@ import javafx.util.Pair;
 import uet.oop.bomberman.controller.audio.Audio;
 import uet.oop.bomberman.entities.bomber.Bomb;
 import uet.oop.bomberman.entities.bomber.Bomber;
+import uet.oop.bomberman.entities.enemies.Duplicate;
 import uet.oop.bomberman.entities.enemies.Enemy;
 import uet.oop.bomberman.entities.enemies.Oneal;
 import uet.oop.bomberman.entities.Entity;
@@ -64,12 +65,15 @@ public class GameMaster {
     public void update() {
         switch (menu.getMenuState()) {
             case SINGLE_PLAY:
-                entities.get(level).forEach(Entity::update);
+                try {
+                    entities.get(level).forEach(Entity::update);
+                } catch (ConcurrentModificationException e) {
+                    System.out.print("");
+                }
                 updateCamera();
                 entitiesUpdate();
                 break;
             case MAP_RELOAD:
-                System.out.println("here");
                 resetCurrentLevel();
                 menu.setMenuState(Menu.MenuState.SINGLE_PLAY);
                 break;
@@ -152,30 +156,44 @@ public class GameMaster {
             if (entities.get(level).get(i) instanceof Enemy) {
                 if (((Enemy) entities.get(level).get(i)).getEnemyStatus() == Enemy.EnemyStatus.DEAD) {
                     if (entities.get(level).get(i) instanceof Oneal) {
-                        for (Entity k : entities.get(level)) {
-                            if (k instanceof Oneal) ((Oneal) k).setOnealStatus(Oneal.OnealStatus.WALKING);
-                        }
+                        ((Oneal) entities.get(level).get(i)).setOnealStatus(Oneal.OnealStatus.WALKING);
+                    }
+                    if (entities.get(level).get(i) instanceof Duplicate) {
+                        ((Duplicate) entities.get(level).get(i)).setDuplicateStatus(Duplicate.DuplicateStatus.WALKING);
                     }
                     entities.get(level).remove(i);
                 }
             }
         }
 
-        //If existing an oneal chasing bomber, others will move randomly
-        Queue<Pair> dis = new PriorityQueue<>(Comparator.comparingDouble(o -> (int) o.getValue()));
+        //If existing an enemy chasing bomber, others will move randomly
+        Queue<Pair> dis1 = new PriorityQueue<>(Comparator.comparingDouble(o -> (int) o.getValue()));
+        Queue<Pair> dis2 = new PriorityQueue<>(Comparator.comparingDouble(o -> (int) o.getValue()));
 
         for (int i = 1; i < entities.get(level).size(); i++) {
             if (entities.get(level).get(i) instanceof Oneal) {
                 if (((Oneal) entities.get(level).get(i)).getOnealStatus() == Oneal.OnealStatus.CHASING) {
-                    dis.add(new Pair(i, ((Oneal) entities.get(level).get(i)).getDistanceFromBomber()));
+                    dis1.add(new Pair(i, ((Oneal) entities.get(level).get(i)).getDistanceFromBomber()));
+                }
+            }
+            if (entities.get(level).get(i) instanceof Duplicate) {
+                if (((Duplicate) entities.get(level).get(i)).getDuplicateStatus() == Duplicate.DuplicateStatus.CHASING) {
+                    dis2.add(new Pair(i, ((Duplicate) entities.get(level).get(i)).getDistanceFromBomber()));
                 }
             }
         }
 
-        if (!dis.isEmpty()) {
+        if (!dis1.isEmpty()) {
             for (Entity j : entities.get(level)) {
-                if (!j.equals(entities.get(level).get((Integer) dis.peek().getKey())) && j instanceof Oneal) {
+                if (!j.equals(entities.get(level).get((Integer) dis1.peek().getKey())) && j instanceof Oneal) {
                     ((Oneal) j).setOnealStatus(Oneal.OnealStatus.INVALID);
+                }
+            }
+        }
+        if (!dis2.isEmpty()) {
+            for (Entity j : entities.get(level)) {
+                if (!j.equals(entities.get(level).get((Integer) dis2.peek().getKey())) && j instanceof Duplicate) {
+                    ((Duplicate) j).setDuplicateStatus(Duplicate.DuplicateStatus.INVALID);
                 }
             }
         }

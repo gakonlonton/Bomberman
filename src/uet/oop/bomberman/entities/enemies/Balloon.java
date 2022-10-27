@@ -6,10 +6,12 @@ import uet.oop.bomberman.controller.collision.CollisionManager;
 public class Balloon extends Enemy {
     public static final int HEIGHT = 30;
     public static final int WIDTH = 30;
+    public boolean invincible;
 
     public Balloon(int x, int y, Image img, CollisionManager collisionManager) {
         super(x, y, img, collisionManager);
         this.speed = 1;
+        invincible = false;
     }
 
     public void move() {

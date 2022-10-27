@@ -2,6 +2,7 @@ package uet.oop.bomberman.entities.enemies;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import uet.oop.bomberman.controller.GameMaster;
 import uet.oop.bomberman.controller.collision.CollisionManager;
 import uet.oop.bomberman.entities.bomber.Bomb;
 import uet.oop.bomberman.entities.bomber.Bomber;
@@ -11,7 +12,10 @@ import uet.oop.bomberman.graphics.sprite.Sprite;
 
 import javax.swing.text.html.HTMLDocument;
 
+import java.util.ConcurrentModificationException;
+
 import static uet.oop.bomberman.controller.GameMaster.bombsList;
+import static uet.oop.bomberman.controller.GameMaster.level;
 
 public abstract class Enemy extends EntityDestroyable {
     public int spriteIndex = 0;
@@ -64,6 +68,15 @@ public abstract class Enemy extends EntityDestroyable {
             rightSprites[1] = Sprite.doll_right2;
             rightSprites[2] = Sprite.doll_right3;
             deadSprites[0] = Sprite.doll_dead;
+        }
+        if (this instanceof Duplicate) {
+            leftSprites[0] = Sprite.minvo_left1;
+            leftSprites[1] = Sprite.minvo_left2;
+            leftSprites[2] = Sprite.minvo_left3;
+            rightSprites[0] = Sprite.minvo_right1;
+            rightSprites[1] = Sprite.minvo_right2;
+            rightSprites[2] = Sprite.minvo_right3;
+            deadSprites[0] = Sprite.minvo_dead;
         }
     }
 
@@ -192,12 +205,45 @@ public abstract class Enemy extends EntityDestroyable {
             move();
         }
         if (enemyStatus == EnemyStatus.LAST) {
-            if (spriteIndex == 20) {
-                enemyStatus = EnemyStatus.DEAD;
-            } else {
-                pickSprite(deadSprites[spriteIndex % deadSprites.length].getFxImage());
+            // Die for duplicate
+            if (this instanceof Duplicate) {
+                if (spriteIndex >= 20) {
+                    enemyStatus = EnemyStatus.DEAD;
+                    Balloon e1 = new Balloon(x / Sprite.SCALED_SIZE, y / Sprite.SCALED_SIZE,
+                                    Sprite.balloom_left1.getFxImage(),
+                                    new CollisionManager(collisionManager.getMap(), Balloon.HEIGHT, Balloon.WIDTH));
+                    Balloon e2 = new Balloon(x / Sprite.SCALED_SIZE, y / Sprite.SCALED_SIZE,
+                            Sprite.balloom_left1.getFxImage(),
+                            new CollisionManager(collisionManager.getMap(), Balloon.HEIGHT, Balloon.WIDTH));
+                    GameMaster.entities.get(level).add(e1);
+                    GameMaster.entities.get(level).add(e2);
+                    e1.invincible = true;
+                    e2.invincible = true;
+                    spriteIndex = 0;
+                } else {
+                    pickSprite(deadSprites[spriteIndex % deadSprites.length].getFxImage());
+                }
+                spriteIndex++;
+            } else if (this instanceof Balloon) {
+                if (!((Balloon) this).invincible) {
+                    if (spriteIndex == 20) {
+                        enemyStatus = EnemyStatus.DEAD;
+                        spriteIndex = 0;
+                    } else {
+                        pickSprite(deadSprites[spriteIndex % deadSprites.length].getFxImage());
+                    }
+                }
+                spriteIndex++;
             }
-            spriteIndex++;
+            else {
+                if (spriteIndex == 20) {
+                    enemyStatus = EnemyStatus.DEAD;
+                    spriteIndex = 0;
+                } else {
+                    pickSprite(deadSprites[spriteIndex % deadSprites.length].getFxImage());
+                }
+                spriteIndex++;
+            }
         }
     }
 
