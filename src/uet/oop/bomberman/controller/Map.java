@@ -1,4 +1,4 @@
-package uet.oop.bomberman.graphics;
+package uet.oop.bomberman.controller;
 
 import javafx.scene.canvas.GraphicsContext;
 import uet.oop.bomberman.controller.collision.CollisionManager;

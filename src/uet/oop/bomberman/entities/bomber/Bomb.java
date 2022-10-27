@@ -7,7 +7,7 @@ import uet.oop.bomberman.controller.GameMaster;
 import uet.oop.bomberman.entities.items.*;
 import uet.oop.bomberman.entities.obstacle.*;
 import uet.oop.bomberman.entities.Entity;
-import uet.oop.bomberman.graphics.Map;
+import uet.oop.bomberman.controller.Map;
 import uet.oop.bomberman.graphics.sprite.Sprite;
 
 import java.util.*;

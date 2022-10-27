@@ -2,12 +2,10 @@ package uet.oop.bomberman.controller;
 
 import javafx.application.Platform;
 import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Pair;
@@ -19,12 +17,9 @@ import uet.oop.bomberman.entities.enemies.Enemy;
 import uet.oop.bomberman.entities.enemies.Oneal;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.graphics.Graphics;
-import uet.oop.bomberman.graphics.Map;
 import uet.oop.bomberman.graphics.Menu;
 
-import java.io.IOException;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class GameMaster {
     public static final int MAX_LEVEL = 5;

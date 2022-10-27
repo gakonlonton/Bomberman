@@ -3,7 +3,7 @@ package uet.oop.bomberman.entities.bomber;
 import javafx.scene.canvas.GraphicsContext;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.obstacle.Grass;
-import uet.oop.bomberman.graphics.Map;
+import uet.oop.bomberman.controller.Map;
 import uet.oop.bomberman.graphics.sprite.Sprite;
 
 public class Flame extends Entity {

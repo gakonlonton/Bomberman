@@ -1,12 +1,8 @@
 package uet.oop.bomberman.controller.collision;
 
-import uet.oop.bomberman.entities.bomber.Bomb;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.obstacle.Obstacle;
-import uet.oop.bomberman.graphics.Map;
-
-import java.util.ArrayList;
-import java.util.List;
+import uet.oop.bomberman.controller.Map;
 
 public class CollisionManager {
     private Map map;
