@@ -21,7 +21,7 @@ public abstract class Enemy extends EntityDestroyable {
         DEAD
     }
     EnemyStatus enemyStatus;
-    private String dir = "";
+    public String dir = "";
     protected CollisionManager collisionManager;
     protected Sprite[] leftSprites = new Sprite[3];
     protected Sprite[] rightSprites = new Sprite[3];
@@ -35,7 +35,7 @@ public abstract class Enemy extends EntityDestroyable {
         loadSprite();
     }
 
-    private boolean goNext = false;
+    public boolean goNext = false;
 
     private void loadSprite() {
         if (this instanceof Balloon) {

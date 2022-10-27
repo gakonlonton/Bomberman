@@ -41,6 +41,7 @@ public class Bomber extends EntityDestroyable {
     public static int speed;
     public static int flameLength;
     public static int bombCount;
+    public static int lifeCount;
 
     /*
         Constructor
@@ -258,12 +259,22 @@ public class Bomber extends EntityDestroyable {
     }
 
     public void resetStats() {
+        lifeCount = 3;
         speed = 2;
         flameLength = 1;
         bombCount = 1;
         status = bomberStatus.ALIVE;
         pickSprite(Sprite.player_right.getFxImage());
     }
+
+    public int getLifeCount() {
+        return lifeCount;
+    }
+
+    public void setLifeCount(int lifeCount) {
+        this.lifeCount = lifeCount;
+    }
+
     public boolean collideWithBomb(int x, int y, String dir) {
         int curX = x;
         int curY = y;
@@ -334,12 +345,10 @@ public class Bomber extends EntityDestroyable {
             pickSprite(Sprite.movingSprite(Sprite.player_dead1,
                     Sprite.player_dead2,
                     Sprite.player_dead3, spriteIndex, 20).getFxImage());
-            if (spriteIndex >= 20) {
-                GameMaster.gameStatus = GameMaster.inGameStatus.LOSE;
+            if (spriteIndex >= 30) {
+                // GameMaster.gameStatus = GameMaster.inGameStatus.LOSE;
             }
-            speed = 2;
-            bombCount = 1;
-            flameLength = 1;
+            resetStats();
         }
     }
     @Override
