@@ -22,7 +22,7 @@ public class Oneal extends Enemy {
     OnealStatus onealStatus;
 
     private Entity bomber;
-    private List<List<Entity>> map = new ArrayList<>();
+    private Entity[][] map;
     private List<Vertices> path;
 
     public Oneal(int x, int y, Image img, CollisionManager collisionManager, Entity bomber) {

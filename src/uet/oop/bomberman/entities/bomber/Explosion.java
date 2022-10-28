@@ -2,17 +2,16 @@ package uet.oop.bomberman.entities.bomber;
 
 import javafx.scene.canvas.GraphicsContext;
 import uet.oop.bomberman.entities.Entity;
-import uet.oop.bomberman.entities.obstacle.Grass;
 import uet.oop.bomberman.controller.Map;
-import uet.oop.bomberman.entities.obstacle.Obstacle;
+import uet.oop.bomberman.entities.obstacle.Wall;
 import uet.oop.bomberman.graphics.sprite.Sprite;
 
-public class Flame extends Entity {
+public class Explosion extends Entity {
     private int spriteIndex = 0;
-    enum flameType {
-        UP, DOWN, LEFT, RIGHT, CENTER, VERTICAL, HORIZON
+    enum explosionType {
+        UP, DOWN, LEFT, RIGHT, CENTER, VERTICAL, HORIZON, BRICK
     }
-    private flameType type;
+    private explosionType type;
     private Map map;
     public Bomb.status status;
 
@@ -20,7 +19,7 @@ public class Flame extends Entity {
         return status;
     }
 
-    public Flame(int x, int y, flameType type, Map map) {
+    public Explosion(int x, int y, explosionType type, Map map) {
         super(x, y, null);
         switch (type) {
             case DOWN:
@@ -44,6 +43,8 @@ public class Flame extends Entity {
             case CENTER:
                 img = Sprite.bomb_exploded2.getFxImage();
                 break;
+            case BRICK:
+                img = Sprite.brick_exploded.getFxImage();
             default:
                 break;
         }
@@ -54,6 +55,10 @@ public class Flame extends Entity {
 
     public void setFlameStatus(Bomb.status status) {
         this.status = status;
+    }
+
+    public void setFlameType(explosionType type) {
+        this.type = type;
     }
 
     @Override
@@ -103,6 +108,11 @@ public class Flame extends Entity {
                             Sprite.explosion_horizontal2,
                             spriteIndex, 20).getFxImage());
                     break;
+                case BRICK:
+                    pickSprite(Sprite.movingSprite(Sprite.brick_exploded,
+                            Sprite.brick_exploded1,
+                            Sprite.brick_exploded2,
+                            spriteIndex, 20).getFxImage());
                 default:
                     break;
             }
@@ -114,7 +124,7 @@ public class Flame extends Entity {
 
     @Override
     public void render(GraphicsContext gc) {
-        if (!(map.getPosition(x, y) instanceof Obstacle)) {
+        if (!(map.getPosition(x, y) instanceof Wall)) {
             super.render(gc);
         }
     }
