@@ -142,7 +142,7 @@ public class Menu {
                         // playAudio
                         switch (choseButton) {
                             case SingleGameCode:
-                                audio.playOnBackground(Audio.AudioType.PLAYING, -1);
+                                audio.playAlone(Audio.AudioType.PLAYING, -1);
                                 menuState = MenuState.SINGLE_PLAY;
                                 break;
                             case MultiplayerCode:
@@ -162,11 +162,11 @@ public class Menu {
                         }
                     } else {
                         if (keyListener.pressed(KeyCode.S)) {
-                            audio.playAlone(Audio.AudioType.CHOOSE, 1);
+                            audio.playOnBackground(Audio.AudioType.CHOOSE, 1);
                             choseButton++;
                             if (choseButton == buttons.size()) choseButton = 0;
                         } else if (keyListener.pressed(KeyCode.W)) {
-                            audio.playAlone(Audio.AudioType.CHOOSE, 1);
+                            audio.playOnBackground(Audio.AudioType.CHOOSE, 1);
                             choseButton--;
                             if (choseButton == -1) choseButton = buttons.size() - 1;
                         } else if (keyListener.pressed(KeyCode.ESCAPE)) {

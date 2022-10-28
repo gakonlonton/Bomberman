@@ -2,6 +2,7 @@ package uet.oop.bomberman.entities.bomber;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import uet.oop.bomberman.controller.audio.Audio;
 import uet.oop.bomberman.controller.collision.CollisionManager;
 import uet.oop.bomberman.controller.GameMaster;
 import uet.oop.bomberman.entities.items.*;
@@ -24,12 +25,16 @@ public class Bomb extends Entity {
     protected List<Flame> DownFlame = new ArrayList<>();
     protected List<Flame> LeftFlame = new ArrayList<>();
     protected List<Flame> RightFlame = new ArrayList<>();
+    protected List<Entity> brickDestroyed = new ArrayList<>();
+    protected List<Entity> entitiesAfterBrickDestroyed = new ArrayList<>();
     protected Flame CenterFlame;
     private int delayTime = 3;
     private int spriteIndex = 0;
     private CollisionManager collisionManager;
     private Map map;
     Timer timer = new Timer();
+    public static Audio audio = new Audio();
+
     TimerTask task = new TimerTask() {
         int cnt = 0;
         @Override
@@ -37,6 +42,25 @@ public class Bomb extends Entity {
             cnt++;
             if ((delayTime - cnt) <= 0) {
                 bombStatus = status.EXPLODED;
+
+                for (Entity brick: brickDestroyed) {
+                    ((Brick) brick).setBrickStatus(Brick.BrickStatus.DESTROY);
+                }
+                for (Flame flame : DownFlame) {
+                    flame.setFlameStatus(status.EXPLODED);
+                }
+                for (Flame flame : LeftFlame) {
+                    flame.setFlameStatus(status.EXPLODED);
+                }
+                for (Flame flame : RightFlame) {
+                    flame.setFlameStatus(status.EXPLODED);
+                }
+                for (Flame flame : UpFlame) {
+                    flame.setFlameStatus(status.EXPLODED);
+                }
+                CenterFlame.setFlameStatus(status.EXPLODED);
+
+                audio.playOnBackground(Audio.AudioType.EXPLODING, 1);
                 timer.cancel();
                 spriteIndex = 0;
             }
@@ -107,23 +131,27 @@ public class Bomb extends Entity {
     public boolean setItems(int xTile, int yTile) {
         switch (collisionManager.getMap().getItems(xTile, yTile)) {
             case ItemSpeed.code:
-                collisionManager.getMap().replace(xTile, yTile,
-                        new ItemSpeed(xTile, yTile, Sprite.powerup_speed.getFxImage()));
-                return true;
             case ItemFlame.code:
-                collisionManager.getMap().replace(xTile, yTile,
-                        new ItemFlame(xTile, yTile, Sprite.powerup_flames.getFxImage()));
-                return true;
             case ItemBomb.code:
-                collisionManager.getMap().replace(xTile, yTile,
-                        new ItemBomb(xTile, yTile, Sprite.powerup_bombs.getFxImage()));
-                return true;
             case ItemPortal.code:
-                collisionManager.getMap().replace(xTile, yTile,
-                        new ItemPortal(xTile, yTile, Sprite.portal.getFxImage()));
                 return true;
             default:
                 return false;
+        }
+    }
+
+    private Entity itemAdd(int xTile, int yTile) {
+        switch (collisionManager.getMap().getItems(xTile, yTile)) {
+            case ItemSpeed.code:
+                return new ItemSpeed(xTile, yTile, Sprite.powerup_speed.getFxImage());
+            case ItemFlame.code:
+                return new ItemFlame(xTile, yTile, Sprite.powerup_flames.getFxImage());
+            case ItemBomb.code:
+                return new ItemBomb(xTile, yTile, Sprite.powerup_bombs.getFxImage());
+            case ItemPortal.code:
+                return new ItemPortal(xTile, yTile, Sprite.portal.getFxImage());
+            default:
+                return null;
         }
     }
 
@@ -134,10 +162,9 @@ public class Bomb extends Entity {
             int yTile = UpFlame.get(i).getY() / Sprite.SCALED_SIZE;
 
             double distance;
-            Entity nearTile = GameMaster.mapList.get(GameMaster.level)
-                    .getPosition(xTile * Sprite.SCALED_SIZE, yTile * Sprite.SCALED_SIZE);
+            Entity tempEntity = map.getPosition(xTile * Sprite.SCALED_SIZE, yTile * Sprite.SCALED_SIZE);
 
-            if (nearTile instanceof Wall) {
+            if (tempEntity instanceof Wall) {
                 if (bombStatus == bombStatus.EXPLODED) {
                     distance = (double) y / Sprite.SCALED_SIZE - (double) UpFlame.get(i).getY() / Sprite.SCALED_SIZE;
                     for (int j = UpFlame.size() - 1; j >= distance; j--) {
@@ -145,13 +172,13 @@ public class Bomb extends Entity {
                     }
                 }
                 break;
-            } else if (nearTile instanceof Brick) {
+            } else if (tempEntity instanceof Brick) {
+                brickDestroyed.add(tempEntity);
                 if (bombStatus == bombStatus.EXPLODED) {
                     if (!setItems(xTile, yTile)) {
                         map.replace(xTile, yTile, new Grass(xTile, yTile, Sprite.grass.getFxImage()));
-                        ((Brick) nearTile).update(xTile, yTile);
                     } else {
-                        // map.replace(xTile, yTile, new Grass(xTile, yTile, Sprite.grass.getFxImage()));
+                        entitiesAfterBrickDestroyed.add(itemAdd(xTile, yTile));
                     }
                     map.convertToGraph();
                     distance = (double) y / Sprite.SCALED_SIZE - (double) UpFlame.get(i).getY() / Sprite.SCALED_SIZE;
@@ -168,10 +195,9 @@ public class Bomb extends Entity {
             int yTile = DownFlame.get(i).getY() / Sprite.SCALED_SIZE;
 
             double distance;
-            Entity nearTile = GameMaster.mapList.get(GameMaster.level)
-                    .getPosition(xTile * Sprite.SCALED_SIZE, yTile * Sprite.SCALED_SIZE);
+            Entity tempEntity = map.getPosition(xTile * Sprite.SCALED_SIZE, yTile * Sprite.SCALED_SIZE);
 
-            if (nearTile instanceof Wall) {
+            if (tempEntity instanceof Wall) {
                 if (bombStatus == bombStatus.EXPLODED) {
                     distance = (double) DownFlame.get(i).getY() / Sprite.SCALED_SIZE - (double) y / Sprite.SCALED_SIZE;
                     for (int j = DownFlame.size() - 1; j >= distance; j--) {
@@ -179,13 +205,13 @@ public class Bomb extends Entity {
                     }
                 }
                 break;
-            } else if (nearTile instanceof Brick) {
+            } else if (tempEntity instanceof Brick) {
+                brickDestroyed.add(tempEntity);
                 if (bombStatus == bombStatus.EXPLODED) {
                     if (!setItems(xTile, yTile)) {
                         map.replace(xTile, yTile, new Grass(xTile, yTile, Sprite.grass.getFxImage()));
-                        ((Brick) nearTile).update(xTile, yTile);
                     } else {
-                        // map.replace(xTile, yTile, new Grass(xTile, yTile, Sprite.grass.getFxImage()));
+                        entitiesAfterBrickDestroyed.add(itemAdd(xTile, yTile));
                     }
                     map.convertToGraph();
                     distance = (double) DownFlame.get(i).getY() / Sprite.SCALED_SIZE - (double) y / Sprite.SCALED_SIZE;
@@ -202,10 +228,9 @@ public class Bomb extends Entity {
             int yTile = LeftFlame.get(i).getY() / Sprite.SCALED_SIZE;
 
             double distance;
-            Entity nearTile = GameMaster.mapList.get(GameMaster.level)
-                    .getPosition(Math.max(xTile * Sprite.SCALED_SIZE, 0), yTile * Sprite.SCALED_SIZE);
+            Entity tempEntity = map.getPosition(Math.max(xTile * Sprite.SCALED_SIZE, 0), yTile * Sprite.SCALED_SIZE);
 
-            if (nearTile instanceof Wall) {
+            if (tempEntity instanceof Wall) {
                 if (bombStatus == bombStatus.EXPLODED) {
                     distance = (double) x / Sprite.SCALED_SIZE - (double) LeftFlame.get(i).getX() / Sprite.SCALED_SIZE;
                     for (int j = LeftFlame.size() - 1; j >= distance; j--) {
@@ -213,13 +238,13 @@ public class Bomb extends Entity {
                     }
                 }
                 break;
-            } else if (nearTile instanceof Brick) {
+            } else if (tempEntity instanceof Brick) {
+                brickDestroyed.add(tempEntity);
                 if (bombStatus == bombStatus.EXPLODED) {
                     if (!setItems(xTile, yTile)) {
                         map.replace(xTile, yTile, new Grass(xTile, yTile, Sprite.grass.getFxImage()));
-                        ((Brick) nearTile).update(xTile, yTile);
                     } else {
-                        // map.replace(xTile, yTile, new Grass(xTile, yTile, Sprite.grass.getFxImage()));
+                        entitiesAfterBrickDestroyed.add(itemAdd(xTile, yTile));
                     }
                     map.convertToGraph();
                     distance = (double) x / Sprite.SCALED_SIZE - (double) LeftFlame.get(i).getX() / Sprite.SCALED_SIZE;
@@ -236,10 +261,9 @@ public class Bomb extends Entity {
             int yTile = RightFlame.get(i).getY() / Sprite.SCALED_SIZE;
 
             double distance;
-            Entity nearTile = GameMaster.mapList.get(GameMaster.level)
-                    .getPosition(Math.max(xTile * Sprite.SCALED_SIZE, 0), yTile * Sprite.SCALED_SIZE);
+            Entity tempEntity = map.getPosition(Math.max(xTile * Sprite.SCALED_SIZE, 0), yTile * Sprite.SCALED_SIZE);
 
-            if (nearTile instanceof Wall) {
+            if (tempEntity instanceof Wall) {
                 if (bombStatus == bombStatus.EXPLODED) {
                     distance = (double) RightFlame.get(i).getX() / Sprite.SCALED_SIZE - (double) x / Sprite.SCALED_SIZE;
                     for (int j = RightFlame.size() - 1; j >= distance; j--) {
@@ -247,13 +271,13 @@ public class Bomb extends Entity {
                     }
                 }
                 break;
-            } else if (nearTile instanceof Brick) {
+            } else if (tempEntity instanceof Brick) {
+                brickDestroyed.add(tempEntity);
                 if (bombStatus == bombStatus.EXPLODED) {
                     if (!setItems(xTile, yTile)) {
                         map.replace(xTile, yTile, new Grass(xTile, yTile, Sprite.grass.getFxImage()));
-                        ((Brick) nearTile).update(xTile, yTile);
                     } else {
-                        // map.replace(xTile, yTile, new Grass(xTile, yTile, Sprite.grass.getFxImage()));
+                        entitiesAfterBrickDestroyed.add(itemAdd(xTile, yTile));
                     }
                     map.convertToGraph();
                     distance = (double) RightFlame.get(i).getX() / Sprite.SCALED_SIZE - (double) x / Sprite.SCALED_SIZE;
@@ -268,6 +292,11 @@ public class Bomb extends Entity {
 
     @Override
     public void update() {
+        brickDestroyed.forEach(Entity::update);
+        for (List<Flame> flames : Arrays.asList(UpFlame, DownFlame, LeftFlame, RightFlame)) {
+            flames.forEach(Entity::update);
+        }
+        CenterFlame.update();
         Exploded();
         if (bombStatus == status.REMAIN) {
             spriteIndex = (spriteIndex + 1) % 1000;
@@ -275,10 +304,13 @@ public class Bomb extends Entity {
         }
         if (bombStatus == status.EXPLODED) {
             bombStatus = CenterFlame.getStatus();
-            for (List<Flame> flames : Arrays.asList(UpFlame, DownFlame, LeftFlame, RightFlame)) {
-                flames.forEach(Entity::update);
+        }
+        if (bombStatus == status.DISAPPEAR) {
+            for (Entity entity : entitiesAfterBrickDestroyed) {
+                int xTile = entity.getX() / Sprite.SCALED_SIZE;
+                int yTile = entity.getY() / Sprite.SCALED_SIZE;
+                map.replace(xTile, yTile, entity);
             }
-            CenterFlame.update();
         }
     }
 
@@ -293,6 +325,9 @@ public class Bomb extends Entity {
                 flames.forEach(g -> g.render(gc));
             }
             CenterFlame.render(gc);
+            for (Entity brick: brickDestroyed) {
+                brick.render(gc);
+            }
         }
     }
 }

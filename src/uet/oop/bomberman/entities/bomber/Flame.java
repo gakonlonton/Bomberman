@@ -4,6 +4,7 @@ import javafx.scene.canvas.GraphicsContext;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.obstacle.Grass;
 import uet.oop.bomberman.controller.Map;
+import uet.oop.bomberman.entities.obstacle.Obstacle;
 import uet.oop.bomberman.graphics.sprite.Sprite;
 
 public class Flame extends Entity {
@@ -48,66 +49,72 @@ public class Flame extends Entity {
         }
         this.type = type;
         this.map = map;
-        status = Bomb.status.EXPLODED;
+        status = Bomb.status.REMAIN;
+    }
+
+    public void setFlameStatus(Bomb.status status) {
+        this.status = status;
     }
 
     @Override
     public void update() {
-        spriteIndex++;
-        switch (type) {
-            case LEFT:
-                pickSprite(Sprite.movingSprite(Sprite.explosion_horizontal_left_last,
-                        Sprite.explosion_horizontal_left_last1,
-                        Sprite.explosion_horizontal_left_last2,
-                        spriteIndex, 20).getFxImage());
-                break;
-            case RIGHT:
-                pickSprite(Sprite.movingSprite(Sprite.explosion_horizontal_right_last,
-                        Sprite.explosion_horizontal_right_last1,
-                        Sprite.explosion_horizontal_right_last2,
-                        spriteIndex, 20).getFxImage());
-                break;
-            case UP:
-                pickSprite(Sprite.movingSprite(Sprite.explosion_vertical_top_last,
-                        Sprite.explosion_vertical_top_last1,
-                        Sprite.explosion_vertical_top_last2,
-                        spriteIndex, 20).getFxImage());
-                break;
-            case DOWN:
-                pickSprite(Sprite.movingSprite(Sprite.explosion_vertical_down_last,
-                        Sprite.explosion_vertical_down_last1,
-                        Sprite.explosion_vertical_down_last2,
-                        spriteIndex, 20).getFxImage());
-                break;
-            case CENTER:
-                pickSprite(Sprite.movingSprite(Sprite.bomb_exploded,
-                        Sprite.bomb_exploded1,
-                        Sprite.bomb_exploded2,
-                        spriteIndex, 20).getFxImage());
-                break;
-            case VERTICAL:
-                pickSprite(Sprite.movingSprite(Sprite.explosion_vertical,
-                        Sprite.explosion_vertical1,
-                        Sprite.explosion_vertical2,
-                        spriteIndex, 20).getFxImage());
-                break;
-            case HORIZON:
-                pickSprite(Sprite.movingSprite(Sprite.explosion_horizontal,
-                        Sprite.explosion_horizontal1,
-                        Sprite.explosion_horizontal2,
-                        spriteIndex, 20).getFxImage());
-                break;
-            default:
-                break;
-        }
-        if (spriteIndex == 20) {
-            status = Bomb.status.DISAPPEAR;
+        if (status == Bomb.status.EXPLODED) {
+            spriteIndex++;
+            switch (type) {
+                case LEFT:
+                    pickSprite(Sprite.movingSprite(Sprite.explosion_horizontal_left_last,
+                            Sprite.explosion_horizontal_left_last1,
+                            Sprite.explosion_horizontal_left_last2,
+                            spriteIndex, 20).getFxImage());
+                    break;
+                case RIGHT:
+                    pickSprite(Sprite.movingSprite(Sprite.explosion_horizontal_right_last,
+                            Sprite.explosion_horizontal_right_last1,
+                            Sprite.explosion_horizontal_right_last2,
+                            spriteIndex, 20).getFxImage());
+                    break;
+                case UP:
+                    pickSprite(Sprite.movingSprite(Sprite.explosion_vertical_top_last,
+                            Sprite.explosion_vertical_top_last1,
+                            Sprite.explosion_vertical_top_last2,
+                            spriteIndex, 20).getFxImage());
+                    break;
+                case DOWN:
+                    pickSprite(Sprite.movingSprite(Sprite.explosion_vertical_down_last,
+                            Sprite.explosion_vertical_down_last1,
+                            Sprite.explosion_vertical_down_last2,
+                            spriteIndex, 20).getFxImage());
+                    break;
+                case CENTER:
+                    pickSprite(Sprite.movingSprite(Sprite.bomb_exploded,
+                            Sprite.bomb_exploded1,
+                            Sprite.bomb_exploded2,
+                            spriteIndex, 20).getFxImage());
+                    break;
+                case VERTICAL:
+                    pickSprite(Sprite.movingSprite(Sprite.explosion_vertical,
+                            Sprite.explosion_vertical1,
+                            Sprite.explosion_vertical2,
+                            spriteIndex, 20).getFxImage());
+                    break;
+                case HORIZON:
+                    pickSprite(Sprite.movingSprite(Sprite.explosion_horizontal,
+                            Sprite.explosion_horizontal1,
+                            Sprite.explosion_horizontal2,
+                            spriteIndex, 20).getFxImage());
+                    break;
+                default:
+                    break;
+            }
+            if (spriteIndex == 20) {
+                status = Bomb.status.DISAPPEAR;
+            }
         }
     }
 
     @Override
     public void render(GraphicsContext gc) {
-        if (map.getPosition(x, y) instanceof Grass) {
+        if (!(map.getPosition(x, y) instanceof Obstacle)) {
             super.render(gc);
         }
     }
