@@ -22,7 +22,7 @@ public class Duplicate extends Enemy {
     DuplicateStatus duplicateStatus;
 
     private Entity bomber;
-    private Entity[][] map;
+    private List<List<Entity>> map;
     private List<Vertices> path;
     public Duplicate(int x, int y, Image img, CollisionManager collisionManager, Entity bomber) {
         super(x, y, img, collisionManager);

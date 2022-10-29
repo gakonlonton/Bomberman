@@ -169,7 +169,7 @@ public class Bomb extends Entity {
                 break;
             } else if (tempEntity instanceof Brick) {
                 if (bombStatus == bombStatus.EXPLODED) {
-                    map.replace(xTile, yTile, null);
+                    map.replace(xTile, yTile, new Grass(xTile, yTile, Sprite.grass.getFxImage()));
                     if (setItems(xTile, yTile)) {
                         entitiesAfterBrickDestroyed.add(itemAdd(xTile, yTile));
                     }
@@ -202,7 +202,7 @@ public class Bomb extends Entity {
                 break;
             } else if (tempEntity instanceof Brick) {
                 if (bombStatus == bombStatus.EXPLODED) {
-                    map.replace(xTile, yTile, null);
+                    map.replace(xTile, yTile, new Grass(xTile, yTile, Sprite.grass.getFxImage()));
                     if (setItems(xTile, yTile)) {
                         entitiesAfterBrickDestroyed.add(itemAdd(xTile, yTile));
                     }
@@ -235,7 +235,7 @@ public class Bomb extends Entity {
                 break;
             } else if (tempEntity instanceof Brick) {
                 if (bombStatus == bombStatus.EXPLODED) {
-                    map.replace(xTile, yTile, null);
+                    map.replace(xTile, yTile, new Grass(xTile, yTile, Sprite.grass.getFxImage()));
                     if (setItems(xTile, yTile)) {
                         entitiesAfterBrickDestroyed.add(itemAdd(xTile, yTile));
                     }
@@ -268,7 +268,7 @@ public class Bomb extends Entity {
                 break;
             } else if (tempEntity instanceof Brick) {
                 if (bombStatus == bombStatus.EXPLODED) {
-                    map.replace(xTile, yTile, null);
+                    map.replace(xTile, yTile, new Grass(xTile, yTile, Sprite.grass.getFxImage()));
                     if (setItems(xTile, yTile)) {
                         entitiesAfterBrickDestroyed.add(itemAdd(xTile, yTile));
                     }
