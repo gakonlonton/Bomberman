@@ -15,11 +15,10 @@ import java.nio.file.Paths;
 
 public class Graphics {
     public static final int SCREEN_WIDTH = 800;
-    public static final int SCREEN_HEIGHT = 448;
+    public static final int SCREEN_HEIGHT = 464;
 
     public static Font default_font;
     public static Font font;
-    public static Font thin_font;
     public static Image menu_image;
 
     private GraphicsContext gc;
@@ -29,7 +28,6 @@ public class Graphics {
         try {
             default_font = Font.loadFont(Files.newInputStream(Paths.get("res/font/PixelGameFont.ttf")), 30);
             font = Font.loadFont(Files.newInputStream(Paths.get("res/font/PixelGameFont.ttf")), 25);
-            thin_font = Font.loadFont(Files.newInputStream(Paths.get("res/font/PixelGameFont.ttf")), 15);
             menu_image = new Image(Files.newInputStream(Paths.get("res/textures/menu.png")));
         } catch (IOException e) {
             System.out.println("Wrong file path");

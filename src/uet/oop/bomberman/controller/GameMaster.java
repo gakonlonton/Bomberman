@@ -7,9 +7,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -111,7 +109,7 @@ public class GameMaster {
                 break;
             case SINGLE_PLAY:
             case MULTIPLAYER:
-                newLevel(level);
+                MapLoader();
                 break;
             case MAP_RELOAD:
             case OPTION:
@@ -173,10 +171,9 @@ public class GameMaster {
             alert.close();
         });
         alert.show();
-        // menu.setMenuState(Menu.MenuState.MENU);
     }
 
-    private int score, lives;
+    private int score, lives, flame, bomb, speed;
     private TextField ScoreBoard;
 
     private void ScoreBoardInit() {
@@ -185,49 +182,35 @@ public class GameMaster {
         ScoreBoard.setEditable(false);
         ScoreBoard.setFocusTraversable(false);
         ScoreBoard.setPrefWidth(Graphics.SCREEN_WIDTH);
-        ScoreBoard.setPrefHeight(Sprite.SCALED_SIZE);
-        ScoreBoard.setFont(Font.font(18));
-        ScoreBoard.setStyle("-fx-background-color: #000000; -fx-text-fill: #ffffff;");
-        ScoreBoard.setText("\uD83D\uDCAF Score:  " + score + spaceBetween +
+        ScoreBoard.setPrefHeight(Sprite.SCALED_SIZE + Sprite.SCALED_SIZE / 2);
+        ScoreBoard.setFont(Font.font("Segoe UI Semibold", 17));
+        ScoreBoard.setStyle("-fx-background-color: #DCDCDC; -fx-text-fill: #000000;");
+        ScoreBoard.setText("  \uD83D\uDC7B Score:  " + score + spaceBetween +
+                    "\uD83D\uDD25 Flame: " + flame + spaceBetween +
+                    "\uD83D\uDCA3 Bomb: " + bomb + spaceBetween +
+                    "\uD83D\uDC5F Speed: " + speed + spaceBetween +
                     "\uD83D\uDC9C Lives: " + lives + spaceBetween +
                     "\uD83D\uDEA9 Level: " + (level + 1));
     }
 
-    private TextField notify;
-
-    private void NotifyInit() {
-        notify.setText("Level " + (level + 1));
-        notify.setEditable(false);
-        notify.setFocusTraversable(false);
-        notify.setStyle("-fx-background-color: #000000; -fx-text-fill: #ffffff");
-        notify.setFont(Font.font(50));
-        notify.setLayoutX(0);
-        notify.setLayoutY(160);
-        notify.setPrefWidth(Graphics.SCREEN_WIDTH);
-        notify.setAlignment(Pos.CENTER);
-    }
-
-    private String spaceBetween = "                                                   ";
-
-    private Button loader;
+    private String spaceBetween = "           ";
     private boolean isPlaying = false;
-    private long delay = 0;
-    public void newLevel(int level) {
-        long now = Timer.now();
+
+    private void MapLoader() {
         if (!isPlaying) {
-            if (level != 1) {
-                root.getChildren().remove(canvas);
-            }
-            if (Objects.isNull(notify)) {
-                notify = new TextField();
-                root.getChildren().add(notify);
-                NotifyInit();
-            }
-            if (now - delay > Timer.INPUT_TIME) {
-                delay++;
-                MapLoader();
-                isPlaying = true;
-            }
+            ScoreBoardInit();
+            root.getChildren().remove(canvas);
+            root.getChildren().add(ScoreBoard);
+            root.setLayoutX(0);
+            ScoreBoard.setLayoutX(0);
+            canvas.setLayoutY(48);
+            root.getChildren().add(canvas);
+
+            graphics.clearScreen(canvas);
+            mapList.get(level).mapRender(gc);
+            entities.get(level).forEach(g -> g.render(gc));
+
+            isPlaying = true;
         } else {
             graphics.clearScreen(canvas);
             mapList.get(level).mapRender(gc);
@@ -235,23 +218,12 @@ public class GameMaster {
         }
     }
 
-    private void MapLoader() {
-        ScoreBoardInit();
-        root.getChildren().add(ScoreBoard);
-        root.setLayoutX(0);
-        ScoreBoard.setLayoutX(0);
-        canvas.setLayoutY(32);
-        root.getChildren().add(canvas);
-        graphics.clearScreen(canvas);
-        mapList.get(level).mapRender(gc);
-        entities.get(level).forEach(g -> g.render(gc));
-    }
-
     /*
         In-game processing
      */
 
     public void entitiesUpdate() {
+        // Set all enemy to WALKING state
         for (int i = entities.get(level).size() - 1; i >= 0; i--) {
             if (entities.get(level).get(i) instanceof Enemy) {
                 if (entities.get(level).get(i) instanceof Oneal) {
@@ -312,12 +284,12 @@ public class GameMaster {
         } else {
             xCamera = mapList.get(level).getWidthPixel() - Graphics.SCREEN_WIDTH;
         }
-        if (bomber_yPixel < (Graphics.SCREEN_HEIGHT - 32) / 2) {
+        if (bomber_yPixel < (Graphics.SCREEN_HEIGHT - 48) / 2) {
             yCamera = 0;
-        } else if (bomber_yPixel < mapList.get(level).getHeightPixel() - (Graphics.SCREEN_HEIGHT - 32)/ 2) {
-            yCamera = bomber_yPixel - (Graphics.SCREEN_HEIGHT - 32) / 2;
+        } else if (bomber_yPixel < mapList.get(level).getHeightPixel() - (Graphics.SCREEN_HEIGHT - 48)/ 2) {
+            yCamera = bomber_yPixel - (Graphics.SCREEN_HEIGHT - 48) / 2;
         } else {
-            yCamera = mapList.get(level).getHeightPixel() - (Graphics.SCREEN_HEIGHT - 32);
+            yCamera = mapList.get(level).getHeightPixel() - (Graphics.SCREEN_HEIGHT - 48);
         }
     }
 }
