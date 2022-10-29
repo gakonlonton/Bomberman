@@ -176,7 +176,7 @@ public class GameMaster {
         // menu.setMenuState(Menu.MenuState.MENU);
     }
 
-    private int score;
+    private int score, lives;
     private TextField ScoreBoard;
 
     private void ScoreBoardInit() {
@@ -188,7 +188,7 @@ public class GameMaster {
         ScoreBoard.setPrefHeight(Sprite.SCALED_SIZE);
         ScoreBoard.setFont(Font.font(18));
         ScoreBoard.setStyle("-fx-background-color: #000000; -fx-text-fill: #ffffff;");
-        ScoreBoard.setText("Score: " + score + "          Lives: " + 1 + "            Level: " + 1);
+        ScoreBoard.setText("Score: " + score + spaceBetween + "Lives: " + lives + spaceBetween + "Level: " + (level + 1));
     }
 
     private TextField notify;
@@ -204,6 +204,8 @@ public class GameMaster {
         notify.setPrefWidth(Graphics.SCREEN_WIDTH);
         notify.setAlignment(Pos.CENTER);
     }
+
+    private String spaceBetween = "                                                   ";
 
     private Button loader;
     private boolean isPlaying = false;
