@@ -2,10 +2,17 @@ package uet.oop.bomberman.controller;
 
 import javafx.application.Platform;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Pair;
@@ -18,7 +25,10 @@ import uet.oop.bomberman.entities.enemies.Oneal;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.graphics.Graphics;
 import uet.oop.bomberman.graphics.Menu;
+import uet.oop.bomberman.graphics.sprite.Sprite;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 public class GameMaster {
@@ -56,6 +66,7 @@ public class GameMaster {
         loadMap();
     }
 
+    public static boolean setAudio = false;
 
     public void update() {
         switch (menu.getMenuState()) {
@@ -63,6 +74,7 @@ public class GameMaster {
                 try {
                     entities.get(level).forEach(Entity::update);
                 } catch (ConcurrentModificationException e) {
+                    // Exception catch by Duplicate
                     System.out.print("");
                 }
                 updateCamera();
@@ -76,6 +88,13 @@ public class GameMaster {
             case PAUSE:
             case MULTIPLAYER:
             case END_STATE:
+            case END:
+                menu.update();
+                break;
+            case OPTION:
+                if (setAudio) {
+                    AudioControls();
+                }
                 menu.update();
                 break;
             default:
@@ -92,9 +111,7 @@ public class GameMaster {
                 break;
             case SINGLE_PLAY:
             case MULTIPLAYER:
-                graphics.clearScreen(canvas);
-                mapList.get(level).mapRender(gc);
-                entities.get(level).forEach(g -> g.render(gc));
+                newLevel(level);
                 break;
             case MAP_RELOAD:
             case OPTION:
@@ -105,9 +122,10 @@ public class GameMaster {
         }
     }
 
+    private Group root = new Group();
+
     public void run() {
         graphics = new Graphics(canvas);
-        Group root = new Group();
         root.getChildren().add(canvas);
         Scene scene = new Scene(root);
         keyListener = new KeyListener(scene);
@@ -140,6 +158,89 @@ public class GameMaster {
         int lifeCount = ((Bomber) entities.get(level).get(0)).getLifeCount();
         mapList.get(level).reset();
         ((Bomber) entities.get(level).get(0)).setLifeCount(lifeCount);
+    }
+
+    private void AudioControls() {
+        setAudio = false;
+        audio.setAudioOption(!audio.isMuted());
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        Path mapDir = Paths.get("").toAbsolutePath();
+        alert.setGraphic((new ImageView(mapDir.normalize().toString() + "/res/textures/audio_notify.png")));
+        alert.setTitle("Audio Notification");
+        alert.setHeaderText(null);
+        alert.setContentText("Audio has been turn " + (audio.isMuted() ? "off." : "on."));
+        alert.setOnCloseRequest(event -> {
+            alert.close();
+        });
+        alert.show();
+        // menu.setMenuState(Menu.MenuState.MENU);
+    }
+
+    private int score;
+    private TextField ScoreBoard;
+
+    private void ScoreBoardInit() {
+        score = 0;
+        ScoreBoard = new TextField();
+        ScoreBoard.setEditable(false);
+        ScoreBoard.setFocusTraversable(false);
+        ScoreBoard.setPrefWidth(Graphics.SCREEN_WIDTH);
+        ScoreBoard.setPrefHeight(Sprite.SCALED_SIZE);
+        ScoreBoard.setFont(Font.font(18));
+        ScoreBoard.setStyle("-fx-background-color: #000000; -fx-text-fill: #ffffff;");
+        ScoreBoard.setText("Score: " + score + "          Lives: " + 1 + "            Level: " + 1);
+    }
+
+    private TextField notify;
+
+    private void NotifyInit() {
+        notify.setText("Level " + (level + 1));
+        notify.setEditable(false);
+        notify.setFocusTraversable(false);
+        notify.setStyle("-fx-background-color: #000000; -fx-text-fill: #ffffff");
+        notify.setFont(Font.font(50));
+        notify.setLayoutX(0);
+        notify.setLayoutY(160);
+        notify.setPrefWidth(Graphics.SCREEN_WIDTH);
+        notify.setAlignment(Pos.CENTER);
+    }
+
+    private Button loader;
+    private boolean isPlaying = false;
+    private long delay = 0;
+    public void newLevel(int level) {
+        long now = Timer.now();
+        if (!isPlaying) {
+            if (level != 1) {
+                root.getChildren().remove(canvas);
+            }
+            if (Objects.isNull(notify)) {
+                notify = new TextField();
+                root.getChildren().add(notify);
+                NotifyInit();
+            }
+            if (now - delay > Timer.INPUT_TIME) {
+                delay++;
+                MapLoader();
+                isPlaying = true;
+            }
+        } else {
+            graphics.clearScreen(canvas);
+            mapList.get(level).mapRender(gc);
+            entities.get(level).forEach(g -> g.render(gc));
+        }
+    }
+
+    private void MapLoader() {
+        ScoreBoardInit();
+        root.getChildren().add(ScoreBoard);
+        root.setLayoutX(0);
+        ScoreBoard.setLayoutX(0);
+        canvas.setLayoutY(32);
+        root.getChildren().add(canvas);
+        graphics.clearScreen(canvas);
+        mapList.get(level).mapRender(gc);
+        entities.get(level).forEach(g -> g.render(gc));
     }
 
     /*
@@ -207,12 +308,12 @@ public class GameMaster {
         } else {
             xCamera = mapList.get(level).getWidthPixel() - Graphics.SCREEN_WIDTH;
         }
-        if (bomber_yPixel < Graphics.SCREEN_HEIGHT / 2) {
+        if (bomber_yPixel < (Graphics.SCREEN_HEIGHT - 32) / 2) {
             yCamera = 0;
-        } else if (bomber_yPixel < mapList.get(level).getHeightPixel() - Graphics.SCREEN_HEIGHT / 2) {
-            yCamera = bomber_yPixel - Graphics.SCREEN_HEIGHT / 2;
+        } else if (bomber_yPixel < mapList.get(level).getHeightPixel() - (Graphics.SCREEN_HEIGHT - 32)/ 2) {
+            yCamera = bomber_yPixel - (Graphics.SCREEN_HEIGHT - 32) / 2;
         } else {
-            yCamera = mapList.get(level).getHeightPixel() - Graphics.SCREEN_HEIGHT;
+            yCamera = mapList.get(level).getHeightPixel() - (Graphics.SCREEN_HEIGHT - 32);
         }
     }
 }

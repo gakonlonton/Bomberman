@@ -9,7 +9,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class KeyListener implements EventHandler<KeyEvent> {
-    private Set<KeyCode> pressedKeys = new HashSet<>();
     public KeyListener(Scene scene) {
         scene.setOnKeyPressed(this);
         scene.setOnKeyReleased(this);
@@ -19,14 +18,10 @@ public class KeyListener implements EventHandler<KeyEvent> {
     public void handle(KeyEvent keyEvent) {
         if (KeyEvent.KEY_PRESSED.equals(keyEvent.getEventType())) {
             GameMaster.entities.get(GameMaster.level).get(0).isPressed(keyEvent.getCode(), true);
-            pressedKeys.add(keyEvent.getCode());
+            GameMaster.menu.isPressed(keyEvent.getCode(), true);
         } else if (KeyEvent.KEY_RELEASED.equals(keyEvent.getEventType())) {
             GameMaster.entities.get(GameMaster.level).get(0).isPressed(keyEvent.getCode(), false);
-            pressedKeys.remove(keyEvent.getCode());
+            GameMaster.menu.isPressed(keyEvent.getCode(), false);
         }
-    }
-
-    public boolean pressed(KeyCode keyCode) {
-        return pressedKeys.contains(keyCode);
     }
 }

@@ -1,6 +1,9 @@
 package uet.oop.bomberman.graphics;
 
+import javafx.application.Platform;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Alert;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import uet.oop.bomberman.controller.GameMaster;
@@ -11,6 +14,8 @@ import uet.oop.bomberman.graphics.sprite.Sprite;
 
 import javafx.scene.input.KeyCode;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
@@ -131,14 +136,36 @@ public class Menu {
      */
 
     private long delay = 0;
+    private boolean enter, goDown, goUp, exit;
+
+    public void isPressed(KeyCode keyCode, boolean isPress) {
+        switch (keyCode) {
+            case ENTER:
+                enter = isPress;
+                break;
+            case S:
+                goDown = isPress;
+                break;
+            case W:
+                goUp = isPress;
+                break;
+            case SPACE:
+                enter = isPress;
+                break;
+            case ESCAPE:
+                exit = isPress;
+            default:
+                break;
+        }
+    }
 
     public void update() {
+        long now = Timer.now();
         switch (menuState) {
             case MENU:
-                long now = Timer.now();
                 if (now - delay > Timer.INPUT_TIME) {
                     delay = now;
-                    if (keyListener.pressed(KeyCode.ENTER)) {
+                    if (enter) {
                         // playAudio
                         switch (choseButton) {
                             case SingleGameCode:
@@ -148,10 +175,10 @@ public class Menu {
                             case MultiplayerCode:
                                 menuState = MenuState.MULTIPLAYER;
                                 // Do something
-                                System.exit(0);
                                 break;
                             case OptionCode:
                                 menuState = MenuState.OPTION;
+                                setAudio = true;
                                 break;
                             case AutoPlayCode:
                                 menuState = MenuState.END;
@@ -161,22 +188,30 @@ public class Menu {
                                 break;
                         }
                     } else {
-                        if (keyListener.pressed(KeyCode.S)) {
+                        if (goDown) {
                             audio.playOnBackground(Audio.AudioType.CHOOSE, 1);
                             choseButton++;
                             if (choseButton == buttons.size()) choseButton = 0;
-                        } else if (keyListener.pressed(KeyCode.W)) {
+                        } else if (goUp) {
                             audio.playOnBackground(Audio.AudioType.CHOOSE, 1);
                             choseButton--;
                             if (choseButton == -1) choseButton = buttons.size() - 1;
-                        } else if (keyListener.pressed(KeyCode.ESCAPE)) {
+                        } else if (exit) {
                             choseButton = ExitCode;
                         }
                     }
                 }
                 break;
+            case SINGLE_PLAY:
+                if (exit) {
+                    menuState = MenuState.PAUSE;
+                }
+                break;
+            case OPTION:
+                menuState = MenuState.MENU;
+                enter = false;
+                break;
             case PAUSE:
-                now = Timer.now();
                 if (now - delay > Timer.INPUT_TIME) {
                     delay = now;
                     if (keyListener.equals(KeyCode.ENTER)) {
@@ -185,7 +220,6 @@ public class Menu {
                 }
                 break;
             case END_STATE:
-                now = Timer.now();
                 if (now - delay > Timer.INPUT_TIME) {
                     delay = now;
                     if (keyListener.equals(KeyCode.ENTER)) {
@@ -194,7 +228,7 @@ public class Menu {
                 }
                 break;
             case END:
-                System.exit(0);
+                Platform.exit();
                 break;
         }
     }

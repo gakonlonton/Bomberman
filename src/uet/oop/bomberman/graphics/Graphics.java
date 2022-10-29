@@ -15,7 +15,7 @@ import java.nio.file.Paths;
 
 public class Graphics {
     public static final int SCREEN_WIDTH = 800;
-    public static final int SCREEN_HEIGHT = 416;
+    public static final int SCREEN_HEIGHT = 448;
 
     public static Font default_font;
     public static Font font;
