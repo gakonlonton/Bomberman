@@ -45,7 +45,7 @@ public class Oneal extends Enemy {
 
         if (src.getXTilePos() >= dst.getXTilePos()) {
             if (x > dst.getXTilePos() * Sprite.SCALED_SIZE) {
-                if (!collisionManager.touchObstacle(x, y, "LEFT", speed) && !touchBomb(x, y, "LEFT")) {
+                if (!collisionManager.touchObstacle(x, y, "LEFT", speed)) {
                     pickSprite(Sprite.movingSprite(
                             leftSprites[0],
                             leftSprites[1],
@@ -57,7 +57,7 @@ public class Oneal extends Enemy {
 
         if (src.getXTilePos() <= dst.getXTilePos()) {
             if (x < dst.getXTilePos() * Sprite.SCALED_SIZE) {
-                if (!collisionManager.touchObstacle(x, y, "RIGHT", speed) && !touchBomb(x, y, "RIGHT")) {
+                if (!collisionManager.touchObstacle(x, y, "RIGHT", speed)) {
                     pickSprite(Sprite.movingSprite(
                             rightSprites[0],
                             rightSprites[1],
@@ -69,7 +69,7 @@ public class Oneal extends Enemy {
 
         if (src.getYTilePos() >= dst.getYTilePos()) {
             if (y > dst.getYTilePos() * Sprite.SCALED_SIZE) {
-                if (!collisionManager.touchObstacle(x, y, "UP", speed) && !touchBomb(x, y, "UP")) {
+                if (!collisionManager.touchObstacle(x, y, "UP", speed)) {
                     pickSprite(Sprite.movingSprite(
                             rightSprites[0],
                             rightSprites[1],
@@ -81,7 +81,7 @@ public class Oneal extends Enemy {
 
         if (src.getYTilePos() <= dst.getYTilePos()) {
             if (y < dst.getYTilePos() * Sprite.SCALED_SIZE) {
-                if (!collisionManager.touchObstacle(x, y, "DOWN", speed) && !touchBomb(x, y, "DOWN")) {
+                if (!collisionManager.touchObstacle(x, y, "DOWN", speed)) {
                     pickSprite(Sprite.movingSprite(
                             leftSprites[0],
                             leftSprites[1],

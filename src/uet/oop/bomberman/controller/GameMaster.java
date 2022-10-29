@@ -188,7 +188,9 @@ public class GameMaster {
         ScoreBoard.setPrefHeight(Sprite.SCALED_SIZE);
         ScoreBoard.setFont(Font.font(18));
         ScoreBoard.setStyle("-fx-background-color: #000000; -fx-text-fill: #ffffff;");
-        ScoreBoard.setText("Score: " + score + spaceBetween + "Lives: " + lives + spaceBetween + "Level: " + (level + 1));
+        ScoreBoard.setText("\uD83D\uDCAF Score:  " + score + spaceBetween +
+                    "\uD83D\uDC9C Lives: " + lives + spaceBetween +
+                    "\uD83D\uDEA9 Level: " + (level + 1));
     }
 
     private TextField notify;
@@ -252,13 +254,13 @@ public class GameMaster {
     public void entitiesUpdate() {
         for (int i = entities.get(level).size() - 1; i >= 0; i--) {
             if (entities.get(level).get(i) instanceof Enemy) {
+                if (entities.get(level).get(i) instanceof Oneal) {
+                    ((Oneal) entities.get(level).get(i)).setOnealStatus(Oneal.OnealStatus.WALKING);
+                }
+                if (entities.get(level).get(i) instanceof Duplicate) {
+                    ((Duplicate) entities.get(level).get(i)).setDuplicateStatus(Duplicate.DuplicateStatus.WALKING);
+                }
                 if (((Enemy) entities.get(level).get(i)).getEnemyStatus() == Enemy.EnemyStatus.DEAD) {
-                    if (entities.get(level).get(i) instanceof Oneal) {
-                        ((Oneal) entities.get(level).get(i)).setOnealStatus(Oneal.OnealStatus.WALKING);
-                    }
-                    if (entities.get(level).get(i) instanceof Duplicate) {
-                        ((Duplicate) entities.get(level).get(i)).setDuplicateStatus(Duplicate.DuplicateStatus.WALKING);
-                    }
                     entities.get(level).remove(i);
                 }
             }
