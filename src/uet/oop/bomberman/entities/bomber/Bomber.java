@@ -1,7 +1,10 @@
 package uet.oop.bomberman.entities.bomber;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.util.Pair;
 import uet.oop.bomberman.controller.audio.Audio;
@@ -17,8 +20,8 @@ import uet.oop.bomberman.entities.obstacle.Obstacle;
 import uet.oop.bomberman.graphics.Menu;
 import uet.oop.bomberman.graphics.sprite.Sprite;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Optional;
+
 import static uet.oop.bomberman.controller.GameMaster.*;
 
 public class Bomber extends EntityDestroyable {
@@ -30,7 +33,7 @@ public class Bomber extends EntityDestroyable {
     }
     bomberStatus status;
     private CollisionManager collisionManager;
-    private boolean placedBomb = false;
+    private boolean placedBomb = false, isExit = false;
     private boolean goUp = false, goDown = false, goLeft = false, goRight = false;
     private KeyCode lastKey = KeyCode.D;
     private Audio audio = new Audio();
@@ -74,6 +77,9 @@ public class Bomber extends EntityDestroyable {
                 break;
             case SPACE:
                 placedBomb = isPress;
+                break;
+            case ESCAPE:
+                isExit = isPress;
                 break;
             default:
                 break;
@@ -164,6 +170,10 @@ public class Bomber extends EntityDestroyable {
             pickSprite(Sprite.movingSprite(Sprite.player_right,
                                         Sprite.player_right_1,
                                         Sprite.player_right_2, spriteIndex, 20).getFxImage());
+        }
+        if (isExit) {
+            GameMaster.returnToMenu();
+            return;
         }
         if (placedBomb) {
             pressed = true;
@@ -268,14 +278,6 @@ public class Bomber extends EntityDestroyable {
         pickSprite(Sprite.player_right.getFxImage());
     }
 
-    public int getLifeCount() {
-        return lifeCount;
-    }
-
-    public void setLifeCount(int lifeCount) {
-        this.lifeCount = lifeCount;
-    }
-
     public boolean collideWithBomb(int x, int y, String dir) {
         int curX = x;
         int curY = y;
@@ -305,9 +307,9 @@ public class Bomber extends EntityDestroyable {
             int xBomb = (bomb.x + Sprite.SCALED_SIZE / 2) / Sprite.SCALED_SIZE;
             int yBomb = (bomb.y + Sprite.SCALED_SIZE / 2) / Sprite.SCALED_SIZE;
             if ((xTile == xBomb && yTile == yBomb)
-                || (xWidth == xBomb && yTile == yBomb)
-                || (xTile == xBomb && yHeight == yBomb)
-                || (xWidth == xBomb && yHeight == yBomb)) {
+                    || (xWidth == xBomb && yTile == yBomb)
+                    || (xTile == xBomb && yHeight == yBomb)
+                    || (xWidth == xBomb && yHeight == yBomb)) {
                 if (lastBomb != null) {
                     if (xBomb == lastBomb.getKey() && yBomb == lastBomb.getValue()) {
                         result = false;
@@ -331,6 +333,34 @@ public class Bomber extends EntityDestroyable {
         }
         return result;
     }
+
+    /*
+        Stats Getter
+     */
+
+    public int getLivesCount() {
+        return lifeCount;
+    }
+
+    public void setLifeCount(int lifeCount) {
+        this.lifeCount = lifeCount;
+    }
+
+    public int getBombCount() {
+        return bombCount;
+    }
+
+    public int getFlameLength() {
+        return flameLength;
+    }
+
+    public int getSpeed() {
+        return speed;
+    }
+
+    /*
+        Override functions
+     */
 
     @Override
     public void update() {

@@ -2,14 +2,12 @@ package uet.oop.bomberman.controller;
 
 import javafx.application.Platform;
 import javafx.event.EventHandler;
-import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -77,6 +75,7 @@ public class GameMaster {
                 }
                 updateCamera();
                 entitiesUpdate();
+                updateScoreBoard();
                 break;
             case MAP_RELOAD:
                 resetCurrentLevel();
@@ -120,7 +119,7 @@ public class GameMaster {
         }
     }
 
-    private Group root = new Group();
+    private static Group root = new Group();
 
     public void run() {
         graphics = new Graphics(canvas);
@@ -153,9 +152,23 @@ public class GameMaster {
     }
 
     public void resetCurrentLevel() {
-        int lifeCount = ((Bomber) entities.get(level).get(0)).getLifeCount();
+        int lifeCount = ((Bomber) entities.get(level).get(0)).getLivesCount();
         mapList.get(level).reset();
         ((Bomber) entities.get(level).get(0)).setLifeCount(lifeCount);
+    }
+
+    private void updateScoreBoard() {
+        enemyAlive = entities.get(level).size() - 1;
+        lives = ((Bomber) entities.get(level).get(0)).getLivesCount();
+        flame = ((Bomber) entities.get(level).get(0)).getFlameLength();
+        speed = ((Bomber) entities.get(level).get(0)).getSpeed();
+        bomb = ((Bomber) entities.get(level).get(0)).getBombCount();
+        ScoreBoard.setText("  \uD83D\uDC9C Lives: " + lives + spaceBetween +
+                "\uD83D\uDEA9 Level: " + (level + 1) + spaceBetween +
+                "\uD83D\uDC7B Enemy:  " + enemyAlive + spaceBetween +
+                "\uD83D\uDD25 Flame: " + flame + spaceBetween +
+                "\uD83D\uDCA3 Bomb: " + bomb + spaceBetween +
+                "\uD83D\uDC5F Speed: " + speed);
     }
 
     private void AudioControls() {
@@ -173,11 +186,19 @@ public class GameMaster {
         alert.show();
     }
 
-    private int score, lives, flame, bomb, speed;
-    private TextField ScoreBoard;
+    public static void returnToMenu() {
+        root.getChildren().remove(canvas);
+        root.getChildren().remove(ScoreBoard);
+        canvas.setLayoutY(0);
+        root.getChildren().add(canvas);
+        isPlaying = false;
+        menu.setMenuState(Menu.MenuState.MENU);
+    }
+
+    private int enemyAlive, lives, flame, bomb, speed;
+    private static TextField ScoreBoard;
 
     private void ScoreBoardInit() {
-        score = 0;
         ScoreBoard = new TextField();
         ScoreBoard.setEditable(false);
         ScoreBoard.setFocusTraversable(false);
@@ -185,16 +206,11 @@ public class GameMaster {
         ScoreBoard.setPrefHeight(Sprite.SCALED_SIZE + Sprite.SCALED_SIZE / 2);
         ScoreBoard.setFont(Font.font("Segoe UI Semibold", 17));
         ScoreBoard.setStyle("-fx-background-color: #DCDCDC; -fx-text-fill: #000000;");
-        ScoreBoard.setText("  \uD83D\uDC7B Score:  " + score + spaceBetween +
-                    "\uD83D\uDD25 Flame: " + flame + spaceBetween +
-                    "\uD83D\uDCA3 Bomb: " + bomb + spaceBetween +
-                    "\uD83D\uDC5F Speed: " + speed + spaceBetween +
-                    "\uD83D\uDC9C Lives: " + lives + spaceBetween +
-                    "\uD83D\uDEA9 Level: " + (level + 1));
+        updateScoreBoard();
     }
 
     private String spaceBetween = "           ";
-    private boolean isPlaying = false;
+    private static boolean isPlaying = false;
 
     private void MapLoader() {
         if (!isPlaying) {

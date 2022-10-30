@@ -4,12 +4,9 @@ import javafx.animation.AnimationTimer;
 import java.util.concurrent.TimeUnit;
 
 public class Timer {
-    private static final int FPS = 30;
+    private static final int FPS = 45;
     private static final long PER_FRAME = 1000000000 / FPS;
-
     public static final long INPUT_TIME = PER_FRAME * 5;
-
-
     private AnimationTimer timer;
     private long last;
     private GameMaster gameMaster;
