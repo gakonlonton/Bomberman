@@ -9,6 +9,8 @@ import uet.oop.bomberman.graphics.sprite.Sprite;
 
 import java.util.List;
 
+import static uet.oop.bomberman.controller.GameMaster.bombsList;
+
 public class Minvo extends Enemy {
     public static final int WIDTH = 30;
     public static final int HEIGHT = 30;
@@ -49,6 +51,8 @@ public class Minvo extends Enemy {
                             leftSprites[1],
                             leftSprites[2], spriteIndex, 20).getFxImage());
                     x -= speed;
+                } else if (touchBomb(x, y, "LEFT")) {
+                    minvoStatus = MinvoStatus.WALKING;
                 }
             }
         }
@@ -61,6 +65,8 @@ public class Minvo extends Enemy {
                             rightSprites[1],
                             rightSprites[2], spriteIndex, 20).getFxImage());
                     x += speed;
+                } else if (touchBomb(x, y, "RIGHT")) {
+                    minvoStatus = MinvoStatus.WALKING;
                 }
             }
         }
@@ -73,6 +79,8 @@ public class Minvo extends Enemy {
                             rightSprites[1],
                             rightSprites[2], spriteIndex, 20).getFxImage());
                     y -= speed;
+                } else if (touchBomb(x, y, "UP")) {
+                    minvoStatus = MinvoStatus.WALKING;
                 }
             }
         }
@@ -85,6 +93,8 @@ public class Minvo extends Enemy {
                             leftSprites[1],
                             leftSprites[2], spriteIndex, 20).getFxImage());
                     y += speed;
+                } else if (touchBomb(x, y, "DOWN")) {
+                    minvoStatus = MinvoStatus.WALKING;
                 }
             }
         }
@@ -96,7 +106,7 @@ public class Minvo extends Enemy {
 
         if (minvoStatus == MinvoStatus.WALKING) {
             path = collisionManager.getMap().getGraph().BFS(minvoIndex, bomberIndex);
-            if (path != null) minvoStatus = MinvoStatus.CHASING;
+            if (path != null && bombsList.size() == 0) minvoStatus = MinvoStatus.CHASING;
         }
 
         if (minvoStatus != MinvoStatus.CHASING) {
