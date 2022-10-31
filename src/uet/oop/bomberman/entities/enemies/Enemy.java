@@ -144,8 +144,7 @@ public abstract class Enemy extends EntityDestroyable {
     }
 
     public boolean touchBomb(int x, int y, String dir) {
-        int curX = x;
-        int curY = y;
+        int curX = x, curY = y;
         switch (dir) {
             case "UP":
                 curY -= speed;
@@ -202,6 +201,9 @@ public abstract class Enemy extends EntityDestroyable {
             }
         }
         if (enemyStatus == EnemyStatus.ALIVE) {
+            if (this instanceof Balloon && spriteIndex >= 20) {
+                ((Balloon) this).invincible = false;
+            }
             move();
         }
         if (enemyStatus == EnemyStatus.LAST) {
@@ -213,8 +215,8 @@ public abstract class Enemy extends EntityDestroyable {
                                     Sprite.balloom_left1.getFxImage(),
                                     new CollisionManager(collisionManager.getMap(), Balloon.HEIGHT, Balloon.WIDTH));
                     Balloon e2 = new Balloon(x / Sprite.SCALED_SIZE, y / Sprite.SCALED_SIZE,
-                            Sprite.balloom_left1.getFxImage(),
-                            new CollisionManager(collisionManager.getMap(), Balloon.HEIGHT, Balloon.WIDTH));
+                                    Sprite.balloom_right1.getFxImage(),
+                                    new CollisionManager(collisionManager.getMap(), Balloon.HEIGHT, Balloon.WIDTH));
                     GameMaster.entities.get(level).add(e1);
                     GameMaster.entities.get(level).add(e2);
                     e1.invincible = true;
@@ -226,7 +228,7 @@ public abstract class Enemy extends EntityDestroyable {
                 spriteIndex++;
             } else if (this instanceof Balloon) {
                 if (!((Balloon) this).invincible) {
-                    if (spriteIndex == 20) {
+                    if (spriteIndex >= 20) {
                         enemyStatus = EnemyStatus.DEAD;
                         spriteIndex = 0;
                     } else {
@@ -236,7 +238,7 @@ public abstract class Enemy extends EntityDestroyable {
                 spriteIndex++;
             }
             else {
-                if (spriteIndex == 20) {
+                if (spriteIndex >= 20) {
                     enemyStatus = EnemyStatus.DEAD;
                     spriteIndex = 0;
                 } else {

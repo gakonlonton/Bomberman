@@ -25,7 +25,7 @@ import static uet.oop.bomberman.controller.GameMaster.*;
 
 public class Menu {
     public enum MenuState {
-        MENU, SINGLE_PLAY, MULTIPLAYER, OPTION, PAUSE, END, END_STATE, MAP_RELOAD
+        MENU, SINGLE_PLAY, MULTIPLAYER, OPTION, END, END_STATE, UNFINISHED, WIN, MAP_RELOAD
     }
     public static MenuState menuState;
     private KeyListener keyListener;
@@ -51,6 +51,7 @@ public class Menu {
      */
 
     public Menu(KeyListener keyListener) {
+        audio.playAlone(Audio.AudioType.LOBBY, -1);
         this.menuState = MenuState.MENU;
         this.keyListener = keyListener;
 
@@ -66,13 +67,13 @@ public class Menu {
         buttons.add(new Button(Graphics.SCREEN_WIDTH / 2 - (int) text.getLayoutBounds().getWidth() / 2,
                 Graphics.SCREEN_HEIGHT / 2 + 3 * (int) text.getLayoutBounds().getHeight() / 2, text));
 
-        text = new Text("OPTIONS");
+        text = new Text("AUDIO OPTIONS");
         text.setFont(Graphics.font);
         text.setFill(Color.WHITE);
 
         buttons.add(new Button(Graphics.SCREEN_WIDTH / 2 - (int) text.getLayoutBounds().getWidth() / 2,
                 Graphics.SCREEN_HEIGHT / 2 + 5 * (int) text.getLayoutBounds().getHeight() / 2, text));
-        text = new Text("AUTO PLAY");
+        text = new Text("BOT PLAY");
         text.setFont(Graphics.font);
         text.setFill(Color.WHITE);
         buttons.add(new Button(Graphics.SCREEN_WIDTH / 2 - (int) text.getLayoutBounds().getWidth() / 2,
@@ -83,34 +84,6 @@ public class Menu {
         text.setFill(Color.WHITE);
         buttons.add(new Button(Graphics.SCREEN_WIDTH / 2 - (int) text.getLayoutBounds().getWidth() / 2,
                 Graphics.SCREEN_HEIGHT / 2 + 9 * (int) text.getLayoutBounds().getHeight() / 2, text));
-
-        text = new Text("START");
-        text.setFont(Graphics.font);
-        text.setFill(Color.WHITE);
-
-        ButtonStart = new Button(Graphics.SCREEN_WIDTH / 2 - (int) text.getLayoutBounds().getWidth() / 2,
-                Graphics.SCREEN_HEIGHT - (int) text.getLayoutBounds().getHeight() / 3 + 4, text);
-
-        text = new Text("READY");
-        text.setFont(Graphics.font);
-        text.setFill(Color.WHITE);
-
-        ButtonReady = new Button(Graphics.SCREEN_WIDTH / 2 - (int) text.getLayoutBounds().getWidth() / 2,
-                Graphics.SCREEN_HEIGHT - (int) text.getLayoutBounds().getHeight() / 3 + 4, text);
-
-        text = new Text("CONTINUE GAME");
-        text.setFont(Graphics.font);
-        text.setFill(Color.WHITE);
-
-        ButtonPause = new Button(Graphics.SCREEN_WIDTH / 7,
-                Graphics.SCREEN_HEIGHT / 8 * 10 - (int) text.getLayoutBounds().getHeight() / 3, text);
-
-        text = new Text("GO TO MENU");
-        text.setFont(Graphics.font);
-        text.setFill(Color.WHITE);
-        ButtonReturn = new Button(Graphics.SCREEN_WIDTH / 7,
-                Graphics.SCREEN_HEIGHT/ 8 * 10 - (int) text.getLayoutBounds().getHeight() / 2, text);
-
         choseButton = SingleGameCode;
     }
 
@@ -136,7 +109,7 @@ public class Menu {
      */
 
     private long delay = 0;
-    private boolean enter, goDown, goUp, exit;
+    private boolean enter, goDown, goUp;
 
     public void isPressed(KeyCode keyCode, boolean isPress) {
         switch (keyCode) {
@@ -152,8 +125,6 @@ public class Menu {
             case SPACE:
                 enter = isPress;
                 break;
-            case ESCAPE:
-                exit = isPress;
             default:
                 break;
         }
@@ -166,7 +137,6 @@ public class Menu {
                 if (now - delay > Timer.INPUT_TIME) {
                     delay = now;
                     if (enter) {
-                        // playAudio
                         switch (choseButton) {
                             case SingleGameCode:
                                 audio.playAlone(Audio.AudioType.PLAYING, -1);
@@ -181,7 +151,8 @@ public class Menu {
                                 setAudio = true;
                                 break;
                             case AutoPlayCode:
-                                menuState = MenuState.END;
+                                menuState = MenuState.UNFINISHED;
+                                unfinished = true;
                                 break;
                             case ExitCode:
                                 menuState = MenuState.END;
@@ -196,28 +167,14 @@ public class Menu {
                             audio.playOnBackground(Audio.AudioType.CHOOSE, 1);
                             choseButton--;
                             if (choseButton == -1) choseButton = buttons.size() - 1;
-                        } else if (exit) {
-                            choseButton = ExitCode;
                         }
                     }
                 }
                 break;
-            case SINGLE_PLAY:
-                if (exit) {
-                    menuState = MenuState.PAUSE;
-                }
-                break;
+            case UNFINISHED:
             case OPTION:
                 menuState = MenuState.MENU;
                 enter = false;
-                break;
-            case PAUSE:
-                if (now - delay > Timer.INPUT_TIME) {
-                    delay = now;
-                    if (keyListener.equals(KeyCode.ENTER)) {
-                        menuState = MenuState.SINGLE_PLAY;
-                    }
-                }
                 break;
             case END_STATE:
                 if (now - delay > Timer.INPUT_TIME) {
@@ -243,9 +200,6 @@ public class Menu {
                         buttons.get(i).render(gc);
                     }
                 }
-                break;
-            case PAUSE:
-                ButtonPause.render(gc);
                 break;
             case END_STATE:
                 break;

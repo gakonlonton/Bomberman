@@ -10,6 +10,7 @@ import uet.oop.bomberman.graphics.sprite.Sprite;
 public class Doll extends Enemy {
     public static final int HEIGHT = 30;
     public static final int WIDTH = 30;
+    private int totalStep = 0;
 
     public Doll(int x, int y, Image img, CollisionManager collisionManager) {
         super(x, y, img, collisionManager);
@@ -18,6 +19,10 @@ public class Doll extends Enemy {
     @Override
     public void goRandom() {
         spriteIndex++;
+        if (totalStep == 64) {
+            totalStep = 0;
+            goNext = false;
+        }
         if (!goNext) {
             int rand = (int) (Math.random() * 16);
             switch (rand % 4) {
@@ -69,6 +74,7 @@ public class Doll extends Enemy {
                         leftSprites[1],
                         leftSprites[2], spriteIndex, 20).getFxImage());
             }
+            totalStep++;
             goNext = true;
         }
     }

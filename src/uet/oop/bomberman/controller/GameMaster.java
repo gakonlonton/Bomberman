@@ -62,7 +62,7 @@ public class GameMaster {
         loadMap();
     }
 
-    public static boolean setAudio = false;
+    public static boolean setAudio = false, unfinished = false;
 
     public void update() {
         switch (menu.getMenuState()) {
@@ -82,10 +82,16 @@ public class GameMaster {
                 menu.setMenuState(Menu.MenuState.SINGLE_PLAY);
                 break;
             case MENU:
-            case PAUSE:
             case MULTIPLAYER:
+            case WIN:
             case END_STATE:
             case END:
+                menu.update();
+                break;
+            case UNFINISHED:
+                if (unfinished) {
+                    UnfinishedAlert();
+                }
                 menu.update();
                 break;
             case OPTION:
@@ -102,7 +108,6 @@ public class GameMaster {
     public void render() {
         switch (menu.getMenuState()) {
             case MENU:
-            case PAUSE:
             case END_STATE:
                 menu.menuRender(gc);
                 break;
@@ -110,6 +115,7 @@ public class GameMaster {
             case MULTIPLAYER:
                 MapLoader();
                 break;
+            case UNFINISHED:
             case MAP_RELOAD:
             case OPTION:
             case END:
@@ -171,6 +177,18 @@ public class GameMaster {
                 "\uD83D\uDC5F Speed: " + speed);
     }
 
+    private void UnfinishedAlert() {
+        unfinished = true;
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Sorry..");
+        alert.setHeaderText(null);
+        alert.setContentText("This feature is coming soon!");
+        alert.setOnCloseRequest(event -> {
+            alert.close();
+        });
+        alert.show();
+    }
+
     private void AudioControls() {
         setAudio = false;
         audio.setAudioOption(!audio.isMuted());
@@ -180,6 +198,9 @@ public class GameMaster {
         alert.setTitle("Audio Notification");
         alert.setHeaderText(null);
         alert.setContentText("Audio has been turn " + (audio.isMuted() ? "off." : "on."));
+        if (!audio.isMuted()) {
+            audio.playAlone(Audio.AudioType.LOBBY, -1);
+        }
         alert.setOnCloseRequest(event -> {
             alert.close();
         });
@@ -192,6 +213,7 @@ public class GameMaster {
         canvas.setLayoutY(0);
         root.getChildren().add(canvas);
         isPlaying = false;
+        audio.playAlone(Audio.AudioType.LOBBY, -1);
         menu.setMenuState(Menu.MenuState.MENU);
     }
 
