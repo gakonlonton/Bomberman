@@ -42,7 +42,7 @@ public class Button {
     public void specificRender(GraphicsContext gc) {
         gc.strokeText(name.getText(), x, y);
         gc.setFont(Graphics.font);
-        gc.setFill(Color.BLACK);
+        gc.setFill(Color.ORANGERED);
         gc.fillText(name.getText(), x, y);
     }
 }

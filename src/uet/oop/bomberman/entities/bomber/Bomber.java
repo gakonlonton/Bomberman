@@ -172,6 +172,8 @@ public class Bomber extends EntityDestroyable {
                                         Sprite.player_right_2, spriteIndex, 20).getFxImage());
         }
         if (isExit) {
+            lifeCount = 3;
+            GameMaster.resetCurrentLevel();
             GameMaster.returnToMenu();
             return;
         }
@@ -379,9 +381,11 @@ public class Bomber extends EntityDestroyable {
             if (spriteIndex >= 20) {
                 lifeCount--;
                 if (lifeCount > 0) {
+                    audio.playOnBackground(Audio.AudioType.DIE, 1);
                     menu.setMenuState(Menu.MenuState.MAP_RELOAD);
                 } else {
-                    menu.setMenuState(Menu.MenuState.END_STATE);
+                    GameMaster.resetAllLevel();
+                    GameMaster.loseAll();
                 }
             }
         }

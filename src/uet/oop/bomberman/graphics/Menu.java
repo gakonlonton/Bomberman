@@ -20,13 +20,12 @@ import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
-import static uet.oop.bomberman.graphics.Graphics.menu_image;
 import static uet.oop.bomberman.controller.GameMaster.*;
-import static uet.oop.bomberman.graphics.Graphics.win_image;
+import static uet.oop.bomberman.graphics.Graphics.*;
 
 public class Menu {
     public enum MenuState {
-        MENU, SINGLE_PLAY, MULTIPLAYER, OPTION, END, END_STATE, UNFINISHED, WIN, MAP_RELOAD
+        MENU, SINGLE_PLAY, MULTIPLAYER, OPTION, END, LOSE, UNFINISHED, WIN, MAP_RELOAD
     }
     public static MenuState menuState;
     private KeyListener keyListener;
@@ -66,35 +65,40 @@ public class Menu {
         text.setFont(Graphics.font);
         text.setFill(Color.WHITE);
         buttons.add(new Button(Graphics.SCREEN_WIDTH / 2 - (int) text.getLayoutBounds().getWidth() / 2,
-                Graphics.SCREEN_HEIGHT / 2 + 3 * (int) text.getLayoutBounds().getHeight() / 2, text));
+                Graphics.SCREEN_HEIGHT / 2 + 4 * (int) text.getLayoutBounds().getHeight() / 2, text));
 
         text = new Text("AUDIO OPTIONS");
         text.setFont(Graphics.font);
         text.setFill(Color.WHITE);
 
         buttons.add(new Button(Graphics.SCREEN_WIDTH / 2 - (int) text.getLayoutBounds().getWidth() / 2,
-                Graphics.SCREEN_HEIGHT / 2 + 5 * (int) text.getLayoutBounds().getHeight() / 2, text));
+                Graphics.SCREEN_HEIGHT / 2 + 7 * (int) text.getLayoutBounds().getHeight() / 2, text));
         text = new Text("BOT PLAY");
         text.setFont(Graphics.font);
         text.setFill(Color.WHITE);
         buttons.add(new Button(Graphics.SCREEN_WIDTH / 2 - (int) text.getLayoutBounds().getWidth() / 2,
-                Graphics.SCREEN_HEIGHT / 2 + 7 * (int) text.getLayoutBounds().getHeight() / 2, text));
+                Graphics.SCREEN_HEIGHT / 2 + 10 * (int) text.getLayoutBounds().getHeight() / 2, text));
 
         text = new Text("EXIT");
         text.setFont(Graphics.font);
         text.setFill(Color.WHITE);
         buttons.add(new Button(Graphics.SCREEN_WIDTH / 2 - (int) text.getLayoutBounds().getWidth() / 2,
-                Graphics.SCREEN_HEIGHT / 2 + 9 * (int) text.getLayoutBounds().getHeight() / 2, text));
+                Graphics.SCREEN_HEIGHT / 2 + 13 * (int) text.getLayoutBounds().getHeight() / 2, text));
         choseButton = SingleGameCode;
     }
 
     public void menuRender(GraphicsContext gc) {
-        gc.drawImage(menu_image, 0, 0, Graphics.SCREEN_WIDTH, Graphics.SCREEN_HEIGHT);
+        gc.drawImage(menu_image, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
         render(gc);
     }
 
     public void winRender(GraphicsContext gc) {
-        gc.drawImage(win_image, 0, 0, Graphics.SCREEN_WIDTH, Graphics.SCREEN_HEIGHT);
+        gc.drawImage(win_image, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+        render(gc);
+    }
+
+    public void loseRender(GraphicsContext gc) {
+        gc.drawImage(lose_image, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
         render(gc);
     }
 
@@ -183,7 +187,7 @@ public class Menu {
                 enter = false;
                 break;
             case WIN:
-            case END_STATE:
+            case LOSE:
                 if (now - delay > Timer.INPUT_TIME) {
                     delay = now;
                     if (enter) {
@@ -209,7 +213,7 @@ public class Menu {
                     }
                 }
                 break;
-            case END_STATE:
+            case LOSE:
                 break;
             case END:
                 break;

@@ -82,7 +82,7 @@ public class GameMaster {
                 menu.setMenuState(Menu.MenuState.SINGLE_PLAY);
                 break;
             case WIN:
-            case END_STATE:
+            case LOSE:
             case MENU:
             case MULTIPLAYER:
             case END:
@@ -108,7 +108,6 @@ public class GameMaster {
     public void render() {
         switch (menu.getMenuState()) {
             case MENU:
-            case END_STATE:
                 menu.menuRender(gc);
                 break;
             case SINGLE_PLAY:
@@ -117,6 +116,9 @@ public class GameMaster {
                 break;
             case WIN:
                 menu.winRender(gc);
+                break;
+            case LOSE:
+                menu.loseRender(gc);
                 break;
             case UNFINISHED:
             case MAP_RELOAD:
@@ -160,7 +162,7 @@ public class GameMaster {
         }
     }
 
-    public void resetCurrentLevel() {
+    public static void resetCurrentLevel() {
         int lifeCount = ((Bomber) entities.get(level).get(0)).getLivesCount();
         mapList.get(level).reset();
         ((Bomber) entities.get(level).get(0)).setLifeCount(lifeCount);
@@ -235,6 +237,16 @@ public class GameMaster {
         isPlaying = false;
         audio.playAlone(Audio.AudioType.WIN, -1);
         menu.setMenuState(Menu.MenuState.WIN);
+    }
+
+    public static void loseAll() {
+        root.getChildren().remove(canvas);
+        root.getChildren().remove(ScoreBoard);
+        canvas.setLayoutY(0);
+        root.getChildren().add(canvas);
+        isPlaying = false;
+        audio.playAlone(Audio.AudioType.LOSE, -1);
+        menu.setMenuState(Menu.MenuState.LOSE);
     }
 
     private int enemyAlive, lives, flame, bomb, speed;
