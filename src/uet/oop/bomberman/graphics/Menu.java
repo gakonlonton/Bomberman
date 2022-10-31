@@ -22,6 +22,7 @@ import java.util.List;
 
 import static uet.oop.bomberman.graphics.Graphics.menu_image;
 import static uet.oop.bomberman.controller.GameMaster.*;
+import static uet.oop.bomberman.graphics.Graphics.win_image;
 
 public class Menu {
     public enum MenuState {
@@ -89,6 +90,11 @@ public class Menu {
 
     public void menuRender(GraphicsContext gc) {
         gc.drawImage(menu_image, 0, 0, Graphics.SCREEN_WIDTH, Graphics.SCREEN_HEIGHT);
+        render(gc);
+    }
+
+    public void winRender(GraphicsContext gc) {
+        gc.drawImage(win_image, 0, 0, Graphics.SCREEN_WIDTH, Graphics.SCREEN_HEIGHT);
         render(gc);
     }
 
@@ -176,10 +182,12 @@ public class Menu {
                 menuState = MenuState.MENU;
                 enter = false;
                 break;
+            case WIN:
             case END_STATE:
                 if (now - delay > Timer.INPUT_TIME) {
                     delay = now;
-                    if (keyListener.equals(KeyCode.ENTER)) {
+                    if (enter) {
+                        audio.playAlone(Audio.AudioType.LOBBY, -1);
                         menuState = MenuState.MENU;
                     }
                 }

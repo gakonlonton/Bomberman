@@ -3,6 +3,7 @@ package uet.oop.bomberman.entities.enemies;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import uet.oop.bomberman.controller.GameMaster;
+import uet.oop.bomberman.controller.audio.Audio;
 import uet.oop.bomberman.controller.collision.CollisionManager;
 import uet.oop.bomberman.entities.bomber.Bomb;
 import uet.oop.bomberman.entities.bomber.Bomber;
@@ -195,6 +196,7 @@ public abstract class Enemy extends EntityDestroyable {
             for (Entity i : bombsList) {
                 if (((Bomb) i).inRange(x + 30 / 2, y + 30 / 2)
                         && ((Bomb) i).getBombStatus() == Bomb.status.EXPLODED) {
+                    GameMaster.audio.playOnBackground(Audio.AudioType.KILL_ENEMY, 1);
                     enemyStatus = EnemyStatus.LAST;
                     spriteIndex = 0;
                 }

@@ -19,7 +19,7 @@ public class Graphics {
 
     public static Font default_font;
     public static Font font;
-    public static Image menu_image;
+    public static Image menu_image, win_image;
 
     private GraphicsContext gc;
 
@@ -29,6 +29,7 @@ public class Graphics {
             default_font = Font.loadFont(Files.newInputStream(Paths.get("res/font/PixelGameFont.ttf")), 30);
             font = Font.loadFont(Files.newInputStream(Paths.get("res/font/PixelGameFont.ttf")), 25);
             menu_image = new Image(Files.newInputStream(Paths.get("res/textures/menu.png")));
+            win_image = new Image(Files.newInputStream(Paths.get("res/textures/win_menu.png")));
         } catch (IOException e) {
             System.out.println("Wrong file path");
         }
