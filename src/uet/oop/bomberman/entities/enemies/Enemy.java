@@ -11,10 +11,6 @@ import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.EntityDestroyable;
 import uet.oop.bomberman.graphics.sprite.Sprite;
 
-import javax.swing.text.html.HTMLDocument;
-
-import java.util.ConcurrentModificationException;
-
 import static uet.oop.bomberman.controller.GameMaster.bombsList;
 import static uet.oop.bomberman.controller.GameMaster.level;
 
@@ -70,7 +66,7 @@ public abstract class Enemy extends EntityDestroyable {
             rightSprites[2] = Sprite.doll_right3;
             deadSprites[0] = Sprite.doll_dead;
         }
-        if (this instanceof Duplicate) {
+        if (this instanceof Minvo) {
             leftSprites[0] = Sprite.minvo_left1;
             leftSprites[1] = Sprite.minvo_left2;
             leftSprites[2] = Sprite.minvo_left3;
@@ -78,6 +74,15 @@ public abstract class Enemy extends EntityDestroyable {
             rightSprites[1] = Sprite.minvo_right2;
             rightSprites[2] = Sprite.minvo_right3;
             deadSprites[0] = Sprite.minvo_dead;
+        }
+        if (this instanceof Kondoria) {
+            leftSprites[0] = Sprite.kondoria_left1;
+            leftSprites[1] = Sprite.kondoria_left2;
+            leftSprites[2] = Sprite.kondoria_left3;
+            rightSprites[0] = Sprite.kondoria_right1;
+            rightSprites[1] = Sprite.kondoria_right2;
+            rightSprites[2] = Sprite.kondoria_right3;
+            deadSprites[0] = Sprite.kondoria_dead;
         }
     }
 
@@ -179,10 +184,6 @@ public abstract class Enemy extends EntityDestroyable {
         return false;
     }
 
-    public void randomSpeed(int L, int R) {
-        speed = (int) ((Math.random() * (R - L)) + L);
-    }
-
     public boolean touchBomber(int xTile, int yTile) {
         boolean check = true;
         if (xTile + Bomber.WIDTH < x || xTile > x + Sprite.SCALED_SIZE) check = false;
@@ -210,7 +211,7 @@ public abstract class Enemy extends EntityDestroyable {
         }
         if (enemyStatus == EnemyStatus.LAST) {
             // Die for duplicate
-            if (this instanceof Duplicate) {
+            if (this instanceof Minvo) {
                 if (spriteIndex >= 20) {
                     enemyStatus = EnemyStatus.DEAD;
                     Balloon e1 = new Balloon(x / Sprite.SCALED_SIZE, y / Sprite.SCALED_SIZE,

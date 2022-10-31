@@ -15,9 +15,7 @@ import javafx.util.Pair;
 import uet.oop.bomberman.controller.audio.Audio;
 import uet.oop.bomberman.entities.bomber.Bomb;
 import uet.oop.bomberman.entities.bomber.Bomber;
-import uet.oop.bomberman.entities.enemies.Duplicate;
-import uet.oop.bomberman.entities.enemies.Enemy;
-import uet.oop.bomberman.entities.enemies.Oneal;
+import uet.oop.bomberman.entities.enemies.*;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.graphics.Graphics;
 import uet.oop.bomberman.graphics.Menu;
@@ -70,7 +68,7 @@ public class GameMaster {
                 try {
                     entities.get(level).forEach(Entity::update);
                 } catch (ConcurrentModificationException e) {
-                    // Exception catch by Duplicate
+                    // Exception catch by Minvo
                     System.out.print("");
                 }
                 updateCamera();
@@ -299,8 +297,11 @@ public class GameMaster {
                 if (entities.get(level).get(i) instanceof Oneal) {
                     ((Oneal) entities.get(level).get(i)).setOnealStatus(Oneal.OnealStatus.WALKING);
                 }
-                if (entities.get(level).get(i) instanceof Duplicate) {
-                    ((Duplicate) entities.get(level).get(i)).setDuplicateStatus(Duplicate.DuplicateStatus.WALKING);
+                if (entities.get(level).get(i) instanceof Minvo) {
+                    ((Minvo) entities.get(level).get(i)).setMinvoStatus(Minvo.MinvoStatus.WALKING);
+                }
+                if (entities.get(level).get(i) instanceof Kondoria) {
+                    ((Kondoria) entities.get(level).get(i)).setKondoriaStatus(Kondoria.KondoriaStatus.WALKING);
                 }
                 if (((Enemy) entities.get(level).get(i)).getEnemyStatus() == Enemy.EnemyStatus.DEAD) {
                     entities.get(level).remove(i);
@@ -311,6 +312,7 @@ public class GameMaster {
         //If existing an enemy chasing bomber, others will move randomly
         Queue<Pair> dis1 = new PriorityQueue<>(Comparator.comparingDouble(o -> (int) o.getValue()));
         Queue<Pair> dis2 = new PriorityQueue<>(Comparator.comparingDouble(o -> (int) o.getValue()));
+        Queue<Pair> dis3 = new PriorityQueue<>(Comparator.comparingDouble(o -> (int) o.getValue()));
 
         for (int i = 1; i < entities.get(level).size(); i++) {
             if (entities.get(level).get(i) instanceof Oneal) {
@@ -318,9 +320,14 @@ public class GameMaster {
                     dis1.add(new Pair(i, ((Oneal) entities.get(level).get(i)).getDistanceFromBomber()));
                 }
             }
-            if (entities.get(level).get(i) instanceof Duplicate) {
-                if (((Duplicate) entities.get(level).get(i)).getDuplicateStatus() == Duplicate.DuplicateStatus.CHASING) {
-                    dis2.add(new Pair(i, ((Duplicate) entities.get(level).get(i)).getDistanceFromBomber()));
+            if (entities.get(level).get(i) instanceof Minvo) {
+                if (((Minvo) entities.get(level).get(i)).getMinvoStatus() == Minvo.MinvoStatus.CHASING) {
+                    dis2.add(new Pair(i, ((Minvo) entities.get(level).get(i)).getDistanceFromBomber()));
+                }
+            }
+            if (entities.get(level).get(i) instanceof Kondoria) {
+                if (((Kondoria) entities.get(level).get(i)).getKondoriaStatus() == Kondoria.KondoriaStatus.CHASING) {
+                    dis3.add(new Pair(i, ((Kondoria) entities.get(level).get(i)).getDistanceFromBomber()));
                 }
             }
         }
@@ -334,8 +341,15 @@ public class GameMaster {
         }
         if (!dis2.isEmpty()) {
             for (Entity j : entities.get(level)) {
-                if (!j.equals(entities.get(level).get((Integer) dis2.peek().getKey())) && j instanceof Duplicate) {
-                    ((Duplicate) j).setDuplicateStatus(Duplicate.DuplicateStatus.INVALID);
+                if (!j.equals(entities.get(level).get((Integer) dis2.peek().getKey())) && j instanceof Minvo) {
+                    ((Minvo) j).setMinvoStatus(Minvo.MinvoStatus.INVALID);
+                }
+            }
+        }
+        if (!dis3.isEmpty()) {
+            for (Entity j : entities.get(level)) {
+                if (!j.equals(entities.get(level).get((Integer) dis3.peek().getKey())) && j instanceof Kondoria) {
+                    ((Kondoria) j).setKondoriaStatus(Kondoria.KondoriaStatus.INVALID);
                 }
             }
         }

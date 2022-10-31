@@ -1,123 +1,122 @@
-package Enemy;
+package uet.oop.bomberman.entities.enemies;
 
-import main.GamePanel;
+import javafx.scene.image.Image;
+import uet.oop.bomberman.controller.collision.CollisionManager;
+import uet.oop.bomberman.controller.collision.Graph;
+import uet.oop.bomberman.controller.collision.Vertices;
+import uet.oop.bomberman.entities.Entity;
+import uet.oop.bomberman.graphics.sprite.Sprite;
 
-import javax.imageio.ImageIO;
-import java.io.IOException;
+import java.util.List;
 
 public class Kondoria extends Enemy {
+    public static final int WIDTH = 30;
 
-    public Kondoria(GamePanel gp) {
-        super(gp);
-        setValue();
+    public static final int HEIGHT = 30;
+
+    public enum KondoriaStatus {
+        CHASING,
+        WALKING,
+        INVALID
+    }
+    KondoriaStatus kondoriaStatus;
+
+    private Entity bomber;
+    private List<List<Entity>> map;
+    private List<Vertices> path;
+    public Kondoria(int x, int y, Image img, CollisionManager collisionManager, Entity bomber) {
+        super(x, y, img, collisionManager);
+        kondoriaStatus = KondoriaStatus.WALKING;
+        this.speed = 1;
+        this.map = collisionManager.getMap().getMap();
+        this.bomber = bomber;
     }
 
-    public void setValue() {
-        speed = 1;
+    public int getDistanceFromBomber() {
+        if (path == null) return -1;
+        return path.size();
     }
 
-    @Override
-    public void getEnemeImage() {
-        try {
-            left = ImageIO.read(getClass().getResourceAsStream("/Enemy/Kondoria/kondoria_left1.png"));
-            left1 = ImageIO.read(getClass().getResourceAsStream("/Enemy/Kondoria/kondoria_left2.png"));
-            left2 = ImageIO.read(getClass().getResourceAsStream("/Enemy/Kondoria/kondoria_left3.png"));
-            right = ImageIO.read(getClass().getResourceAsStream("/Enemy/Kondoria/kondoria_right1.png"));
-            right1 = ImageIO.read(getClass().getResourceAsStream("/Enemy/Kondoria/kondoria_right2.png"));
-            right2 = ImageIO.read(getClass().getResourceAsStream("/Enemy/Kondoria/kondoria_right3.png"));
-            up = ImageIO.read(getClass().getResourceAsStream("/Enemy/Kondoria/kondoria_left1.png"));
-            up1 = ImageIO.read(getClass().getResourceAsStream("/Enemy/Kondoria/kondoria_left2.png"));
-            up2 = ImageIO.read(getClass().getResourceAsStream("/Enemy/Kondoria/kondoria_left3.png"));
-            down = ImageIO.read(getClass().getResourceAsStream("/Enemy/Kondoria/kondoria_right1.png"));
-            down1 = ImageIO.read(getClass().getResourceAsStream("/Enemy/Kondoria/kondoria_right2.png"));
-            down2 = ImageIO.read(getClass().getResourceAsStream("/Enemy/Kondoria/kondoria_right3.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+    public void chasing() {
+        Vertices src = path.get(0);
+        Vertices dst = path.get(1);
+        spriteIndex++;
 
-    public void update() {
-        //Check Flame
-        isDead = gp.cChecker.checkEntityVsFlame(this);
-        if (isDead) {
-            gp.explode.endInit(this.x, this.y);
-        }
-        gp.cChecker.checkTile(this);
-        //Check collision Tile
-        collisionOn = false;
-        leftX = (this.x + 2) / gp.tileSize;
-        upY = (this.y + 2) / gp.tileSize;
-        rightX = ((this.x - 2) + gp.tileSize) / gp.tileSize;
-        downY = ((this.y - 2) + gp.tileSize) / gp.tileSize;
-        move();
-        //Check bomb
-        gp.cChecker.checkBombVsEnemy(this);
-        //If collisionOn is false
-        switch (direction) {
-            case "up":
-                y -= speed;
-                break;
-            case "down":
-                y += speed;
-                break;
-            case "right":
-                x += speed;
-                break;
-            case "left":
-                x -= speed;
-                break;
-        }
-        spriteCounter++;
-        if (spriteCounter > 10) {
-            spriteNum++;
-            if (spriteNum > 3) {
-                spriteNum = 1;
+        if (src.getXTilePos() >= dst.getXTilePos()) {
+            if (x > dst.getXTilePos() * Sprite.SCALED_SIZE) {
+                if (!collisionManager.touchObstacle(x, y, "LEFT", speed) && !touchBomb(x, y, "LEFT")) {
+                    pickSprite(Sprite.movingSprite(
+                            leftSprites[0],
+                            leftSprites[1],
+                            leftSprites[2], spriteIndex, 20).getFxImage());
+                    x -= speed;
+                }
             }
-            spriteCounter = 0;
         }
 
+        if (src.getXTilePos() <= dst.getXTilePos()) {
+            if (x < dst.getXTilePos() * Sprite.SCALED_SIZE) {
+                if (!collisionManager.touchObstacle(x, y, "RIGHT", speed) && !touchBomb(x, y, "RIGHT")) {
+                    pickSprite(Sprite.movingSprite(
+                            rightSprites[0],
+                            rightSprites[1],
+                            rightSprites[2], spriteIndex, 20).getFxImage());
+                    x += speed;
+                }
+            }
+        }
+
+        if (src.getYTilePos() >= dst.getYTilePos()) {
+            if (y > dst.getYTilePos() * Sprite.SCALED_SIZE) {
+                if (!collisionManager.touchObstacle(x, y, "UP", speed) && !touchBomb(x, y, "UP")) {
+                    pickSprite(Sprite.movingSprite(
+                            rightSprites[0],
+                            rightSprites[1],
+                            rightSprites[2], spriteIndex, 20).getFxImage());
+                    y -= speed;
+                }
+            }
+        }
+
+        if (src.getYTilePos() <= dst.getYTilePos()) {
+            if (y < dst.getYTilePos() * Sprite.SCALED_SIZE) {
+                if (!collisionManager.touchObstacle(x, y, "DOWN", speed) && !touchBomb(x, y, "DOWN")) {
+                    pickSprite(Sprite.movingSprite(
+                            leftSprites[0],
+                            leftSprites[1],
+                            leftSprites[2], spriteIndex, 20).getFxImage());
+                    y += speed;
+                }
+            }
+        }
     }
 
-    private void move() {
-        String way = gp.findWayEnemy.FindWayForEnemy2((this.y + gp.tileSize / 2) / gp.tileSize,
-                (this.x + gp.tileSize / 2) / gp.tileSize);
-        switch (direction) {
-            case "up":
-                if (upY != downY) {
-                    direction = "up";
-                    findNewWay = true;
-                } else if (findNewWay) {
-                    direction = way;
-                    findNewWay = false;
-                }
-                break;
-            case "down":
-                if (upY != downY) {
-                    direction = "down";
-                    findNewWay = true;
-                } else if (findNewWay) {
-                    direction = way;
-                    findNewWay = false;
-                }
-                break;
-            case "left":
-                if (leftX != rightX) {
-                    direction = "left";
-                    findNewWay = true;
-                } else if (findNewWay) {
-                    direction = way;
-                    findNewWay = false;
-                }
-                break;
-            case "right":
-                if (leftX != rightX) {
-                    direction = "right";
-                    findNewWay = true;
-                } else if (findNewWay) {
-                    direction = way;
-                    findNewWay = false;
-                }
-                break;
+    public void move() {
+        int onealIndex = Graph.getVerticesIndex(x + Oneal.WIDTH / 2, y + Oneal.HEIGHT / 2);
+        int bomberIndex = Graph.getVerticesIndex(bomber.getX(), bomber.getY());
+
+        if (kondoriaStatus == KondoriaStatus.WALKING) {
+            path = collisionManager.getMap().getGraph().BFS(onealIndex, bomberIndex);
+            if (path != null) kondoriaStatus = KondoriaStatus.CHASING;
         }
+
+        if (kondoriaStatus != KondoriaStatus.CHASING) {
+            speed = 1;
+            goRandom();
+        } else {
+            path = collisionManager.getMap().getGraph().BFS(onealIndex, bomberIndex);
+            if (path != null) {
+                speed = 2;
+                chasing();
+            }
+        }
+    }
+
+    public void setKondoriaStatus(KondoriaStatus kondoriaStatus) {
+        this.kondoriaStatus = kondoriaStatus;
+    }
+
+    public KondoriaStatus getKondoriaStatus() {
+        return kondoriaStatus;
     }
 }

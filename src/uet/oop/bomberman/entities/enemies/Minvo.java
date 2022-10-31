@@ -7,26 +7,25 @@ import uet.oop.bomberman.controller.collision.Vertices;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.graphics.sprite.Sprite;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class Duplicate extends Enemy {
+public class Minvo extends Enemy {
     public static final int WIDTH = 30;
     public static final int HEIGHT = 30;
 
-    public enum DuplicateStatus {
+    public enum MinvoStatus {
         CHASING,
         WALKING,
         INVALID
     }
-    DuplicateStatus duplicateStatus;
+    MinvoStatus minvoStatus;
 
     private Entity bomber;
     private List<List<Entity>> map;
     private List<Vertices> path;
-    public Duplicate(int x, int y, Image img, CollisionManager collisionManager, Entity bomber) {
+    public Minvo(int x, int y, Image img, CollisionManager collisionManager, Entity bomber) {
         super(x, y, img, collisionManager);
-        duplicateStatus = DuplicateStatus.WALKING;
+        minvoStatus = MinvoStatus.WALKING;
         this.speed = 1;
         this.map = collisionManager.getMap().getMap();
         this.bomber = bomber;
@@ -95,12 +94,12 @@ public class Duplicate extends Enemy {
         int onealIndex = Graph.getVerticesIndex(x + Oneal.WIDTH / 2, y + Oneal.HEIGHT / 2);
         int bomberIndex = Graph.getVerticesIndex(bomber.getX(), bomber.getY());
 
-        if (duplicateStatus == DuplicateStatus.WALKING) {
+        if (minvoStatus == MinvoStatus.WALKING) {
             path = collisionManager.getMap().getGraph().BFS(onealIndex, bomberIndex);
-            if (path != null) duplicateStatus = DuplicateStatus.CHASING;
+            if (path != null) minvoStatus = MinvoStatus.CHASING;
         }
 
-        if (duplicateStatus != DuplicateStatus.CHASING) {
+        if (minvoStatus != MinvoStatus.CHASING) {
             goRandom();
         } else {
             path = collisionManager.getMap().getGraph().BFS(onealIndex, bomberIndex);
@@ -110,11 +109,11 @@ public class Duplicate extends Enemy {
         }
     }
 
-    public void setDuplicateStatus(DuplicateStatus duplicateStatus) {
-        this.duplicateStatus = Duplicate.this.duplicateStatus;
+    public void setMinvoStatus(MinvoStatus minvoStatus) {
+        this.minvoStatus = Minvo.this.minvoStatus;
     }
 
-    public DuplicateStatus getDuplicateStatus() {
-        return duplicateStatus;
+    public MinvoStatus getMinvoStatus() {
+        return minvoStatus;
     }
 }

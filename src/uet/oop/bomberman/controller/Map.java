@@ -2,7 +2,6 @@ package uet.oop.bomberman.controller;
 
 import javafx.scene.canvas.GraphicsContext;
 import uet.oop.bomberman.controller.collision.CollisionManager;
-import uet.oop.bomberman.controller.GameMaster;
 import uet.oop.bomberman.controller.collision.Graph;
 import uet.oop.bomberman.controller.collision.Vertices;
 import uet.oop.bomberman.entities.*;
@@ -97,9 +96,15 @@ public class Map {
                         break;
                     case '4':
                         map.get(i).add(new Grass(j, i, Sprite.grass.getFxImage()));
-                        Enemy duplicate = new Duplicate(j, i, Sprite.minvo_left1.getFxImage(),
-                                new CollisionManager(this, Duplicate.HEIGHT, Duplicate.WIDTH), GameMaster.entities.get(level).get(0));
-                        GameMaster.entities.get(level).add(duplicate);
+                        Enemy minvo = new Minvo(j, i, Sprite.minvo_left1.getFxImage(),
+                                new CollisionManager(this, Minvo.HEIGHT, Minvo.WIDTH), GameMaster.entities.get(level).get(0));
+                        GameMaster.entities.get(level).add(minvo);
+                        break;
+                    case '5':
+                        map.get(i).add(new Grass(j, i, Sprite.grass.getFxImage()));
+                        Enemy kondoria = new Kondoria(j, i, Sprite.kondoria_left1.getFxImage(),
+                                new CollisionManager(this, Kondoria.HEIGHT, Kondoria.WIDTH), GameMaster.entities.get(level).get(0));
+                        GameMaster.entities.get(level).add(kondoria);
                         break;
                     case 'x':
                         map.get(i).add(new Brick(j, i, Sprite.brick.getFxImage()));
