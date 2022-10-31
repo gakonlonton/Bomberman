@@ -68,7 +68,7 @@ public class GameMaster {
                 try {
                     entities.get(level).forEach(Entity::update);
                 } catch (ConcurrentModificationException e) {
-                    // Exception catch by Minvo
+                    // Exception catch by Minvo while die
                     System.out.print("");
                 }
                 updateCamera();

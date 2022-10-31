@@ -6,6 +6,8 @@ import javafx.scene.input.KeyCode;
 import uet.oop.bomberman.controller.GameMaster;
 import uet.oop.bomberman.graphics.sprite.Sprite;
 
+// Entity
+
 public abstract class Entity {
     public int x;
     public int y;

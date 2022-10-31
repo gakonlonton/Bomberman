@@ -153,8 +153,8 @@ public class Menu {
                                 menuState = MenuState.SINGLE_PLAY;
                                 break;
                             case MultiplayerCode:
-                                menuState = MenuState.MULTIPLAYER;
-                                // Do something
+                                menuState = MenuState.UNFINISHED;
+                                unfinished = true;
                                 break;
                             case OptionCode:
                                 menuState = MenuState.OPTION;
