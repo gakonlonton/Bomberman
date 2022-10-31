@@ -91,18 +91,18 @@ public class Minvo extends Enemy {
     }
 
     public void move() {
-        int onealIndex = Graph.getVerticesIndex(x + Oneal.WIDTH / 2, y + Oneal.HEIGHT / 2);
+        int minvoIndex = Graph.getVerticesIndex(x + Minvo.WIDTH / 2, y + Minvo.HEIGHT / 2);
         int bomberIndex = Graph.getVerticesIndex(bomber.getX(), bomber.getY());
 
         if (minvoStatus == MinvoStatus.WALKING) {
-            path = collisionManager.getMap().getGraph().BFS(onealIndex, bomberIndex);
+            path = collisionManager.getMap().getGraph().BFS(minvoIndex, bomberIndex);
             if (path != null) minvoStatus = MinvoStatus.CHASING;
         }
 
         if (minvoStatus != MinvoStatus.CHASING) {
             goRandom();
         } else {
-            path = collisionManager.getMap().getGraph().BFS(onealIndex, bomberIndex);
+            path = collisionManager.getMap().getGraph().BFS(minvoIndex, bomberIndex);
             if (path != null) {
                 chasing();
             }

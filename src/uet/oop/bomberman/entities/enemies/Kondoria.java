@@ -9,6 +9,9 @@ import uet.oop.bomberman.graphics.sprite.Sprite;
 
 import java.util.List;
 
+import static uet.oop.bomberman.controller.GameMaster.bombsList;
+import static uet.oop.bomberman.controller.GameMaster.level;
+
 public class Kondoria extends Enemy {
     public static final int WIDTH = 30;
 
@@ -17,7 +20,7 @@ public class Kondoria extends Enemy {
     public enum KondoriaStatus {
         CHASING,
         WALKING,
-        INVALID
+        INVALID,
     }
     KondoriaStatus kondoriaStatus;
 
@@ -50,6 +53,8 @@ public class Kondoria extends Enemy {
                             leftSprites[1],
                             leftSprites[2], spriteIndex, 20).getFxImage());
                     x -= speed;
+                } else if (touchBomb(x, y, "LEFT")) {
+                    kondoriaStatus = KondoriaStatus.WALKING;
                 }
             }
         }
@@ -62,6 +67,8 @@ public class Kondoria extends Enemy {
                             rightSprites[1],
                             rightSprites[2], spriteIndex, 20).getFxImage());
                     x += speed;
+                } else if (touchBomb(x, y, "RIGHT")) {
+                    kondoriaStatus = KondoriaStatus.WALKING;
                 }
             }
         }
@@ -74,6 +81,8 @@ public class Kondoria extends Enemy {
                             rightSprites[1],
                             rightSprites[2], spriteIndex, 20).getFxImage());
                     y -= speed;
+                } else if (touchBomb(x, y, "UP")) {
+                    kondoriaStatus = KondoriaStatus.WALKING;
                 }
             }
         }
@@ -86,25 +95,27 @@ public class Kondoria extends Enemy {
                             leftSprites[1],
                             leftSprites[2], spriteIndex, 20).getFxImage());
                     y += speed;
+                } else if (touchBomb(x, y, "DOWN")) {
+                    kondoriaStatus = KondoriaStatus.WALKING;
                 }
             }
         }
     }
 
     public void move() {
-        int onealIndex = Graph.getVerticesIndex(x + Oneal.WIDTH / 2, y + Oneal.HEIGHT / 2);
+        int kondoriaIndex = Graph.getVerticesIndex(x + Kondoria.WIDTH / 2, y + Kondoria.HEIGHT / 2);
         int bomberIndex = Graph.getVerticesIndex(bomber.getX(), bomber.getY());
 
         if (kondoriaStatus == KondoriaStatus.WALKING) {
-            path = collisionManager.getMap().getGraph().BFS(onealIndex, bomberIndex);
-            if (path != null) kondoriaStatus = KondoriaStatus.CHASING;
+            path = collisionManager.getMap().getGraph().BFS(kondoriaIndex, bomberIndex);
+            if (path != null && bombsList.size() == 0) kondoriaStatus = KondoriaStatus.CHASING;
         }
 
         if (kondoriaStatus != KondoriaStatus.CHASING) {
             speed = 1;
             goRandom();
         } else {
-            path = collisionManager.getMap().getGraph().BFS(onealIndex, bomberIndex);
+            path = collisionManager.getMap().getGraph().BFS(kondoriaIndex, bomberIndex);
             if (path != null) {
                 speed = 2;
                 chasing();
